@@ -1,0 +1,81 @@
+{
+  "notes": 4990,
+  "mediaFiles": 4990,
+  "audioMapTerms": 4983,
+  "hskCounts": {
+    "1": 149,
+    "2": 151,
+    "3": 297,
+    "4": 598,
+    "5": 1297,
+    "6": 2498
+  },
+  "missingAudioCount": 0,
+  "firstFive": [
+    {
+      "id": "1440086396324",
+      "hanzi": "什么",
+      "traditional": "什麼",
+      "pinyin": "shén me",
+      "meaning": "what, which",
+      "wordType": "QP",
+      "hskLevel": 1,
+      "audio": "什麼_B_zh.mp3",
+      "tags": [
+        "Mandarin::HSK1"
+      ]
+    },
+    {
+      "id": "1440086396331",
+      "hanzi": "他",
+      "traditional": "",
+      "pinyin": "tā",
+      "meaning": "he, she, it; other",
+      "wordType": "Pron",
+      "hskLevel": 1,
+      "audio": "他_B_zh.mp3",
+      "tags": [
+        "Mandarin::HSK1"
+      ]
+    },
+    {
+      "id": "1440086396332",
+      "hanzi": "一",
+      "traditional": "",
+      "pinyin": "yī",
+      "meaning": "one",
+      "wordType": "Num",
+      "hskLevel": 1,
+      "audio": "一_B_zh.mp3",
+      "tags": [
+        "Mandarin::HSK1"
+      ]
+    },
+    {
+      "id": "1440086396333",
+      "hanzi": "二",
+      "traditional": "",
+      "pinyin": "èr",
+      "meaning": "two",
+      "wordType": "Num",
+      "hskLevel": 1,
+      "audio": "二_B_zh.mp3",
+      "tags": [
+        "Mandarin::HSK1"
+      ]
+    },
+    {
+      "id": "1440086396334",
+      "hanzi": "三",
+      "traditional": "",
+      "pinyin": "sān",
+      "meaning": "three",
+      "wordType": "Num",
+      "hskLevel": 1,
+      "audio": "三_B_zh.mp3",
+      "tags": [
+        "Mandarin::HSK1"
+      ]
+    }
+  ]
+}

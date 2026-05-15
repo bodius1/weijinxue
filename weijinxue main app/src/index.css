@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+:root {
+  --bg-base: #0f0e0c;
+  --bg-card: #1c1a16;
+  --bg-elevated: #252219;
+  --border: #3a3529;
+  --text-primary: #f0e6d3;
+  --text-secondary: #a89880;
+  --text-muted: #6b6050;
+  --accent-red: #c0392b;
+  --accent-gold: #d4a843;
+  --accent-jade: #2d6b4a;
+  --correct: #3d7a5a;
+  --wrong: #7a2e2e;
+  --btn-hover: #b8872a;
+}
+
+@theme {
+  --color-paper: var(--bg-base);
+  --color-parchment: var(--bg-card);
+  --color-elevated: var(--bg-elevated);
+  --color-taupe: var(--border);
+  --color-clay: var(--accent-gold);
+  --color-espresso: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-ink: var(--text-primary);
+  --color-accent-red: var(--accent-red);
+  --color-accent-jade: var(--accent-jade);
+  --color-correct: var(--correct);
+  --color-wrong: var(--wrong);
+  --color-btn-hover: var(--btn-hover);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background-color: var(--bg-base);
+}
+
+/* --- Floating lanterns --- */
+.lantern-perspective-wrap {
+  perspective: 1400px;
+  perspective-origin: 50% 40%;
+}
+
+.lantern-rise {
+  position: fixed;
+  bottom: -22vh;
+  width: var(--lw, auto);
+  opacity: var(--lantern-opacity, 0.25);
+  filter: blur(var(--lantern-blur, 0px));
+  transform: translateZ(0);
+  transform-origin: center bottom;
+  animation: lantern-rise-bottom var(--lantern-dur, 18s) linear infinite;
+  animation-delay: var(--lantern-delay, 0s);
+  will-change: bottom, filter;
+}
+
+.lantern-bob {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.lantern-sway {
+  height: 100%;
+  animation: lantern-sway var(--lantern-sway-dur, 3.2s) ease-in-out infinite;
+  animation-delay: var(--lantern-sway-delay, var(--lantern-delay, 0s));
+  will-change: transform;
+}
+
+@keyframes lantern-rise-bottom {
+  0% {
+    bottom: -22vh;
+  }
+  100% {
+    bottom: 132vh;
+  }
+}
+
+@keyframes lantern-sway {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(var(--lantern-amp, 8px), 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Auth toasts — fade in, hold, fade out (~2s total) */
+@keyframes huaxue-toast-lifecycle {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  12% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  82% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+}
+
+.huaxue-toast-pop {
+  animation: huaxue-toast-lifecycle 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Flashcard quiz-deck toasts — 1.5s fade at bottom of card */
+@keyframes huaxue-deck-toast {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  18% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  72% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.huaxue-deck-toast {
+  animation: huaxue-deck-toast 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}

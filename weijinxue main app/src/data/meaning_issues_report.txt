@@ -1,0 +1,638 @@
+WRONG MEANINGS REPORT
+─────────────────────
+
+Method: For each HSK list word, pick CC-CEDICT row via pickCedictEntryForWord(simplified, HSK pinyin),
+then formatEnglishMeaningForDisplay(simplified, cedictEnglishJoinedOrHskEnglish). Flagged if the final display string matches the criteria below.
+
+Flag rules:
+  - starts with (case-insensitive): surname, used in, see , variant of, old variant, abbr., also written
+  - contains "surname" anywhere
+  - contains "|"
+  - contains bracket segment with digit (pinyin ref noise), e.g. [zhang3]
+  - length > 80 characters
+
+Note: headword 姓 with gloss "surname" is treated as a false positive and is not flagged.
+
+"Should be" is the first acceptable formatEnglishMeaningForDisplay result from:
+  HSK JSON english, then each /-split CC-CEDICT sense (shortest clean segment as fallback).
+
+HSK 1:
+   那 (nà) → currently showing: "surname Na"
+              matched rules: startsWith:surname, contains:surname
+              should be: "that"
+
+   三 (sān) → currently showing: "surname San"
+              matched rules: startsWith:surname, contains:surname
+              should be: "three"
+
+   和 (hé) → currently showing: "old variant of 和"
+              matched rules: startsWith:old variant
+              should be: "and"
+
+   家 (jiā) → currently showing: "used in 傢伙 家伙 and 傢俱 家俱"
+              matched rules: startsWith:used in
+              should be: "home"
+
+   上 (shàng) → currently showing: "used in 上聲 上声"
+              matched rules: startsWith:used in
+              should be: "up, on"
+
+   里 (lǐ) → currently showing: "variant of 裡 里"
+              matched rules: startsWith:variant of
+              should be: "inside"
+
+   水 (shuǐ) → currently showing: "surname Shui"
+              matched rules: startsWith:surname, contains:surname
+              should be: "water"
+
+   钱 (qián) → currently showing: "surname Qian"
+              matched rules: startsWith:surname, contains:surname
+              should be: "money"
+
+   书 (shū) → currently showing: "abbr. for 書經 书经"
+              matched rules: startsWith:abbr.
+              should be: "book"
+
+   坐 (zuò) → currently showing: "surname Zuo"
+              matched rules: startsWith:surname, contains:surname
+              should be: "to sit"
+
+   能 (néng) → currently showing: "surname Neng"
+              matched rules: startsWith:surname, contains:surname
+              should be: "can, to be able to"
+
+   冷 (lěng) → currently showing: "surname Leng"
+              matched rules: startsWith:surname, contains:surname
+              should be: "cold"
+
+HSK 2:
+   百 (bǎi) → currently showing: "surname Bai"
+              matched rules: startsWith:surname, contains:surname
+              should be: "hundred"
+
+   别 (bié) → currently showing: "surname Bie"
+              matched rules: startsWith:surname, contains:surname
+              should be: "do not"
+
+   也 (yě) → currently showing: "surname Ye"
+              matched rules: startsWith:surname, contains:surname
+              should be: "also"
+
+   最 (zuì) → currently showing: "variant of 最"
+              matched rules: startsWith:variant of
+              should be: "the most"
+
+   从 (cóng) → currently showing: "variant of 從 从"
+              matched rules: startsWith:variant of
+              should be: "from"
+
+   离 (lí) → currently showing: "surname Li"
+              matched rules: startsWith:surname, contains:surname
+              should be: "distance between"
+
+   路 (lù) → currently showing: "surname Lu"
+              matched rules: startsWith:surname, contains:surname
+              should be: "road"
+
+   日 (rì) → currently showing: "abbr. for 日本, Japan"
+              matched rules: startsWith:abbr.
+              should be: "date, day"
+
+   鱼 (yú) → currently showing: "surname Yu"
+              matched rules: startsWith:surname, contains:surname
+              should be: "fish"
+
+   雪 (xuě) → currently showing: "surname Xue"
+              matched rules: startsWith:surname, contains:surname
+              should be: "snow"
+
+   门 (mén) → currently showing: "surname Men"
+              matched rules: startsWith:surname, contains:surname
+              should be: "door"
+
+   题 (tí) → currently showing: "surname Ti"
+              matched rules: startsWith:surname, contains:surname
+              should be: "topic, question"
+
+   姓 (xìng) → currently showing: "to be surnamed ..."
+              matched rules: contains:surname
+              should be: "surname"
+
+   笑 (xiào) → currently showing: "old variant of 笑"
+              matched rules: startsWith:old variant
+              should be: "to smile, to laugh"
+
+   高 (gāo) → currently showing: "surname Gao"
+              matched rules: startsWith:surname, contains:surname
+              should be: "tall, high"
+
+   红 (hóng) → currently showing: "surname Hong"
+              matched rules: startsWith:surname, contains:surname
+              should be: "red"
+
+   白 (bái) → currently showing: "surname Bai"
+              matched rules: startsWith:surname, contains:surname
+              should be: "white"
+
+   黑 (hēi) → currently showing: "abbr. for Heilongjiang province 黑龍江 黑龙江"
+              matched rules: startsWith:abbr.
+              should be: "black"
+
+   新 (xīn) → currently showing: "abbr. for Xinjiang 新疆"
+              matched rules: startsWith:abbr.
+              should be: "new"
+
+   贵 (guì) → currently showing: "abbr. for Guizhou Province 貴州 贵州"
+              matched rules: startsWith:abbr.
+              should be: "expensive"
+
+   阴 (yīn) → currently showing: "surname Yin"
+              matched rules: startsWith:surname, contains:surname
+              should be: "cloudy, overcast"
+
+   错 (cuò) → currently showing: "surname Cuo"
+              matched rules: startsWith:surname, contains:surname
+              should be: "wrong, mistake"
+
+HSK 3:
+   班 (bān) → currently showing: "surname Ban"
+              matched rules: startsWith:surname, contains:surname
+              should be: "class, shift"
+
+   包 (bāo) → currently showing: "surname Bao"
+              matched rules: startsWith:surname, contains:surname
+              should be: "bag, package"
+
+   草 (cǎo) → currently showing: "variant of 草"
+              matched rules: startsWith:variant of
+              should be: "grass"
+
+   船 (chuán) → currently showing: "variant of 船"
+              matched rules: startsWith:variant of
+              should be: "ship, boat"
+
+   春 (chūn) → currently showing: "old variant of 春"
+              matched rules: startsWith:old variant
+              should be: "spring (season)"
+
+   东 (dōng) → currently showing: "surname Dong"
+              matched rules: startsWith:surname, contains:surname
+              should be: "east"
+
+   段 (duàn) → currently showing: "surname Duan"
+              matched rules: startsWith:surname, contains:surname
+              should be: "paragraph, section"
+
+   关 (guān) → currently showing: "surname Guan"
+              matched rules: startsWith:surname, contains:surname
+              should be: "to close, to shut"
+
+   花 (huā) → currently showing: "surname Hua"
+              matched rules: startsWith:surname, contains:surname
+              should be: "to spend, flower"
+
+   还 (huán) → currently showing: "surname Huan"
+              matched rules: startsWith:surname, contains:surname
+              should be: "to return (something)"
+
+   教 (jiāo) → currently showing: "surname Jiao"
+              matched rules: startsWith:surname, contains:surname
+              should be: "to teach"
+
+   蓝 (lán) → currently showing: "surname Lan"
+              matched rules: startsWith:surname, contains:surname
+              should be: "blue"
+
+   楼 (lóu) → currently showing: "surname Lou"
+              matched rules: startsWith:surname, contains:surname
+              should be: "floor, building"
+
+   绿 (lǜ) → currently showing: "used in names"
+              matched rules: startsWith:used in
+              should be: "green"
+
+   马 (mǎ) → currently showing: "surname Ma"
+              matched rules: startsWith:surname, contains:surname
+              should be: "horse"
+
+   米 (mǐ) → currently showing: "surname Mi"
+              matched rules: startsWith:surname, contains:surname
+              should be: "meter, rice"
+
+   拿 (ná) → currently showing: "old variant of 拿"
+              matched rules: startsWith:old variant
+              should be: "to take, to hold"
+
+   南 (nán) → currently showing: "surname Nan"
+              matched rules: startsWith:surname, contains:surname
+              should be: "south"
+
+   秋 (qiū) → currently showing: "surname Qiu"
+              matched rules: startsWith:surname, contains:surname
+              should be: "autumn, fall"
+
+   双 (shuāng) → currently showing: "variant of 雙 双"
+              matched rules: startsWith:variant of
+              should be: "pair, double"
+
+   碗 (wǎn) → currently showing: "variant of 碗"
+              matched rules: startsWith:variant of
+              should be: "bowl"
+
+   万 (wàn) → currently showing: "surname Wan"
+              matched rules: startsWith:surname, contains:surname
+              should be: "ten thousand"
+
+   向 (xiàng) → currently showing: "surname Xiang"
+              matched rules: startsWith:surname, contains:surname
+              should be: "towards, facing"
+
+   越 (yuè) → currently showing: "abbr. for Vietnam 越南"
+              matched rules: startsWith:abbr.
+              should be: "the more"
+
+   张 (zhāng) → currently showing: "surname Zhang"
+              matched rules: startsWith:surname, contains:surname
+              should be: "measure word (flat things)"
+
+   只 (zhī) → currently showing: "variant of 隻 只"
+              matched rules: startsWith:variant of
+              should be: "measure word (animals)"
+
+   只 (zhǐ) → currently showing: "variant of 隻 只"
+              matched rules: startsWith:variant of
+              should be: "only"
+
+HSK 4:
+   遍 (biàn) → currently showing: "variant of 遍"
+              matched rules: startsWith:variant of
+              should be: "Times"
+
+   抽烟 (chōuyān) → currently showing: "variant of 抽菸 抽烟"
+              matched rules: startsWith:variant of
+              should be: "smoking"
+
+   戴 (dài) → currently showing: "surname Dai"
+              matched rules: startsWith:surname, contains:surname
+              should be: "wear"
+
+   刀 (dāo) → currently showing: "surname Dao"
+              matched rules: startsWith:surname, contains:surname
+              should be: "knife"
+
+   富 (fù) → currently showing: "surname Fu"
+              matched rules: startsWith:surname, contains:surname
+              should be: "rich"
+
+   干 (gān) → currently showing: "old variant of 乾 干"
+              matched rules: startsWith:old variant
+              should be: "dry"
+
+   汗 (hàn) → currently showing: "see 可汗, 汗國 汗国"
+              matched rules: startsWith:see 
+              should be: "sweat"
+
+   火 (huǒ) → currently showing: "surname Huo"
+              matched rules: startsWith:surname, contains:surname
+              should be: "fire"
+
+   节 (jié) → currently showing: "see 節骨眼 节骨眼"
+              matched rules: startsWith:see 
+              should be: "section, festival"
+
+   举 (jǔ) → currently showing: "variant of 舉 举"
+              matched rules: startsWith:variant of
+              should be: "lift"
+
+   辣 (là) → currently showing: "old variant of 辣"
+              matched rules: startsWith:old variant
+              should be: "spicy"
+
+   懒 (lǎn) → currently showing: "variant of 懶 懒"
+              matched rules: startsWith:variant of
+              should be: "lazy"
+
+   连 (lián) → currently showing: "surname Lian"
+              matched rules: startsWith:surname, contains:surname
+              should be: "even"
+
+   联系 (liánxì) → currently showing: "variant of 聯繫 联系"
+              matched rules: startsWith:variant of
+              should be: "contact"
+
+   留 (liú) → currently showing: "old variant of 留"
+              matched rules: startsWith:old variant
+              should be: "stay"
+
+   毛 (máo) → currently showing: "surname Mao"
+              matched rules: startsWith:surname, contains:surname
+              should be: "hair"
+
+   却 (què) → currently showing: "old variant of 卻 却"
+              matched rules: startsWith:old variant
+              should be: "but"
+
+   深 (shēn) → currently showing: "old variant of 深"
+              matched rules: startsWith:old variant
+              should be: "deep"
+
+   帅 (shuài) → currently showing: "surname Shuai"
+              matched rules: startsWith:surname, contains:surname
+              should be: "Handsome"
+
+   谈 (tán) → currently showing: "surname Tan"
+              matched rules: startsWith:surname, contains:surname
+              should be: "talk"
+
+   汤 (tāng) → currently showing: "surname Tang"
+              matched rules: startsWith:surname, contains:surname
+              should be: "soup"
+
+   趟 (tàng) → currently showing: "old variant of 趟"
+              matched rules: startsWith:old variant
+              should be: "Trip"
+
+   咸 (xián) → currently showing: "surname Xian"
+              matched rules: startsWith:surname, contains:surname
+              should be: "salty"
+
+   以 (yǐ) → currently showing: "old variant of 以"
+              matched rules: startsWith:old variant
+              should be: "with"
+
+   友好 (yǒuhǎo) → currently showing: "see 友好區 友好区"
+              matched rules: startsWith:see 
+              should be: "friendly"
+
+   友谊 (yǒuyì) → currently showing: "see 友誼縣 友谊县"
+              matched rules: startsWith:see 
+              should be: "friendship"
+
+   与 (yǔ) → currently showing: "variant of 歟 欤"
+              matched rules: startsWith:variant of
+              should be: "and"
+
+HSK 5:
+   岸 (àn) → currently showing: "variant of 岸"
+              matched rules: startsWith:variant of
+              should be: "bank"
+
+   踩 (cǎi) → currently showing: "variant of 踩"
+              matched rules: startsWith:variant of
+              should be: "step on"
+
+   丑 (chǒu) → currently showing: "surname Chou"
+              matched rules: startsWith:surname, contains:surname
+              should be: "ugly"
+
+   纪录 (jìlù) → currently showing: "variant of 記錄 记录 (but in Taiwan, not for the verb sense "to..."
+              matched rules: startsWith:variant of
+              should be: "Record"
+
+   救 (jiù) → currently showing: "variant of 救"
+              matched rules: startsWith:variant of
+              should be: "save"
+
+   桔子 (júzi) → currently showing: "variant of 橘子"
+              matched rules: startsWith:variant of
+              should be: "Orange"
+
+   克 (kè) → currently showing: "abbr. for 克羅地亞 克罗地亚, Croatia"
+              matched rules: startsWith:abbr.
+              should be: "gram"
+
+   夸 (kuā) → currently showing: "used in transliteration"
+              matched rules: startsWith:used in
+              should be: "boast, praise"
+
+   老板 (lǎobǎn) → currently showing: "variant of 老闆 老板"
+              matched rules: startsWith:variant of
+              should be: "Boss"
+
+   龙 (lóng) → currently showing: "surname Long"
+              matched rules: startsWith:surname, contains:surname
+              should be: "dragon"
+
+   平 (píng) → currently showing: "surname Ping"
+              matched rules: startsWith:surname, contains:surname
+              should be: "flat"
+
+   奇迹 (qíjì) → currently showing: "variant of 奇蹟 奇迹"
+              matched rules: startsWith:variant of
+              should be: "Miracle"
+
+   枪 (qiāng) → currently showing: "surname Qiang"
+              matched rules: startsWith:surname, contains:surname
+              should be: "gun"
+
+   群 (qún) → currently showing: "variant of 群"
+              matched rules: startsWith:variant of
+              should be: "group"
+
+   晒 (shài) → currently showing: "variant of 曬 晒"
+              matched rules: startsWith:variant of
+              should be: "The sun"
+
+   诗 (shī) → currently showing: "abbr. for Shijing 詩經 诗经, the Book of Songs"
+              matched rules: startsWith:abbr.
+              should be: "poetry"
+
+   宣布 (xuānbù) → currently showing: "variant of 宣布"
+              matched rules: startsWith:variant of
+              should be: "Announce"
+
+   夜 (yè) → currently showing: "variant of 夜"
+              matched rules: startsWith:variant of
+              should be: "night"
+
+   支 (zhī) → currently showing: "surname Zhi"
+              matched rules: startsWith:surname, contains:surname
+              should be: "branch (measure word)"
+
+   暗 (àn) → currently showing: "variant of 暗"
+              matched rules: startsWith:variant of
+              should be: "dark"
+
+   背 (bèi) → currently showing: "variant of 背"
+              matched rules: startsWith:variant of
+              should be: "Back"
+
+   朝 (cháo) → currently showing: "abbr. for 朝鮮 朝鲜 Korea"
+              matched rules: startsWith:abbr.
+              should be: "towards"
+
+   词汇 (cíhuì) → currently showing: "variant of 詞彙 词汇"
+              matched rules: startsWith:variant of
+              should be: "vocabulary"
+
+   大方 (dàfang) → currently showing: "see 大方縣 大方县"
+              matched rules: startsWith:see 
+              should be: "generous"
+
+   反复 (fǎnfù) → currently showing: "variant of 反覆 反复"
+              matched rules: startsWith:variant of
+              should be: "Repeatedly"
+
+   方 (fāng) → currently showing: "surname Fang"
+              matched rules: startsWith:surname, contains:surname
+              should be: "square"
+
+   非 (fēi) → currently showing: "abbr. for 非洲, Africa"
+              matched rules: startsWith:abbr.
+              should be: "wrong; non"
+
+   公布 (gōngbù) → currently showing: "variant of 公布"
+              matched rules: startsWith:variant of
+              should be: "Publish"
+
+   官 (guān) → currently showing: "surname Guan"
+              matched rules: startsWith:surname, contains:surname
+              should be: "officer"
+
+   柜台 (guìtái) → currently showing: "variant of 櫃檯 柜台"
+              matched rules: startsWith:variant of
+              should be: "Counter"
+
+   哈 (hā) → currently showing: "abbr. for 哈薩克斯坦 哈萨克斯坦, Kazakhstan"
+              matched rules: startsWith:abbr.
+              should be: "ah"
+
+   滑 (huá) → currently showing: "surname Hua"
+              matched rules: startsWith:surname, contains:surname
+              should be: "slippery"
+
+   艰巨 (jiānjù) → currently showing: "variant of 艱鉅 艰巨"
+              matched rules: startsWith:variant of
+              should be: "arduous"
+
+   宽 (kuān) → currently showing: "surname Kuan"
+              matched rules: startsWith:surname, contains:surname
+              should be: "wide"
+
+   雷 (léi) → currently showing: "surname Lei"
+              matched rules: startsWith:surname, contains:surname
+              should be: "Thunder"
+
+   念 (niàn) → currently showing: "variant of 念, to read aloud"
+              matched rules: startsWith:variant of
+              should be: "Read"
+
+   碰 (pèng) → currently showing: "variant of 碰"
+              matched rules: startsWith:variant of
+              should be: "touch, meet"
+
+   飘 (piāo) → currently showing: "variant of 飄 飘"
+              matched rules: startsWith:variant of
+              should be: "Gone with the wind"
+
+   凭 (píng) → currently showing: "variant of 憑 凭"
+              matched rules: startsWith:variant of
+              should be: "By"
+
+   墙 (qiáng) → currently showing: "variant of 牆 墙"
+              matched rules: startsWith:variant of
+              should be: "wall"
+
+   青 (qīng) → currently showing: "abbr. for 青海, Qinghai Province"
+              matched rules: startsWith:abbr.
+              should be: "young"
+
+   蛇 (shé) → currently showing: "variant of 蛇"
+              matched rules: startsWith:variant of
+              should be: "snake"
+
+   收获 (shōuhuò) → currently showing: "variant of 收穫 收获"
+              matched rules: startsWith:variant of
+              should be: "Harvest"
+
+   闻 (wén) → currently showing: "surname Wen"
+              matched rules: startsWith:surname, contains:surname
+              should be: "smell"
+
+   鲜艳 (xiānyàn) → currently showing: "variant of 鮮豔 鲜艳"
+              matched rules: startsWith:variant of
+              should be: "Colorful"
+
+   项 (xiàng) → currently showing: "surname Xiang"
+              matched rules: startsWith:surname, contains:surname
+              should be: "term"
+
+   胸 (xiōng) → currently showing: "variant of 胸"
+              matched rules: startsWith:variant of
+              should be: "chest"
+
+   阳台 (yángtái) → currently showing: "variant of 陽臺 阳台"
+              matched rules: startsWith:variant of
+              should be: "balcony"
+
+   摇 (yáo) → currently showing: "surname Yao"
+              matched rules: startsWith:surname, contains:surname
+              should be: "shake"
+
+   占 (zhàn) → currently showing: "variant of 占"
+              matched rules: startsWith:variant of
+              should be: "occupy"
+
+   挣 (zhèng) → currently showing: "used in 掙扎 挣扎"
+              matched rules: startsWith:used in
+              should be: "earn, make"
+
+   直 (zhí) → currently showing: "surname Zhi"
+              matched rules: startsWith:surname, contains:surname
+              should be: "straight"
+
+   煮 (zhǔ) → currently showing: "variant of 煮"
+              matched rules: startsWith:variant of
+              should be: "cook"
+
+   资源 (zīyuán) → currently showing: "see 資源縣 资源县"
+              matched rules: startsWith:see 
+              should be: "Resources"
+
+   咨询 (zīxún) → currently showing: "variant of 諮詢 咨询"
+              matched rules: startsWith:variant of
+              should be: "Consultation"
+
+   组 (zǔ) → currently showing: "surname Zu"
+              matched rules: startsWith:surname, contains:surname
+              should be: "group"
+
+HSK 6:
+   沉淀 (chéndiàn) → currently showing: "variant of 沉澱 沉淀"
+              matched rules: startsWith:variant of
+              should be: "to settle"
+
+   词汇 (cíhuì) → currently showing: "variant of 詞彙 词汇"
+              matched rules: startsWith:variant of
+              should be: "vocabulary"
+
+   高明 (gāomíng) → currently showing: "see 高明區 高明区"
+              matched rules: startsWith:see 
+              should be: "brilliant"
+
+   公安 (gōng'ān) → currently showing: "see 公安縣 公安县"
+              matched rules: startsWith:see 
+              should be: "public security"
+
+   合并 (hébìng) → currently showing: "variant of 合併 合并"
+              matched rules: startsWith:variant of
+              should be: "to merge"
+
+   回避 (huíbì) → currently showing: "variant of 迴避 回避"
+              matched rules: startsWith:variant of
+              should be: "to evade"
+
+   局限 (júxiàn) → currently showing: "variant of 局限"
+              matched rules: startsWith:variant of
+              should be: "limitation"
+
+─────────────────────
+SUMMARY
+─────────────────────
+HSK 1: 12 flagged
+HSK 2: 22 flagged
+HSK 3: 27 flagged
+HSK 4: 27 flagged
+HSK 5: 56 flagged
+HSK 6: 7 flagged
+Overall: 151 flagged
