@@ -1,0 +1,17 @@
+{
+  "name": "Weijinxue",
+  "short_name": "为进学",
+  "description": "Free open-source Mandarin learning app",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F0E0C",
+  "theme_color": "#D4A843",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

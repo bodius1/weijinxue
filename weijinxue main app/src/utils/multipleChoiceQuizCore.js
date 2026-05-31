@@ -164,7 +164,7 @@ function englishViolatesBan(distractorEnglish, banTokens) {
  * @returns {{ isReverse: boolean, choices: string[], correctIndex: number, clueText: string }}
  */
 export function buildQuestion(entryChar, correctMeaning, round, isReverse, options = {}) {
-  const char = String(entryChar || '').trim() || '学'
+  const char = String(entryChar || '').trim() || '欢迎'
   const correct = String(correctMeaning || '').trim() || '—'
   const seed = hashString(`${char}\0${correct}\0${round}\0${isReverse ? 'r' : 'f'}`)
 

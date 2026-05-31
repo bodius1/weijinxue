@@ -1,52 +1,1759 @@
 [
-  {"chinese":"我爱你。","english":"I love you.","pinyin":"Wǒ ài nǐ.","parts":"我|爱|你","py":"wo3|ai4|ni3"},
-  {"chinese":"你好吗？","english":"How are you?","pinyin":"Nǐ hǎo ma?","parts":"你|好|吗","py":"ni3|hao3|ma5"},
-  {"chinese":"我很好。","english":"I am very good.","pinyin":"Wǒ hěn hǎo.","parts":"我|很|好","py":"wo3|hen3|hao3"},
-  {"chinese":"谢谢你。","english":"Thank you.","pinyin":"Xièxie nǐ.","parts":"谢|谢|你","py":"xie4|xie4|ni3"},
-  {"chinese":"不客气。","english":"You're welcome.","pinyin":"Bú kèqi.","parts":"不|客|气","py":"bu2|ke4|qi5"},
-  {"chinese":"再见！","english":"Goodbye!","pinyin":"Zàijiàn!","parts":"再|见","py":"zai4|jian4"},
-  {"chinese":"我是学生。","english":"I am a student.","pinyin":"Wǒ shì xuéshēng.","parts":"我|是|学|生","py":"wo3|shi4|xue2|sheng1"},
-  {"chinese":"他是老师。","english":"He is a teacher.","pinyin":"Tā shì lǎoshī.","parts":"他|是|老|师","py":"ta1|shi4|lao3|shi1"},
-  {"chinese":"我们吃饭。","english":"We are eating.","pinyin":"Wǒmen chīfàn.","parts":"我|们|吃|饭","py":"wo3|men5|chi1|fan4"},
-  {"chinese":"你喝水吗？","english":"Do you drink water?","pinyin":"Nǐ hē shuǐ ma?","parts":"你|喝|水|吗","py":"ni3|he1|shui3|ma5"},
-  {"chinese":"我喜欢茶。","english":"I like tea.","pinyin":"Wǒ xǐhuān chá.","parts":"我|喜|欢|茶","py":"wo3|xi3|huan1|cha2"},
-  {"chinese":"今天很热。","english":"Today is very hot.","pinyin":"Jīntiān hěn rè.","parts":"今|天|很|热","py":"jin1|tian1|hen3|re4"},
-  {"chinese":"现在几点？","english":"What time is it now?","pinyin":"Xiànzài jǐ diǎn?","parts":"现|在|几|点","py":"xian4|zai4|ji3|dian3"},
-  {"chinese":"我不知道。","english":"I don't know.","pinyin":"Wǒ bù zhīdào.","parts":"我|不|知|道","py":"wo3|bu4|zhi1|dao4"},
-  {"chinese":"请等一下。","english":"Please wait a moment.","pinyin":"Qǐng děng yīxià.","parts":"请|等|一|下","py":"qing3|deng3|yi2|xia4"},
-  {"chinese":"对不起。","english":"Sorry.","pinyin":"Duìbuqǐ.","parts":"对|不|起","py":"dui4|bu4|qi3"},
-  {"chinese":"没关系。","english":"It's okay.","pinyin":"Méi guānxi.","parts":"没|关|系","py":"mei2|guan1|xi5"},
-  {"chinese":"你叫什么名字？","english":"What is your name?","pinyin":"Nǐ jiào shénme míngzi?","parts":"你|叫|什|么|名|字","py":"ni3|jiao4|shen2|me5|ming2|zi5"},
-  {"chinese":"我叫小明。","english":"My name is Xiaoming.","pinyin":"Wǒ jiào Xiǎomíng.","parts":"我|叫|小|明","py":"wo3|jiao4|xiao3|ming2"},
-  {"chinese":"我会一点儿汉语。","english":"I speak a little Chinese.","pinyin":"Wǒ huì yīdiǎnr Hànyǔ.","parts":"我|会|一|点|儿|汉|语","py":"wo3|hui4|yi1|dian3|er2|han4|yu3"},
-  {"chinese":"这个多少钱？","english":"How much is this?","pinyin":"Zhège duōshao qián?","parts":"这|个|多|少|钱","py":"zhe4|ge5|duo1|shao3|qian2"},
-  {"chinese":"太贵了。","english":"That's too expensive.","pinyin":"Tài guì le.","parts":"太|贵|了","py":"tai4|gui4|le5"},
-  {"chinese":"我要这个。","english":"I want this one.","pinyin":"Wǒ yào zhège.","parts":"我|要|这|个","py":"wo3|yao4|zhe4|ge5"},
-  {"chinese":"我们走吧。","english":"Let's go.","pinyin":"Wǒmen zǒu ba.","parts":"我|们|走|吧","py":"wo3|men5|zou3|ba5"},
-  {"chinese":"我累了。","english":"I'm tired.","pinyin":"Wǒ lèi le.","parts":"我|累|了","py":"wo3|lei4|le5"},
-  {"chinese":"你在哪儿？","english":"Where are you?","pinyin":"Nǐ zài nǎr?","parts":"你|在|哪|儿","py":"ni3|zai4|na3|er5"},
-  {"chinese":"我在家。","english":"I'm at home.","pinyin":"Wǒ zài jiā.","parts":"我|在|家","py":"wo3|zai4|jia1"},
-  {"chinese":"他在学校。","english":"He is at school.","pinyin":"Tā zài xuéxiào.","parts":"他|在|学|校","py":"ta1|zai4|xue2|xiao4"},
-  {"chinese":"她去商店。","english":"She went to the store.","pinyin":"Tā qù shāngdiàn.","parts":"她|去|商|店","py":"ta1|qu4|shang1|dian4"},
-  {"chinese":"我们看电影。","english":"We are watching a movie.","pinyin":"Wǒmen kàn diànyǐng.","parts":"我|们|看|电|影","py":"wo3|men5|kan4|dian4|ying3"},
-  {"chinese":"今天星期几？","english":"What day of the week is it?","pinyin":"Jīntiān xīngqī jǐ?","parts":"今|天|星|期|几","py":"jin1|tian1|xing1|qi1|ji3"},
-  {"chinese":"今天星期一。","english":"Today is Monday.","pinyin":"Jīntiān xīngqī yī.","parts":"今|天|星|期|一","py":"jin1|tian1|xing1|qi1|yi1"},
-  {"chinese":"昨天很忙。","english":"Yesterday was busy.","pinyin":"Zuótiān hěn máng.","parts":"昨|天|很|忙","py":"zuo2|tian1|hen3|mang2"},
-  {"chinese":"请帮我。","english":"Please help me.","pinyin":"Qǐng bāng wǒ.","parts":"请|帮|我","py":"qing3|bang1|wo3"},
-  {"chinese":"我不是老师。","english":"I am not a teacher.","pinyin":"Wǒ bù shì lǎoshī.","parts":"我|不|是|老|师","py":"wo3|bu2|shi4|lao3|shi1"},
-  {"chinese":"他是我朋友。","english":"He is my friend.","pinyin":"Tā shì wǒ péngyou.","parts":"他|是|我|朋|友","py":"ta1|shi4|wo3|peng2|you5"},
-  {"chinese":"我有一个姐姐。","english":"I have an older sister.","pinyin":"Wǒ yǒu yī gè jiějie.","parts":"我|有|一|个|姐|姐","py":"wo3|you3|yi2|ge4|jie3|jie5"},
-  {"chinese":"你有猫吗？","english":"Do you have a cat?","pinyin":"Nǐ yǒu māo ma?","parts":"你|有|猫|吗","py":"ni3|you3|mao1|ma5"},
-  {"chinese":"我有一只狗。","english":"I have a dog.","pinyin":"Wǒ yǒu yī zhī gǒu.","parts":"我|有|一|只|狗","py":"wo3|you3|yi1|zhi1|gou3"},
-  {"chinese":"他喝茶不喝水。","english":"He drinks tea, not water.","pinyin":"Tā hē chá bù hē shuǐ.","parts":"他|喝|茶|不|喝|水","py":"ta1|he1|cha2|bu4|he1|shui3"},
-  {"chinese":"我妈妈是医生。","english":"My mom is a doctor.","pinyin":"Wǒ māma shì yīshēng.","parts":"我|妈|妈|是|医|生","py":"wo3|ma1|ma5|shi4|yi1|sheng1"},
-  {"chinese":"我爸爸在家。","english":"My dad is at home.","pinyin":"Wǒ bàba zài jiā.","parts":"我|爸|爸|在|家","py":"wo3|ba4|ba5|zai4|jia1"},
-  {"chinese":"这是什么？","english":"What is this?","pinyin":"Zhè shì shénme?","parts":"这|是|什|么","py":"zhe4|shi4|shen2|me5"},
-  {"chinese":"那是书。","english":"That is a book.","pinyin":"Nà shì shū.","parts":"那|是|书","py":"na4|shi4|shu1"},
-  {"chinese":"我买苹果。","english":"I am buying apples.","pinyin":"Wǒ mǎi píngguǒ.","parts":"我|买|苹|果","py":"wo3|mai3|ping2|guo3"},
-  {"chinese":"水果多少钱？","english":"How much is the fruit?","pinyin":"Shuǐguǒ duōshao qián?","parts":"水|果|多|少|钱","py":"shui3|guo3|duo1|shao3|qian2"},
-  {"chinese":"我们坐出租车。","english":"We take a taxi.","pinyin":"Wǒmen zuò chūzūchē.","parts":"我|们|坐|出|租|车","py":"wo3|men5|zuo4|chu1|zu1|che1"},
-  {"chinese":"今天天气怎么样？","english":"What is the weather like today?","pinyin":"Jīntiān tiānqì zěnmeyàng?","parts":"今|天|天|气|怎|么|样","py":"jin1|tian1|tian1|qi4|zen3|me5|yang4"},
-  {"chinese":"天气很好。","english":"The weather is great.","pinyin":"Tiānqì hěn hǎo.","parts":"天|气|很|好","py":"tian1|qi4|hen3|hao3"},
-  {"chinese":"我喜欢吃米饭。","english":"I like eating rice.","pinyin":"Wǒ xǐhuān chī mǐfàn.","parts":"我|喜|欢|吃|米|饭","py":"wo3|xi3|huan1|chi1|mi3|fan4"}
+  {
+    "chinese": "你好！很高兴认识你。",
+    "english": "Hello! Nice to meet you.",
+    "pinyin": "Nǐ hǎo! Hěn gāoxìng rènshi nǐ.",
+    "parts": "你|好|很|高|兴|认|识|你",
+    "py": "ni3|hao3|hen3|gao1|xing4|ren4|shi5|ni3"
+  },
+  {
+    "chinese": "下午我去商店买水果。",
+    "english": "This afternoon I am going to the store to buy fruit.",
+    "pinyin": "Xiàwǔ wǒ qù shāngdiàn mǎi shuǐguǒ.",
+    "parts": "下|午|我|去|商|店|买|水|果",
+    "py": "xia4|wu3|wo3|qu4|shang1|dian4|mai3|shui3|guo3"
+  },
+  {
+    "chinese": "她下午去学校。",
+    "english": "She is going to school this afternoon.",
+    "pinyin": "Tā xiàwǔ qù xuéxiào.",
+    "parts": "她|下|午|去|学|校",
+    "py": "ta1|xia4|wu3|qu4|xue2|xiao4"
+  },
+  {
+    "chinese": "桌子上有一个杯子。",
+    "english": "There is a cup on the table.",
+    "pinyin": "Zhuōzi shang yǒu yí ge bēizi.",
+    "parts": "桌|子|上|有|一|个|杯|子",
+    "py": "zhuo1|zi5|shang4|you3|yi2|ge5|bei1|zi5"
+  },
+  {
+    "chinese": "椅子上没有书。",
+    "english": "There is no book on the chair.",
+    "pinyin": "Yǐzi shang méiyǒu shū.",
+    "parts": "椅|子|上|没|有|书",
+    "py": "yi3|zi5|shang4|mei2|you3|shu1"
+  },
+  {
+    "chinese": "电脑在桌子后面。",
+    "english": "The computer is behind the desk.",
+    "pinyin": "Diànnǎo zài zhuōzi hòumiàn.",
+    "parts": "电|脑|在|桌|子|后|面",
+    "py": "dian4|nao3|zai4|zhuo1|zi5|hou4|mian4"
+  },
+  {
+    "chinese": "我家有一只猫。",
+    "english": "My family has a cat.",
+    "pinyin": "Wǒ jiā yǒu yì zhī māo.",
+    "parts": "我|家|有|一|只|猫",
+    "py": "wo3|jia1|you3|yi1|zhi1|mao1"
+  },
+  {
+    "chinese": "他家有一只狗。",
+    "english": "His family has a dog.",
+    "pinyin": "Tā jiā yǒu yì zhī gǒu.",
+    "parts": "他|家|有|一|只|狗",
+    "py": "ta1|jia1|you3|yi1|zhi1|gou3"
+  },
+  {
+    "chinese": "我喜欢猫和狗。",
+    "english": "I like cats and dogs.",
+    "pinyin": "Wǒ xǐhuan māo hé gǒu.",
+    "parts": "我|喜|欢|猫|和|狗",
+    "py": "wo3|xi3|huan1|mao1|he2|gou3"
+  },
+  {
+    "chinese": "我今年二十岁。",
+    "english": "I am twenty years old this year.",
+    "pinyin": "Wǒ jīnnián èrshí suì.",
+    "parts": "我|今|年|二|十|岁",
+    "py": "wo3|jin1|nian2|er4|shi2|sui4"
+  },
+  {
+    "chinese": "他女儿八岁。",
+    "english": "His daughter is eight years old.",
+    "pinyin": "Tā nǚ'ér bā suì.",
+    "parts": "他|女|儿|八|岁",
+    "py": "ta1|nv3|er2|ba1|sui4"
+  },
+  {
+    "chinese": "李老师在打电话。",
+    "english": "Teacher Li is on the phone.",
+    "pinyin": "Lǐ lǎoshī zài dǎ diànhuà.",
+    "parts": "李|老|师|在|打|电|话",
+    "py": "li3|lao3|shi1|zai4|da3|dian4|hua4"
+  },
+  {
+    "chinese": "家里有很多苹果。",
+    "english": "There are many apples at home.",
+    "pinyin": "Jiā lǐ yǒu hěn duō píngguǒ.",
+    "parts": "家|里|有|很|多|苹|果",
+    "py": "jia1|li3|you3|hen3|duo1|ping2|guo3"
+  },
+  {
+    "chinese": "我们去前面的饭店吃饭，怎么样？",
+    "english": "Shall we eat at the restaurant up ahead?",
+    "pinyin": "Wǒmen qù qiánmiàn de fàndiàn chī fàn, zěnmeyàng?",
+    "parts": "我|们|去|前|面|的|饭|店|吃|饭|怎|么|样",
+    "py": "wo3|men5|qu4|qian2|mian4|de5|fan4|dian4|chi1|fan4|zen3|me5|yang4"
+  },
+  {
+    "chinese": "我和妈妈都喜欢看电影。",
+    "english": "My mom and I both like watching movies.",
+    "pinyin": "Wǒ hé māma dōu xǐhuan kàn diànyǐng.",
+    "parts": "我|和|妈|妈|都|喜|欢|看|电|影",
+    "py": "wo3|he2|ma1|ma5|dou1|xi3|huan1|kan4|dian4|ying3"
+  },
+  {
+    "chinese": "不客气，请坐。",
+    "english": "You're welcome. Please sit down.",
+    "pinyin": "Bú kèqi, qǐng zuò.",
+    "parts": "不|客|气|请|坐",
+    "py": "bu2|ke4|qi5|qing3|zuo4"
+  },
+  {
+    "chinese": "哪个是你的同学？",
+    "english": "Which one is your classmate?",
+    "pinyin": "Nǎge shì nǐ de tóngxué?",
+    "parts": "哪|个|是|你|的|同|学",
+    "py": "na3|ge5|shi4|ni3|de5|tong2|xue2"
+  },
+  {
+    "chinese": "你的汉语怎么样？",
+    "english": "How is your Chinese?",
+    "pinyin": "Nǐ de Hànyǔ zěnmeyàng?",
+    "parts": "你|的|汉|语|怎|么|样",
+    "py": "ni3|de5|han4|yu3|zen3|me5|yang4"
+  },
+  {
+    "chinese": "我会说一点儿汉语。",
+    "english": "I can speak a little Chinese.",
+    "pinyin": "Wǒ huì shuō yìdiǎnr Hànyǔ.",
+    "parts": "我|会|说|一|点|儿|汉|语",
+    "py": "wo3|hui4|shuo1|yi1|dian3|er5|han4|yu3"
+  },
+  {
+    "chinese": "你看见王小姐了吗？",
+    "english": "Did you see Miss Wang?",
+    "pinyin": "Nǐ kànjiàn Wáng xiǎojiě le ma?",
+    "parts": "你|看|见|王|小|姐|了|吗",
+    "py": "ni3|kan4|jian4|wang2|xiao3|jie3|le5|ma5"
+  },
+  {
+    "chinese": "我没看见她。",
+    "english": "I didn't see her.",
+    "pinyin": "Wǒ méi kànjiàn tā.",
+    "parts": "我|没|看|见|她",
+    "py": "wo3|mei2|kan4|jian4|ta1"
+  },
+  {
+    "chinese": "对不起，他们是谁？",
+    "english": "Sorry, who are they?",
+    "pinyin": "Duìbuqǐ, tāmen shì shéi?",
+    "parts": "对|不|起|他|们|是|谁",
+    "py": "dui4|bu4|qi3|ta1|men5|shi4|shei2"
+  },
+  {
+    "chinese": "他们是我爸爸妈妈。",
+    "english": "They are my father and mother.",
+    "pinyin": "Tāmen shì wǒ bàba māma.",
+    "parts": "他|们|是|我|爸|爸|妈|妈",
+    "py": "ta1|men5|shi4|wo3|ba4|ba5|ma1|ma5"
+  },
+  {
+    "chinese": "你现在住在哪儿？",
+    "english": "Where do you live now?",
+    "pinyin": "Nǐ xiànzài zhù zài nǎr?",
+    "parts": "你|现|在|住|在|哪|儿",
+    "py": "ni3|xian4|zai4|zhu4|zai4|na3|er5"
+  },
+  {
+    "chinese": "我住在学校里。",
+    "english": "I live at school.",
+    "pinyin": "Wǒ zhù zài xuéxiào lǐ.",
+    "parts": "我|住|在|学|校|里",
+    "py": "wo3|zhu4|zai4|xue2|xiao4|li3"
+  },
+  {
+    "chinese": "中国人喜欢喝茶。",
+    "english": "Chinese people like drinking tea.",
+    "pinyin": "Zhōngguórén xǐhuan hē chá.",
+    "parts": "中|国|人|喜|欢|喝|茶",
+    "py": "zhong1|guo2|ren2|xi3|huan1|he1|cha2"
+  },
+  {
+    "chinese": "中午你买什么东西了？",
+    "english": "What did you buy at noon?",
+    "pinyin": "Zhōngwǔ nǐ mǎi shénme dōngxi le?",
+    "parts": "中|午|你|买|什|么|东|西|了",
+    "py": "zhong1|wu3|ni3|mai3|shen2|me5|dong1|xi5|le5"
+  },
+  {
+    "chinese": "他少写了一个字。",
+    "english": "He wrote one character too few.",
+    "pinyin": "Tā shǎo xiě le yí ge zì.",
+    "parts": "他|少|写|了|一|个|字",
+    "py": "ta1|shao3|xie3|le5|yi2|ge5|zi4"
+  },
+  {
+    "chinese": "你开车几年了？",
+    "english": "How many years have you been driving?",
+    "pinyin": "Nǐ kāi chē jǐ nián le?",
+    "parts": "你|开|车|几|年|了",
+    "py": "ni3|kai1|che1|ji3|nian2|le5"
+  },
+  {
+    "chinese": "我开车六年了。",
+    "english": "I have been driving for six years.",
+    "pinyin": "Wǒ kāi chē liù nián le.",
+    "parts": "我|开|车|六|年|了",
+    "py": "wo3|kai1|che1|liu4|nian2|le5"
+  },
+  {
+    "chinese": "昨天北京天气很冷。",
+    "english": "Yesterday the weather in Beijing was very cold.",
+    "pinyin": "Zuótiān Běijīng tiānqì hěn lěng.",
+    "parts": "昨|天|北|京|天|气|很|冷",
+    "py": "zuo2|tian1|bei3|jing1|tian1|qi4|hen3|leng3"
+  },
+  {
+    "chinese": "今天太热了。",
+    "english": "Today is too hot.",
+    "pinyin": "Jīntiān tài rè le.",
+    "parts": "今|天|太|热|了",
+    "py": "jin1|tian1|tai4|re4|le5"
+  },
+  {
+    "chinese": "你好，我能吃一块儿吗？",
+    "english": "Hello, can I have a piece?",
+    "pinyin": "Nǐ hǎo, wǒ néng chī yí kuàir ma?",
+    "parts": "你|好|我|能|吃|一|块|儿|吗",
+    "py": "ni3|hao3|wo3|neng2|chi1|yi2|kuai4|er5|ma5"
+  },
+  {
+    "chinese": "他们在买衣服呢。",
+    "english": "They are buying clothes.",
+    "pinyin": "Tāmen zài mǎi yīfu ne.",
+    "parts": "他|们|在|买|衣|服|呢",
+    "py": "ta1|men5|zai4|mai3|yi1|fu5|ne5"
+  },
+  {
+    "chinese": "天气很热，多喝水。",
+    "english": "The weather is hot; drink more water.",
+    "pinyin": "Tiānqì hěn rè, duō hē shuǐ.",
+    "parts": "天|气|很|热|多|喝|水",
+    "py": "tian1|qi4|hen3|re4|duo1|he1|shui3"
+  },
+  {
+    "chinese": "来，我们看看里面有什么。",
+    "english": "Come on, let's see what's inside.",
+    "pinyin": "Lái, wǒmen kànkan lǐmiàn yǒu shénme.",
+    "parts": "来|我|们|看|看|里|面|有|什|么",
+    "py": "lai2|wo3|men5|kan4|kan5|li3|mian4|you3|shen2|me5"
+  },
+  {
+    "chinese": "喂，你睡觉了吗？",
+    "english": "Hello, are you asleep?",
+    "pinyin": "Wéi, nǐ shuìjiào le ma?",
+    "parts": "喂|你|睡|觉|了|吗",
+    "py": "wei4|ni3|shui4|jiao4|le5|ma5"
+  },
+  {
+    "chinese": "那个人是谁？",
+    "english": "Who is that person?",
+    "pinyin": "Nàge rén shì shéi?",
+    "parts": "那|个|人|是|谁",
+    "py": "na4|ge5|ren2|shi4|shei2"
+  },
+  {
+    "chinese": "我不认识那个人。",
+    "english": "I don't know that person.",
+    "pinyin": "Wǒ bú rènshi nàge rén.",
+    "parts": "我|不|认|识|那|个|人",
+    "py": "wo3|bu2|ren4|shi5|na4|ge5|ren2"
+  },
+  {
+    "chinese": "你的同学在哪儿工作？",
+    "english": "Where does your classmate work?",
+    "pinyin": "Nǐ de tóngxué zài nǎr gōngzuò?",
+    "parts": "你|的|同|学|在|哪|儿|工|作",
+    "py": "ni3|de5|tong2|xue2|zai4|na3|er5|gong1|zuo4"
+  },
+  {
+    "chinese": "他在医院工作。",
+    "english": "He works at the hospital.",
+    "pinyin": "Tā zài yīyuàn gōngzuò.",
+    "parts": "他|在|医|院|工|作",
+    "py": "ta1|zai4|yi1|yuan4|gong1|zuo4"
+  },
+  {
+    "chinese": "昨天上午下雨了。",
+    "english": "It rained yesterday morning.",
+    "pinyin": "Zuótiān shàngwǔ xià yǔ le.",
+    "parts": "昨|天|上|午|下|雨|了",
+    "py": "zuo2|tian1|shang4|wu3|xia4|yu3|le5"
+  },
+  {
+    "chinese": "爸爸什么时候来北京？",
+    "english": "When is Dad coming to Beijing?",
+    "pinyin": "Bàba shénme shíhou lái Běijīng?",
+    "parts": "爸|爸|什|么|时|候|来|北|京",
+    "py": "ba4|ba5|shen2|me5|shi2|hou5|lai2|bei3|jing1"
+  },
+  {
+    "chinese": "他下个月来北京。",
+    "english": "He is coming to Beijing next month.",
+    "pinyin": "Tā xià ge yuè lái Běijīng.",
+    "parts": "他|下|个|月|来|北|京",
+    "py": "ta1|xia4|ge5|yue4|lai2|bei3|jing1"
+  },
+  {
+    "chinese": "昨天是八月十九日。",
+    "english": "Yesterday was August 19th.",
+    "pinyin": "Zuótiān shì bā yuè shíjiǔ rì.",
+    "parts": "昨|天|是|八|月|十|九|日",
+    "py": "zuo2|tian1|shi4|ba1|yue4|shi2|jiu3|ri4"
+  },
+  {
+    "chinese": "那个饭店在火车站前面。",
+    "english": "That restaurant is in front of the train station.",
+    "pinyin": "Nàge fàndiàn zài huǒchēzhàn qiánmiàn.",
+    "parts": "那|个|饭|店|在|火|车|站|前|面",
+    "py": "na4|ge5|fan4|dian4|zai4|huo3|che1|zhan4|qian2|mian4"
+  },
+  {
+    "chinese": "你会说汉语吗？",
+    "english": "Can you speak Chinese?",
+    "pinyin": "Nǐ huì shuō Hànyǔ ma?",
+    "parts": "你|会|说|汉|语|吗",
+    "py": "ni3|hui4|shuo1|han4|yu3|ma5"
+  },
+  {
+    "chinese": "王先生在吗？",
+    "english": "Is Mr. Wang in?",
+    "pinyin": "Wáng xiānsheng zài ma?",
+    "parts": "王|先|生|在|吗",
+    "py": "wang2|xian1|sheng1|zai4|ma5"
+  },
+  {
+    "chinese": "他在，请坐。",
+    "english": "He's here. Please sit down.",
+    "pinyin": "Tā zài, qǐng zuò.",
+    "parts": "他|在|请|坐",
+    "py": "ta1|zai4|qing3|zuo4"
+  },
+  {
+    "chinese": "对不起，我不会做饭。",
+    "english": "Sorry, I can't cook.",
+    "pinyin": "Duìbuqǐ, wǒ bú huì zuò fàn.",
+    "parts": "对|不|起|我|不|会|做|饭",
+    "py": "dui4|bu4|qi3|wo3|bu2|hui4|zuo4|fan4"
+  },
+  {
+    "chinese": "没关系，我会做饭。",
+    "english": "It's okay, I can cook.",
+    "pinyin": "Méi guānxi, wǒ huì zuò fàn.",
+    "parts": "没|关|系|我|会|做|饭",
+    "py": "mei2|guan1|xi5|wo3|hui4|zuo4|fan4"
+  },
+  {
+    "chinese": "这个杯子多少钱？",
+    "english": "How much is this cup?",
+    "pinyin": "Zhège bēizi duōshao qián?",
+    "parts": "这|个|杯|子|多|少|钱",
+    "py": "zhe4|ge5|bei1|zi5|duo1|shao3|qian2"
+  },
+  {
+    "chinese": "这个苹果八块钱。",
+    "english": "This apple is eight yuan.",
+    "pinyin": "Zhège píngguǒ bā kuài qián.",
+    "parts": "这|个|苹|果|八|块|钱",
+    "py": "zhe4|ge5|ping2|guo3|ba1|kuai4|qian2"
+  },
+  {
+    "chinese": "我今天在朋友家吃饭。",
+    "english": "I'm eating at a friend's house today.",
+    "pinyin": "Wǒ jīntiān zài péngyou jiā chī fàn.",
+    "parts": "我|今|天|在|朋|友|家|吃|饭",
+    "py": "wo3|jin1|tian1|zai4|peng2|you3|jia1|chi1|fan4"
+  },
+  {
+    "chinese": "他在家里看电视。",
+    "english": "He is watching TV at home.",
+    "pinyin": "Tā zài jiā lǐ kàn diànshì.",
+    "parts": "他|在|家|里|看|电|视",
+    "py": "ta1|zai4|jia1|li3|kan4|dian4|shi4"
+  },
+  {
+    "chinese": "星期五我们去学校。",
+    "english": "On Friday we go to school.",
+    "pinyin": "Xīngqīwǔ wǒmen qù xuéxiào.",
+    "parts": "星|期|五|我|们|去|学|校",
+    "py": "xing1|qi1|wu3|wo3|men5|qu4|xue2|xiao4"
+  },
+  {
+    "chinese": "星期六我想看电影。",
+    "english": "On Saturday I want to watch a movie.",
+    "pinyin": "Xīngqīliù wǒ xiǎng kàn diànyǐng.",
+    "parts": "星|期|六|我|想|看|电|影",
+    "py": "xing1|qi1|liu4|wo3|xiang3|kan4|dian4|ying3"
+  },
+  {
+    "chinese": "我们坐火车去北京。",
+    "english": "We take the train to Beijing.",
+    "pinyin": "Wǒmen zuò huǒchē qù Běijīng.",
+    "parts": "我|们|坐|火|车|去|北|京",
+    "py": "wo3|men5|zuo4|huo3|che1|qu4|bei3|jing1"
+  },
+  {
+    "chinese": "他坐飞机来中国。",
+    "english": "He takes a plane to China.",
+    "pinyin": "Tā zuò fēijī lái Zhōngguó.",
+    "parts": "他|坐|飞|机|来|中|国",
+    "py": "ta1|zuo4|fei1|ji1|lai2|zhong1|guo2"
+  },
+  {
+    "chinese": "我想回家。",
+    "english": "I want to go home.",
+    "pinyin": "Wǒ xiǎng huí jiā.",
+    "parts": "我|想|回|家",
+    "py": "wo3|xiang3|hui2|jia1"
+  },
+  {
+    "chinese": "这本书是我的。",
+    "english": "This book is mine.",
+    "pinyin": "Zhè běn shū shì wǒ de.",
+    "parts": "这|本|书|是|我|的",
+    "py": "zhe4|ben3|shu1|shi4|wo3|de5"
+  },
+  {
+    "chinese": "那个杯子是他的。",
+    "english": "That cup is his.",
+    "pinyin": "Nàge bēizi shì tā de.",
+    "parts": "那|个|杯|子|是|他|的",
+    "py": "na4|ge5|bei1|zi5|shi4|ta1|de5"
+  },
+  {
+    "chinese": "今天星期三。",
+    "english": "Today is Wednesday.",
+    "pinyin": "Jīntiān xīngqīsān.",
+    "parts": "今|天|星|期|三",
+    "py": "jin1|tian1|xing1|qi1|san1"
+  },
+  {
+    "chinese": "我有十五个苹果。",
+    "english": "I have fifteen apples.",
+    "pinyin": "Wǒ yǒu shíwǔ ge píngguǒ.",
+    "parts": "我|有|十|五|个|苹|果",
+    "py": "wo3|you3|shi2|wu3|ge5|ping2|guo3"
+  },
+  {
+    "chinese": "她很漂亮。",
+    "english": "She is very beautiful.",
+    "pinyin": "Tā hěn piàoliang.",
+    "parts": "她|很|漂|亮",
+    "py": "ta1|hen3|piao4|liang5"
+  },
+  {
+    "chinese": "他很爱学习。",
+    "english": "He really loves studying.",
+    "pinyin": "Tā hěn ài xuéxí.",
+    "parts": "他|很|爱|学|习",
+    "py": "ta1|hen3|ai4|xue2|xi2"
+  },
+  {
+    "chinese": "我想买茶。",
+    "english": "I want to buy tea.",
+    "pinyin": "Wǒ xiǎng mǎi chá.",
+    "parts": "我|想|买|茶",
+    "py": "wo3|xiang3|mai3|cha2"
+  },
+  {
+    "chinese": "你叫什么名字？",
+    "english": "What is your name?",
+    "pinyin": "Nǐ jiào shénme míngzi?",
+    "parts": "你|叫|什|么|名|字",
+    "py": "ni3|jiao4|shen2|me5|ming2|zi5"
+  },
+  {
+    "chinese": "我叫王明。",
+    "english": "My name is Wang Ming.",
+    "pinyin": "Wǒ jiào Wáng Míng.",
+    "parts": "我|叫|王|明",
+    "py": "wo3|jiao4|wang2|ming2"
+  },
+  {
+    "chinese": "这是我的老师。",
+    "english": "This is my teacher.",
+    "pinyin": "Zhè shì wǒ de lǎoshī.",
+    "parts": "这|是|我|的|老|师",
+    "py": "zhe4|shi4|wo3|de5|lao3|shi1"
+  },
+  {
+    "chinese": "我爱你",
+    "english": "I love you",
+    "pinyin": "Wǒ ài nǐ",
+    "parts": "我|爱|你",
+    "py": "wo3|ai4|ni3"
+  },
+  {
+    "chinese": "你爱我",
+    "english": "You love me",
+    "pinyin": "Nǐ ài wǒ",
+    "parts": "你|爱|我",
+    "py": "ni3|ai4|wo3"
+  },
+  {
+    "chinese": "他爱她",
+    "english": "He loves her",
+    "pinyin": "Tā ài tā",
+    "parts": "他|爱|她",
+    "py": "ta1|ai4|ta1"
+  },
+  {
+    "chinese": "我住在北京",
+    "english": "I live in Beijing",
+    "pinyin": "Wǒ zhù zài Běijīng",
+    "parts": "我|住|在|北|京",
+    "py": "wo3|hu4|zai4|bei3|jing1"
+  },
+  {
+    "chinese": "我要一杯茶",
+    "english": "I want one cup of tea",
+    "pinyin": "Wǒ yào yìbēi chá",
+    "parts": "我|要|一|杯|茶",
+    "py": "wo3|yao4|yi4|bei1|ha2"
+  },
+  {
+    "chinese": "你喜欢这本书吗？",
+    "english": "Do you like this book?",
+    "pinyin": "Nǐ xǐhuān zhè běn shū ma？",
+    "parts": "你|喜|欢|这|本|书|吗",
+    "py": "ni3|xi3|huan1|he4|ben3|hu1|ma"
+  },
+  {
+    "chinese": "我喜欢这本书",
+    "english": "I like this book",
+    "pinyin": "Wǒ xǐhuān zhè běn shū",
+    "parts": "我|喜|欢|这|本|书",
+    "py": "wo3|xi3|huan1|he4|ben3|hu1"
+  },
+  {
+    "chinese": "我不喜欢你",
+    "english": "I don't like you",
+    "pinyin": "Wǒ bù xǐhuān nǐ",
+    "parts": "我|不|喜|欢|你",
+    "py": "wo3|bu4|xi3|huan1|ni3"
+  },
+  {
+    "chinese": "不客气",
+    "english": "You're welcome",
+    "pinyin": "Búkèqì",
+    "parts": "不|客|气",
+    "py": "bu2|ke4|qi4"
+  },
+  {
+    "chinese": "中国人很喜欢喝茶",
+    "english": "Chinese people really like drinking tea",
+    "pinyin": "Zhōngguórén hěn xǐhuān hē chá",
+    "parts": "中|国|人|很|喜|欢|喝|茶",
+    "py": "hong1|guo2|ren2|hen3|xi3|huan1|he1|ha2"
+  },
+  {
+    "chinese": "我是坐出租车去医院的",
+    "english": "I took a taxi to the hospital",
+    "pinyin": "Wǒ shì zuò chūzūchē qù yīyuàn de",
+    "parts": "我|是|坐|出|租|车|去|医|院|的",
+    "py": "wo3|hi4|zuo4|hu1|zu1|he1|qu4|yi1|yuan4|de"
+  },
+  {
+    "chinese": "我在打电话",
+    "english": "I'm on a phone call",
+    "pinyin": "Wǒ zài dǎdiànhuà",
+    "parts": "我|在|打|电|话",
+    "py": "wo3|zai4|da3|dian4|hua4"
+  },
+  {
+    "chinese": "这是我的",
+    "english": "This is mine",
+    "pinyin": "Zhè shì wǒ de",
+    "parts": "这|是|我|的",
+    "py": "he4|hi4|wo3|de"
+  },
+  {
+    "chinese": "你几点来？",
+    "english": "At what time are you coming?",
+    "pinyin": "Nǐ jǐ diǎn lái？",
+    "parts": "你|几|点|来",
+    "py": "ni3|ji3|dian3|lai2"
+  },
+  {
+    "chinese": "我朋友的电脑很好",
+    "english": "My friend's computer is really good",
+    "pinyin": "Wǒ péngyǒu de diànnǎo hěn hǎo",
+    "parts": "我|朋|友|的|电|脑|很|好",
+    "py": "wo3|peng2|you3|de|dian4|nao3|hen3|hao3"
+  },
+  {
+    "chinese": "你今天想去看电影吗？",
+    "english": "Do you want to go watch a film today?",
+    "pinyin": "Nǐ jīntiān xiǎng qù kàn diànyǐng ma？",
+    "parts": "你|今|天|想|去|看|电|影|吗",
+    "py": "ni3|jin1|tian1|xiang3|qu4|kan4|dian4|ying3|ma"
+  },
+  {
+    "chinese": "我在北京大学读书",
+    "english": "I'm studying at Beijing University",
+    "pinyin": "Wǒ zài Běijīng Dàxué dú shū",
+    "parts": "我|在|北|京|大|学|读|书",
+    "py": "wo3|zai4|bei3|jing1|da4|xue2|du2|hu1"
+  },
+  {
+    "chinese": "我在读书",
+    "english": "I'm studying",
+    "pinyin": "Wǒ zài dú shū",
+    "parts": "我|在|读|书",
+    "py": "wo3|zai4|du2|hu1"
+  },
+  {
+    "chinese": "我在看书",
+    "english": "I'm reading a book",
+    "pinyin": "Wǒ zài kànshū",
+    "parts": "我|在|看|书",
+    "py": "wo3|zai4|kan4|hu1"
+  },
+  {
+    "chinese": "对不起，你是谁？",
+    "english": "I'm sorry, who are you?",
+    "pinyin": "Duìbùqǐ nǐ shì shéi，？",
+    "parts": "对|不|起|你|是|谁",
+    "py": "dui4|bu4|qi3|ni3|hi4|hei2"
+  },
+  {
+    "chinese": "我买了很多",
+    "english": "I bought a lot",
+    "pinyin": "Wǒ mǎi le hěn duō",
+    "parts": "我|买|了|很|多",
+    "py": "wo3|mai3|le|hen3|duo1"
+  },
+  {
+    "chinese": "我买了不多",
+    "english": "I didn't buy too many",
+    "pinyin": "Wǒ mǎi le bù duō",
+    "parts": "我|买|了|不|多",
+    "py": "wo3|mai3|le|bu4|duo1"
+  },
+  {
+    "chinese": "这本书多少钱？",
+    "english": "How much is this book?",
+    "pinyin": "Zhè běn shū duōshǎo qián？",
+    "parts": "这|本|书|多|少|钱",
+    "py": "he4|ben3|hu1|duo1|hao3|qian2"
+  },
+  {
+    "chinese": "你买了多少？",
+    "english": "How many did you buy?",
+    "pinyin": "Nǐ mǎi le duōshǎo？",
+    "parts": "你|买|了|多|少",
+    "py": "ni3|mai3|le|duo1|hao3"
+  },
+  {
+    "chinese": "这饭店的菜很好吃",
+    "english": "The food in this restaurant is great",
+    "pinyin": "Zhè fàndiàn de cài hěn hǎochī",
+    "parts": "这|饭|店|的|菜|很|好|吃",
+    "py": "he4|fan4|dian4|de|cai4|hen3|hao3|hi1"
+  },
+  {
+    "chinese": "我坐飞机回家",
+    "english": "I'm going home by plane",
+    "pinyin": "Wǒ zuò fēijī huí jiā",
+    "parts": "我|坐|飞|机|回|家",
+    "py": "wo3|zuo4|fei1|ji1|hui2|jia1"
+  },
+  {
+    "chinese": "我很高兴",
+    "english": "I am very happy",
+    "pinyin": "Wǒ hěn gāoxìng",
+    "parts": "我|很|高|兴",
+    "py": "wo3|hen3|gao1|xing4"
+  },
+  {
+    "chinese": "她爱我，我很高兴",
+    "english": "She loves me, I am very happy",
+    "pinyin": "Tā ài wǒ wǒ hěn gāoxìng，",
+    "parts": "她|爱|我|我|很|高|兴",
+    "py": "ta1|ai4|wo3|wo3|hen3|gao1|xing4"
+  },
+  {
+    "chinese": "我很喜欢学习汉语",
+    "english": "I really like studying Chinese",
+    "pinyin": "Wǒ hěn xǐhuān xuéxí hànyǔ",
+    "parts": "我|很|喜|欢|学|习|汉|语",
+    "py": "wo3|hen3|xi3|huan1|xue2|xi2|han4|yu3"
+  },
+  {
+    "chinese": "这是我很好的朋友",
+    "english": "This is my very good friend",
+    "pinyin": "Zhè shì wǒ hěn hǎo de péngyǒu",
+    "parts": "这|是|我|很|好|的|朋|友",
+    "py": "he4|hi4|wo3|hen3|hao3|de|peng2|you3"
+  },
+  {
+    "chinese": "这是我的好朋友",
+    "english": "This is my good friend",
+    "pinyin": "Zhè shì wǒ de hǎo péngyǒu",
+    "parts": "这|是|我|的|好|朋|友",
+    "py": "he4|hi4|wo3|de|hao3|peng2|you3"
+  },
+  {
+    "chinese": "我好高兴",
+    "english": "I am very happy",
+    "pinyin": "Wǒ hǎo gāoxìng",
+    "parts": "我|好|高|兴",
+    "py": "wo3|hao3|gao1|xing4"
+  },
+  {
+    "chinese": "你和她我都喜欢",
+    "english": "I like both of you",
+    "pinyin": "Nǐ hé tā wǒ dōu xǐhuān",
+    "parts": "你|和|她|我|都|喜|欢",
+    "py": "ni3|he2|ta1|wo3|dou1|xi3|huan1"
+  },
+  {
+    "chinese": "你要一杯水吗？",
+    "english": "Do you want a cup of water?",
+    "pinyin": "Nǐ yào yìbēi shuǐ ma？",
+    "parts": "你|要|一|杯|水|吗",
+    "py": "ni3|yao4|yi4|bei1|hui3|ma"
+  },
+  {
+    "chinese": "我要一杯开水",
+    "english": "I want a cup of drinking water",
+    "pinyin": "Wǒ yào yìbēi kāishuǐ",
+    "parts": "我|要|一|杯|开|水",
+    "py": "wo3|yao4|yi4|bei1|kai1|hui3"
+  },
+  {
+    "chinese": "我很喜欢他",
+    "english": "I like him a lot",
+    "pinyin": "Wǒ hěn xǐhuān tā",
+    "parts": "我|很|喜|欢|他",
+    "py": "wo3|hen3|xi3|huan1|ta1"
+  },
+  {
+    "chinese": "我明天回家",
+    "english": "I'll go home tomorrow",
+    "pinyin": "Wǒ míngtiān huí jiā",
+    "parts": "我|明|天|回|家",
+    "py": "wo3|ming2|tian1|hui2|jia1"
+  },
+  {
+    "chinese": "我会做饭",
+    "english": "I can cook",
+    "pinyin": "Wǒ huì zuòfàn",
+    "parts": "我|会|做|饭",
+    "py": "wo3|hui4|zuo4|fan4"
+  },
+  {
+    "chinese": "我不会做饭",
+    "english": "I can't cook",
+    "pinyin": "Wǒ bù huì zuòfàn",
+    "parts": "我|不|会|做|饭",
+    "py": "wo3|bu4|hui4|zuo4|fan4"
+  },
+  {
+    "chinese": "你买了几本书？",
+    "english": "How many books did you buy?",
+    "pinyin": "Nǐ mǎi le jǐ běn shū？",
+    "parts": "你|买|了|几|本|书",
+    "py": "ni3|mai3|le|ji3|ben3|hu1"
+  },
+  {
+    "chinese": "我买了几本书",
+    "english": "I bought several books",
+    "pinyin": "Wǒ mǎi le jǐ běn shū",
+    "parts": "我|买|了|几|本|书",
+    "py": "wo3|mai3|le|ji3|ben3|hu1"
+  },
+  {
+    "chinese": "你家有几个人？",
+    "english": "How many people are in your family?",
+    "pinyin": "Nǐ jiā yǒu jǐ gè rén？",
+    "parts": "你|家|有|几|个|人",
+    "py": "ni3|jia1|you3|ji3|ge4|ren2"
+  },
+  {
+    "chinese": "我今天去",
+    "english": "I'll go today",
+    "pinyin": "Wǒ jīntiān qù",
+    "parts": "我|今|天|去",
+    "py": "wo3|jin1|tian1|qu4"
+  },
+  {
+    "chinese": "我今天去了",
+    "english": "I went today",
+    "pinyin": "Wǒ jīntiān qù le",
+    "parts": "我|今|天|去|了",
+    "py": "wo3|jin1|tian1|qu4|le"
+  },
+  {
+    "chinese": "我在看你",
+    "english": "I'm looking at you",
+    "pinyin": "Wǒ zài kàn nǐ",
+    "parts": "我|在|看|你",
+    "py": "wo3|zai4|kan4|ni3"
+  },
+  {
+    "chinese": "我看见你了",
+    "english": "I spotted you!",
+    "pinyin": "Wǒ kànjiàn nǐ le",
+    "parts": "我|看|见|你|了",
+    "py": "wo3|kan4|jian4|ni3|le"
+  },
+  {
+    "chinese": "这本书三十四块",
+    "english": "This book costs 34 RMB",
+    "pinyin": "Zhè běn shū sānshísì kuài",
+    "parts": "这|本|书|三|十|四|块",
+    "py": "he4|ben3|hu1|san1|hi2|si4|kuai4"
+  },
+  {
+    "chinese": "你来吗？",
+    "english": "Are you coming?",
+    "pinyin": "Nǐ lái ma？",
+    "parts": "你|来|吗",
+    "py": "ni3|lai2|ma"
+  },
+  {
+    "chinese": "我来了",
+    "english": "I'm here",
+    "pinyin": "Wǒ lái le",
+    "parts": "我|来|了",
+    "py": "wo3|lai2|le"
+  },
+  {
+    "chinese": "我好了",
+    "english": "I'm fine now",
+    "pinyin": "Wǒ hǎo le",
+    "parts": "我|好|了",
+    "py": "wo3|hao3|le"
+  },
+  {
+    "chinese": "这里的天气很冷",
+    "english": "It's quite cold here",
+    "pinyin": "Zhè lǐ de tiānqì hěn lěng",
+    "parts": "这|里|的|天|气|很|冷",
+    "py": "he4|li3|de|tian1|qi4|hen3|leng3"
+  },
+  {
+    "chinese": "这里的天气很好",
+    "english": "The weather here is very good",
+    "pinyin": "Zhè lǐ de tiānqì hěn hǎo",
+    "parts": "这|里|的|天|气|很|好",
+    "py": "he4|li3|de|tian1|qi4|hen3|hao3"
+  },
+  {
+    "chinese": "那里的天气很好",
+    "english": "The weather there is very good",
+    "pinyin": "Nà lǐ de tiānqì hěn hǎo",
+    "parts": "那|里|的|天|气|很|好",
+    "py": "na4|li3|de|tian1|qi4|hen3|hao3"
+  },
+  {
+    "chinese": "你爱她吗？",
+    "english": "Do you love her?",
+    "pinyin": "Nǐ ài tā ma？",
+    "parts": "你|爱|她|吗",
+    "py": "ni3|ai4|ta1|ma"
+  },
+  {
+    "chinese": "没关系",
+    "english": "It doesn't matter",
+    "pinyin": "Méiguānxì",
+    "parts": "没|关|系",
+    "py": "mei2|guan1|xi4"
+  },
+  {
+    "chinese": "我要一碗米饭",
+    "english": "I want a bowl of rice",
+    "pinyin": "Wǒ yào yī wǎn mǐfàn",
+    "parts": "我|要|一|碗|米|饭",
+    "py": "wo3|yao4|yi1|wan3|mi3|fan4"
+  },
+  {
+    "chinese": "我明天去",
+    "english": "I'll go tomorrow",
+    "pinyin": "Wǒ míngtiān qù",
+    "parts": "我|明|天|去",
+    "py": "wo3|ming2|tian1|qu4"
+  },
+  {
+    "chinese": "你喜欢哪本书？",
+    "english": "Which book do you like?",
+    "pinyin": "Nǐ xǐhuān nǎ běn shū？",
+    "parts": "你|喜|欢|哪|本|书",
+    "py": "ni3|xi3|huan1|na3|ben3|hu1"
+  },
+  {
+    "chinese": "我很喜欢，你呢？",
+    "english": "I like it a lot, what about you?",
+    "pinyin": "Wǒ hěn xǐhuān nǐ ne，？",
+    "parts": "我|很|喜|欢|你|呢",
+    "py": "wo3|hen3|xi3|huan1|ni3|ne"
+  },
+  {
+    "chinese": "我不太喜欢",
+    "english": "I don't like it that much",
+    "pinyin": "Wǒ bù tài xǐhuān",
+    "parts": "我|不|太|喜|欢",
+    "py": "wo3|bu4|tai4|xi3|huan1"
+  },
+  {
+    "chinese": "我不能做饭",
+    "english": "I'm not able to cook right now",
+    "pinyin": "Wǒ bù néng zuòfàn",
+    "parts": "我|不|能|做|饭",
+    "py": "wo3|bu4|neng2|zuo4|fan4"
+  },
+  {
+    "chinese": "这是我的朋友",
+    "english": "This is my friend",
+    "pinyin": "Zhè shì wǒ de péngyǒu",
+    "parts": "这|是|我|的|朋|友",
+    "py": "he4|hi4|wo3|de|peng2|you3"
+  },
+  {
+    "chinese": "我很喜欢吃苹果",
+    "english": "I really like eating apples",
+    "pinyin": "Wǒ hěn xǐhuān chī píngguǒ",
+    "parts": "我|很|喜|欢|吃|苹|果",
+    "py": "wo3|hen3|xi3|huan1|hi1|ping2|guo3"
+  },
+  {
+    "chinese": "我有钱",
+    "english": "I have money",
+    "pinyin": "Wǒ yǒu qián",
+    "parts": "我|有|钱",
+    "py": "wo3|you3|qian2"
+  },
+  {
+    "chinese": "我没有钱",
+    "english": "I don't have money",
+    "pinyin": "Wǒ méiyǒu qián",
+    "parts": "我|没|有|钱",
+    "py": "wo3|mei2|you3|qian2"
+  },
+  {
+    "chinese": "在医院的前面有个很小的商店",
+    "english": "There's a small shop in front of the hospital",
+    "pinyin": "Zài yīyuàn de qiánmiàn yǒu gè hěn xiǎo de shāngdiàn",
+    "parts": "在|医|院|的|前|面|有|个|很|小|的|商|店",
+    "py": "zai4|yi1|yuan4|de|qian2|mian4|you3|ge4|hen3|xiao3|de|hang1|dian4"
+  },
+  {
+    "chinese": "我请你吃饭",
+    "english": "I'll treat you to a meal",
+    "pinyin": "Wǒ qǐng nǐ chīfàn",
+    "parts": "我|请|你|吃|饭",
+    "py": "wo3|qing3|ni3|hi1|fan4"
+  },
+  {
+    "chinese": "我来请",
+    "english": "I'll pay",
+    "pinyin": "Wǒ lái qǐng",
+    "parts": "我|来|请",
+    "py": "wo3|lai2|qing3"
+  },
+  {
+    "chinese": "我去北京",
+    "english": "I'm going to Beijing",
+    "pinyin": "Wǒ qù Běijīng",
+    "parts": "我|去|北|京",
+    "py": "wo3|qu4|bei3|jing1"
+  },
+  {
+    "chinese": "这里的天气很热",
+    "english": "It's quite hot here",
+    "pinyin": "Zhè lǐ de tiānqì hěn rè",
+    "parts": "这|里|的|天|气|很|热",
+    "py": "he4|li3|de|tian1|qi4|hen3|re4"
+  },
+  {
+    "chinese": "这些人很好",
+    "english": "Those people are very nice",
+    "pinyin": "Zhèxiē rén hěn hǎo",
+    "parts": "这|些|人|很|好",
+    "py": "he4|xie1|ren2|hen3|hao3"
+  },
+  {
+    "chinese": "我买了很少",
+    "english": "I bought just a few",
+    "pinyin": "Wǒ mǎi le hěn shǎo",
+    "parts": "我|买|了|很|少",
+    "py": "wo3|mai3|le|hen3|hao3"
+  },
+  {
+    "chinese": "我买了不少",
+    "english": "I bought quite a few",
+    "pinyin": "Wǒ mǎi le bù shǎo",
+    "parts": "我|买|了|不|少",
+    "py": "wo3|mai3|le|bu4|hao3"
+  },
+  {
+    "chinese": "谁爱你？",
+    "english": "Who loves you?",
+    "pinyin": "Shéi ài nǐ？",
+    "parts": "谁|爱|你",
+    "py": "hei2|ai4|ni3"
+  },
+  {
+    "chinese": "我有十个朋友",
+    "english": "I have ten friends",
+    "pinyin": "Wǒ yǒu shí gè péngyǒu",
+    "parts": "我|有|十|个|朋|友",
+    "py": "wo3|you3|hi2|ge4|peng2|you3"
+  },
+  {
+    "chinese": "这是我",
+    "english": "This is me",
+    "pinyin": "Zhè shì wǒ",
+    "parts": "这|是|我",
+    "py": "he4|hi4|wo3"
+  },
+  {
+    "chinese": "我是医生",
+    "english": "I'm a doctor",
+    "pinyin": "Wǒ shì yīshēng",
+    "parts": "我|是|医|生",
+    "py": "wo3|hi4|yi1|heng1"
+  },
+  {
+    "chinese": "我要一杯水",
+    "english": "I want a glass of water",
+    "pinyin": "Wǒ yào yìbēi shuǐ",
+    "parts": "我|要|一|杯|水",
+    "py": "wo3|yao4|yi4|bei1|hui3"
+  },
+  {
+    "chinese": "我去睡觉",
+    "english": "I'm going to bed",
+    "pinyin": "Wǒ qù shuìjiào",
+    "parts": "我|去|睡|觉",
+    "py": "wo3|qu4|hui4|jiao4"
+  },
+  {
+    "chinese": "你几岁？",
+    "english": "How old are you?",
+    "pinyin": "Nǐ jǐ suì？",
+    "parts": "你|几|岁",
+    "py": "ni3|ji3|sui4"
+  },
+  {
+    "chinese": "你多大？",
+    "english": "How old are you?",
+    "pinyin": "Nǐ duō dà？",
+    "parts": "你|多|大",
+    "py": "ni3|duo1|da4"
+  },
+  {
+    "chinese": "太好了！",
+    "english": "That's great!",
+    "pinyin": "Tài hǎo le！",
+    "parts": "太|好|了",
+    "py": "tai4|hao3|le"
+  },
+  {
+    "chinese": "天气很好",
+    "english": "The weather is great",
+    "pinyin": "Tiānqì hěn hǎo",
+    "parts": "天|气|很|好",
+    "py": "tian1|qi4|hen3|hao3"
+  },
+  {
+    "chinese": "你听我说",
+    "english": "Listen to what I'm saying",
+    "pinyin": "Nǐ tīng wǒ shuō",
+    "parts": "你|听|我|说",
+    "py": "ni3|ting1|wo3|huo1"
+  },
+  {
+    "chinese": "我的同学都很喜欢我",
+    "english": "My classmates all like me a lot",
+    "pinyin": "Wǒ de tóngxué dōu hěn xǐhuān wǒ",
+    "parts": "我|的|同|学|都|很|喜|欢|我",
+    "py": "wo3|de|tong2|xue2|dou1|hen3|xi3|huan1|wo3"
+  },
+  {
+    "chinese": "喂，你好",
+    "english": "Hello, answering the phone",
+    "pinyin": "Wèi nǐhǎo，",
+    "parts": "喂|你|好",
+    "py": "wei4|ni3|hao3"
+  },
+  {
+    "chinese": "我喜欢你",
+    "english": "I like you",
+    "pinyin": "Wǒ xǐhuān nǐ",
+    "parts": "我|喜|欢|你",
+    "py": "wo3|xi3|huan1|ni3"
+  },
+  {
+    "chinese": "你喜欢我",
+    "english": "You like me",
+    "pinyin": "Nǐ xǐhuān wǒ",
+    "parts": "你|喜|欢|我",
+    "py": "ni3|xi3|huan1|wo3"
+  },
+  {
+    "chinese": "今天下雨了，我不想去",
+    "english": "It's raining today, I don't really want to go",
+    "pinyin": "Jīntiān xiàyǔ le wǒ bù xiǎng qù，",
+    "parts": "今|天|下|雨|了|我|不|想|去",
+    "py": "jin1|tian1|xia4|yu3|le|wo3|bu4|xiang3|qu4"
+  },
+  {
+    "chinese": "明天会下雨",
+    "english": "It might be raining tomorrow",
+    "pinyin": "Míngtiān huì xiàyǔ",
+    "parts": "明|天|会|下|雨",
+    "py": "ming2|tian1|hui4|xia4|yu3"
+  },
+  {
+    "chinese": "现在几点？",
+    "english": "What time is it now?",
+    "pinyin": "Xiànzài jǐ diǎn？",
+    "parts": "现|在|几|点",
+    "py": "xian4|zai4|ji3|dian3"
+  },
+  {
+    "chinese": "我很想你",
+    "english": "I miss you",
+    "pinyin": "Wǒ hěn xiǎng nǐ",
+    "parts": "我|很|想|你",
+    "py": "wo3|hen3|xiang3|ni3"
+  },
+  {
+    "chinese": "我很想我的家",
+    "english": "I miss my family",
+    "pinyin": "Wǒ hěn xiǎng wǒ de jiā",
+    "parts": "我|很|想|我|的|家",
+    "py": "wo3|hen3|xiang3|wo3|de|jia1"
+  },
+  {
+    "chinese": "你想一想",
+    "english": "Think about it",
+    "pinyin": "Nǐ xiǎng yī xiǎng",
+    "parts": "你|想|一|想",
+    "py": "ni3|xiang3|yi1|xiang3"
+  },
+  {
+    "chinese": "小姐，你好",
+    "english": "Hello, miss!",
+    "pinyin": "Xiǎojiě nǐhǎo，",
+    "parts": "小|姐|你|好",
+    "py": "xiao3|jie3|ni3|hao3"
+  },
+  {
+    "chinese": "老师在写汉字",
+    "english": "The teacher is writing characters",
+    "pinyin": "Lǎoshī zài xiě hànzì",
+    "parts": "老|师|在|写|汉|字",
+    "py": "lao3|hi1|zai4|xie3|han4|zi4"
+  },
+  {
+    "chinese": "我很喜欢这些",
+    "english": "I really like these",
+    "pinyin": "Wǒ hěn xǐhuān zhèxiē",
+    "parts": "我|很|喜|欢|这|些",
+    "py": "wo3|hen3|xi3|huan1|he4|xie1"
+  },
+  {
+    "chinese": "我很喜欢那些",
+    "english": "I really like those",
+    "pinyin": "Wǒ hěn xǐhuān nàxiē",
+    "parts": "我|很|喜|欢|那|些",
+    "py": "wo3|hen3|xi3|huan1|na4|xie1"
+  },
+  {
+    "chinese": "今天星期六",
+    "english": "Today is Saturday",
+    "pinyin": "Jīntiān xīngqīliù",
+    "parts": "今|天|星|期|六",
+    "py": "jin1|tian1|xing1|qi1|liu4"
+  },
+  {
+    "chinese": "明天星期天",
+    "english": "Tomorrow is Sunday",
+    "pinyin": "Míngtiān xīngqītiān",
+    "parts": "明|天|星|期|天",
+    "py": "ming2|tian1|xing1|qi1|tian1"
+  },
+  {
+    "chinese": "今天星期几？",
+    "english": "What day is today?",
+    "pinyin": "Jīntiān xīngqī jǐ？",
+    "parts": "今|天|星|期|几",
+    "py": "jin1|tian1|xing1|qi1|ji3"
+  },
+  {
+    "chinese": "我是很好的学生",
+    "english": "I'm a good student",
+    "pinyin": "Wǒ shì hěn hǎo de xuéshēng",
+    "parts": "我|是|很|好|的|学|生",
+    "py": "wo3|hi4|hen3|hao3|de|xue2|heng1"
+  },
+  {
+    "chinese": "我在学习",
+    "english": "I'm studying",
+    "pinyin": "Wǒ zài xuéxí",
+    "parts": "我|在|学|习",
+    "py": "wo3|zai4|xue2|xi2"
+  },
+  {
+    "chinese": "这是我的学校",
+    "english": "This is my school",
+    "pinyin": "Zhè shì wǒ de xuéxiào",
+    "parts": "这|是|我|的|学|校",
+    "py": "he4|hi4|wo3|de|xue2|xiao4"
+  },
+  {
+    "chinese": "我在医院工作",
+    "english": "I work at the hospital",
+    "pinyin": "Wǒ zài yīyuàn gōngzuò",
+    "parts": "我|在|医|院|工|作",
+    "py": "wo3|zai4|yi1|yuan4|gong1|zuo4"
+  },
+  {
+    "chinese": "在这里天气很好",
+    "english": "The weather here is quite good",
+    "pinyin": "Zài zhè lǐ tiānqì hěn hǎo",
+    "parts": "在|这|里|天|气|很|好",
+    "py": "zai4|he4|li3|tian1|qi4|hen3|hao3"
+  },
+  {
+    "chinese": "再见",
+    "english": "Goodbye",
+    "pinyin": "Zàijiàn",
+    "parts": "再|见",
+    "py": "zai4|jian4"
+  },
+  {
+    "chinese": "明天见",
+    "english": "See you tomorrow",
+    "pinyin": "Míngtiān jiàn",
+    "parts": "明|天|见",
+    "py": "ming2|tian1|jian4"
+  },
+  {
+    "chinese": "我住在中国",
+    "english": "I live in China",
+    "pinyin": "Wǒ zhù zài Zhōngguó",
+    "parts": "我|住|在|中|国",
+    "py": "wo3|hu4|zai4|hong1|guo2"
+  },
+  {
+    "chinese": "你住在哪里？",
+    "english": "Where do you live?",
+    "pinyin": "Nǐ zhù zài nǎlǐ？",
+    "parts": "你|住|在|哪|里",
+    "py": "ni3|hu4|zai4|na3|li3"
+  },
+  {
+    "chinese": "汉语有很多字",
+    "english": "Mandarin has many characters",
+    "pinyin": "Hànyǔ yǒu hěn duō zì",
+    "parts": "汉|语|有|很|多|字",
+    "py": "han4|yu3|you3|hen3|duo1|zi4"
+  },
+  {
+    "chinese": "我喜欢做饭",
+    "english": "I like cooking",
+    "pinyin": "Wǒ xǐhuān zuòfàn",
+    "parts": "我|喜|欢|做|饭",
+    "py": "wo3|xi3|huan1|zuo4|fan4"
+  },
+  {
+    "chinese": "请坐",
+    "english": "Please sit down",
+    "pinyin": "Qǐng zuò",
+    "parts": "请|坐",
+    "py": "qing3|zuo4"
+  },
+  {
+    "chinese": "坐一下",
+    "english": "Take a seat",
+    "pinyin": "Zuò yíxià",
+    "parts": "坐|一|下",
+    "py": "zuo4|yi2|xia4"
+  },
+  {
+    "chinese": "我昨天去了",
+    "english": "I went yesterday",
+    "pinyin": "Wǒ zuótiān qù le",
+    "parts": "我|昨|天|去|了",
+    "py": "wo3|zuo2|tian1|qu4|le"
+  },
+  {
+    "chinese": "这是我爸爸",
+    "english": "This is my dad",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "爸爸在哪儿？",
+    "english": "Where is dad?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我杯子里的茶很好喝",
+    "english": "The tea in my cup is delicious",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我不买这个",
+    "english": "I don't buy this",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "她不漂亮",
+    "english": "She is not pretty",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这个菜很好吃",
+    "english": "This dish is delicious",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这个菜多少钱？",
+    "english": "How much is this dish?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我很喜欢吃东西",
+    "english": "I really like eating",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我买的衣服太大了",
+    "english": "The clothes I bought are too big",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我爸爸在看电视",
+    "english": "My dad is watching TV",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我和我的朋友们今天去看电影",
+    "english": "My friends and I are going to watch a film today",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "她很喜欢去买东西",
+    "english": "She likes to go shopping",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我买了很多东西",
+    "english": "I bought a lot of things",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我们都喜欢她",
+    "english": "All of us like her",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "对不起，我不认识他",
+    "english": "Sorry, I don't know him",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这是我儿子",
+    "english": "This is my son",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这个很好",
+    "english": "This is great",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你的工作是什么？",
+    "english": "What's your job?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你的狗很漂亮",
+    "english": "Your dog is gorgeous",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我很喜欢学汉语",
+    "english": "I really like studying Chinese",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "她好漂亮",
+    "english": "She is very beautiful",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "在医院的后面有个我很喜欢的小店",
+    "english": "There is a small shop I really like behind the hospital",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我的家有三个人，爸爸，妈妈和我",
+    "english": "There are 3 people in my family, my dad, my mum and me",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这个家有四个人，爸爸，妈妈，儿子和女儿",
+    "english": "This family has 4 people, dad, mum, son and daughter",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我在这儿，你能看见我吗？",
+    "english": "I'm here, can you see me?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你来我这儿",
+    "english": "Come to me",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我们的汉语老师很好",
+    "english": "Our Chinese teacher is great",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你喜欢买衣服吗？",
+    "english": "Do you like buying clothes?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这是我妈妈",
+    "english": "This is my mum",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我买了衣服",
+    "english": "I bought clothes",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我买衣服了",
+    "english": "I bought clothes",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我买的衣服都很漂亮",
+    "english": "The clothes I bought look great",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我没有衣服",
+    "english": "I don't have clothes",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我没有衣服了",
+    "english": "I ran out of clothes",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我很喜欢那个",
+    "english": "I like that a lot",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你在哪儿？",
+    "english": "Where are you?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你的女儿很漂亮",
+    "english": "Your daughter is very beautiful",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你们都很漂亮",
+    "english": "You're all looking great",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "她很漂亮，我很喜欢她",
+    "english": "She is really pretty, I like her a lot",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这个苹果很好吃",
+    "english": "This apple is really good",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你去哪儿？",
+    "english": "Where are you going?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我去买衣服",
+    "english": "I'm going shopping for clothes",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这个人很好",
+    "english": "This person is very nice",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这个人是我的朋友",
+    "english": "This person is my friend",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "那个人很漂亮",
+    "english": "That person is very beautiful",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这个商店很大",
+    "english": "This shop is quite big",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你说什么？",
+    "english": "What did you say?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你喜欢什么？",
+    "english": "What do you like?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你什么时候来？",
+    "english": "When are you coming?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你喜欢什么书？",
+    "english": "What kind of books do you like?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你喜欢什么水果？",
+    "english": "Which fruits do you like?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我说你很漂亮",
+    "english": "I said you are very beautiful",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我买的衣服太小了",
+    "english": "The clothes I bought are too small",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "在那儿天气怎么样？",
+    "english": "How's the weather there?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我想吃东西",
+    "english": "I want to eat something",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "谢谢你",
+    "english": "Thank you!",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这里有点儿冷",
+    "english": "It's a little bit cold here",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这些衣服很漂亮",
+    "english": "These clothes look great",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这个椅子太小了",
+    "english": "This chair is too small",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我有衣服",
+    "english": "I have clothes",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你怎么了？",
+    "english": "What's wrong?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "这本书怎么样？",
+    "english": "How is that book?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你怎么样？",
+    "english": "How are you?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "我很喜欢这个",
+    "english": "I really like this",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "你住在哪儿？",
+    "english": "Where do you live?",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  },
+  {
+    "chinese": "桌子上的菜都很好吃",
+    "english": "The dishes on the table are all delicious",
+    "pinyin": "",
+    "parts": [],
+    "py": []
+  }
 ]

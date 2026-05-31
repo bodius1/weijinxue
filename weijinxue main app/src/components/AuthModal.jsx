@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { auth } from '../firebase.js'
 import { useAuth } from '../context/useAuth.js'
+import { trackEvent } from '../utils/analytics.js'
 
 /** @param {{ open: boolean, onClose: () => void }} props */
 export default function AuthModal({ open, onClose }) {
@@ -72,6 +73,7 @@ export default function AuthModal({ open, onClose }) {
     setBusy(true)
     try {
       await signUpWithEmail(email, password)
+      trackEvent('sign_up', { method: 'email' })
       onClose()
     } catch (e) {
       setError(e?.message ?? 'Sign up failed')
@@ -127,7 +129,7 @@ export default function AuthModal({ open, onClose }) {
       >
         <div className="border-b border-taupe/70 bg-elevated/80 px-4 py-3">
           <h2 id="auth-modal-title" className="text-center text-lg font-semibold text-ink">
-            Huaxue account
+            Weijinxue account
           </h2>
           <p className="mt-1 text-center text-xs text-espresso">
             Sign in to sync your quiz deck and progress across devices.

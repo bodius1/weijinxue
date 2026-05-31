@@ -4,8 +4,14 @@
  * CC-CEDICT loads via dynamic import — see {@link preloadPinyinImeData}.
  */
 
-/** @type {import('cc-cedict').default | null} */
+/** @type {any | null} */
 let _cedict = null
+
+/** @type {Promise<any> | null} */
+let _dictionaryPromise = null
+
+/** @type {Promise<void> | null} */
+let _hskPreloadPromise = null
 
 /** @type {Promise<void> | null} */
 let _preloadPromise = null
@@ -52,32 +58,59 @@ function rebuildWordMinHsk() {
 }
 
 /**
- * Fetch HSK 1–6 from `public/data/` and load CC-CEDICT via dynamic import.
+ * Fetch HSK 1–6 from `src/data/` without loading CC-CEDICT.
+ * Safe to call multiple times; subsequent calls return the same promise.
+ */
+export function preloadHskData() {
+  if (_hskPreloadPromise) return _hskPreloadPromise
+  _hskPreloadPromise = (async () => {
+    const urls = [1, 2, 3, 4, 5, 6].map((n) => new URL(`../data/hsk${n}.json`, import.meta.url).href)
+    const levels = await Promise.all(
+      urls.map((u) =>
+        fetch(u).then((r) => {
+          if (!r.ok) throw new Error(`Failed to load ${u}: ${r.status}`)
+          return r.json()
+        }),
+      ),
+    )
+    for (let i = 0; i < 6; i += 1) {
+      HSK_DATA[i] = Array.isArray(levels[i]) ? levels[i] : []
+    }
+    rebuildWordMinHsk()
+
+    const { resetMultipleChoiceQuizHskCache } = await import('./multipleChoiceQuizCore.js')
+    resetMultipleChoiceQuizHskCache()
+  })().catch((err) => {
+    _hskPreloadPromise = null
+    throw err
+  })
+  return _hskPreloadPromise
+}
+
+export async function getDictionary() {
+  if (_cedict) return _cedict
+  if (!_dictionaryPromise) {
+    _dictionaryPromise = import('cc-cedict')
+      .then((mod) => {
+        _cedict = mod.default
+        return _cedict
+      })
+      .catch((err) => {
+        _dictionaryPromise = null
+        throw err
+      })
+  }
+  return _dictionaryPromise
+}
+
+/**
+ * Fetch HSK 1–6 and load CC-CEDICT via dynamic import.
  * Safe to call multiple times; subsequent calls return the same promise.
  */
 export function preloadPinyinImeData() {
   if (_preloadPromise) return _preloadPromise
   _preloadPromise = (async () => {
-    const urls = [1, 2, 3, 4, 5, 6].map((n) => new URL(`../data/hsk${n}.json`, import.meta.url).href)
-    const [levels, cedMod] = await Promise.all([
-      Promise.all(
-        urls.map((u) =>
-          fetch(u).then((r) => {
-            if (!r.ok) throw new Error(`Failed to load ${u}: ${r.status}`)
-            return r.json()
-          }),
-        ),
-      ),
-      import('cc-cedict'),
-    ])
-    for (let i = 0; i < 6; i += 1) {
-      HSK_DATA[i] = Array.isArray(levels[i]) ? levels[i] : []
-    }
-    rebuildWordMinHsk()
-    _cedict = cedMod.default
-
-    const { resetMultipleChoiceQuizHskCache } = await import('./multipleChoiceQuizCore.js')
-    resetMultipleChoiceQuizHskCache()
+    await Promise.all([preloadHskData(), getDictionary()])
   })().catch((err) => {
     _preloadPromise = null
     throw err
@@ -85,7 +118,6 @@ export function preloadPinyinImeData() {
   return _preloadPromise
 }
 
-/** @returns {import('cc-cedict').default | null} */
 export function getCedictOrNull() {
   return _cedict
 }
@@ -156,14 +188,17 @@ function hskListOrderIndex(level, simplified) {
  * HSK1 words, HSK2, HSK3+, then rest by ascending simplified length.
  * @param {number | null | undefined} boostHskLevel When set (sentence mode), prefer headwords from that HSK list.
  */
-export function sortFilteredImeCandidates(entries, queryNorm, targetSimp, boostHskLevel) {
-  /** Pin #1 candidate: sentence lookahead uses first Han; character mode only when the target is one character (avoid stealing focus from multi-char words). */
+export function sortFilteredImeCandidates(entries, queryNorm, targetSimp, boostHskLevel, targetPinyin) {
+  const fullTarget = targetSimp && targetPinyin ? fullTonelessPinyin(targetPinyin) : ''
+  /** Pin #1 only after the typed query exactly matches the target toneless pinyin (not a syllable prefix like `z` → `zhuo`). */
   const orderPin =
-    boostHskLevel != null && boostHskLevel >= 1 && boostHskLevel <= 6
-      ? activeHanForImeOrdering(targetSimp)
-      : String(targetSimp ?? '').length === 1
+    fullTarget && queryNorm === fullTarget
+      ? boostHskLevel != null && boostHskLevel >= 1 && boostHskLevel <= 6
         ? activeHanForImeOrdering(targetSimp)
-        : undefined
+        : String(targetSimp ?? '').length === 1
+          ? activeHanForImeOrdering(targetSimp)
+          : undefined
+      : undefined
   const full = (e) => fullTonelessPinyin(e.pinyin)
   const inBoost = (e) =>
     boostHskLevel != null &&
@@ -287,11 +322,44 @@ export function buildPinyinPrefixIndex() {
  * If they diverge (e.g. yinle vs yīnyuè), still show the phrase so they can recover.
  */
 export function shouldOmitTargetFromCandidates(targetSimp, targetPinyin, queryNorm) {
-  if (!targetSimp || targetSimp.length <= 1) return false
+  if (!targetSimp || !targetPinyin) return false
   const full = fullTonelessPinyin(targetPinyin)
   if (!full) return false
   if (queryNorm.length >= full.length) return false
   return full.startsWith(queryNorm)
+}
+
+/**
+ * Toneless syllables from a space-separated pinyin field (e.g. `zhuo1` → `zhuo`, `yī xià` → `yi`, `xia`).
+ * @param {string} pinyinField
+ * @returns {string[]}
+ */
+export function tonelessSyllablesFromPinyinField(pinyinField) {
+  if (!pinyinField || typeof pinyinField !== 'string') return []
+  return pinyinField
+    .trim()
+    .split(/\s+/)
+    .map((syl) => fullTonelessPinyin(syl))
+    .filter(Boolean)
+}
+
+/**
+ * True when `queryNorm` equals the toneless join of the first k syllables (k ≥ 1), or the full string.
+ * Rejects in-syllable prefixes (e.g. `z` is not a match for `zhuo`).
+ * @param {string} queryNorm
+ * @param {string} pinyinField
+ */
+export function queryMatchesSyllablePrefix(queryNorm, pinyinField) {
+  const q = String(queryNorm ?? '').trim()
+  if (!q) return false
+  const syllables = tonelessSyllablesFromPinyinField(pinyinField)
+  if (!syllables.length) return false
+  let built = ''
+  for (const syl of syllables) {
+    built += syl
+    if (q === built) return true
+  }
+  return false
 }
 
 /** Append entries from another prefix bucket (dedupe by simplified|pinyin). */
@@ -359,7 +427,9 @@ export function lookupFromIndex(index, queryNorm, targetSimp, targetPinyin, targ
     boostHskLevel >= 1 &&
     boostHskLevel <= 6 &&
     fullTargetPinyin &&
-    fullTargetPinyin !== queryNorm
+    fullTargetPinyin !== queryNorm &&
+    targetPinyin &&
+    queryMatchesSyllablePrefix(queryNorm, targetPinyin)
   ) {
     rawList = mergeImeBucket(rawList, index, fullTargetPinyin)
   }
@@ -404,7 +474,10 @@ export function lookupFromIndex(index, queryNorm, targetSimp, targetPinyin, targ
     filtered = out
   }
 
-  let sorted = sortFilteredImeCandidates(filtered, queryNorm, targetSimp, boostHskLevel).slice(0, MAX_RESULTS)
+  let sorted = sortFilteredImeCandidates(filtered, queryNorm, targetSimp, boostHskLevel, targetPinyin).slice(
+    0,
+    MAX_RESULTS,
+  )
 
   /** Multi-char sentence lookahead: surface the expected phrase when not anti-spoiler-hidden (wrong pinyin recovery). */
   if (

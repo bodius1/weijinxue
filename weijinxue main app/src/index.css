@@ -138,3 +138,59 @@ body,
 .huaxue-deck-toast {
   animation: huaxue-deck-toast 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
+/* Type tab — 5× streak: container border glow + sentence text-shadow */
+@keyframes fire-border {
+  0% {
+    box-shadow:
+      0 0 4px #ff660033,
+      0 0 8px #d4a84322,
+      0 2px 6px #ff440018;
+  }
+  33% {
+    box-shadow:
+      0 0 5px #ff880044,
+      0 0 10px #d4a84333,
+      0 2px 7px #ff660022;
+  }
+  66% {
+    box-shadow:
+      0 0 3px #ff550028,
+      0 0 7px #d4a84318,
+      0 2px 4px #ff330011;
+  }
+  100% {
+    box-shadow:
+      0 0 4px #ff660033,
+      0 0 8px #d4a84322,
+      0 2px 6px #ff440018;
+  }
+}
+
+.fire-container {
+  animation: fire-border 1.2s ease-in-out infinite;
+  border: 1px solid #d4a84328;
+  border-radius: 12px;
+}
+
+@keyframes fire-text {
+  0% {
+    text-shadow:
+      0 0 4px #d4a84344,
+      0 0 8px #ff880018;
+  }
+  50% {
+    text-shadow:
+      0 0 6px #ffd70055,
+      0 0 10px #ff660022;
+  }
+  100% {
+    text-shadow:
+      0 0 4px #d4a84344,
+      0 0 8px #ff880018;
+  }
+}
+
+.fire-text {
+  animation: fire-text 1.5s ease-in-out infinite;
+}

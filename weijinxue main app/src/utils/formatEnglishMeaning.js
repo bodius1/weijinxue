@@ -13,6 +13,16 @@ const MEANING_OVERRIDE_PRIORITY = Object.freeze({
   行: 'OK, alright / capable',
   从来: 'always, ever (usually with negation)',
   理发: 'to get a haircut',
+  告诉: 'to tell; to inform',
+  咖啡: 'coffee',
+  一起: 'together',
+  玩: 'to play; to have fun',
+  累: 'tired',
+  妹妹: 'younger sister',
+  宾馆: 'hotel',
+  完: 'to finish; to complete; finished; used up',
+  每: 'every; each',
+  离: 'to be away from; from; to leave',
 })
 
 /** @type {Readonly<Record<string, string>>} */
@@ -123,7 +133,10 @@ const SKIP_SENSE_PREFIXES = [
 function stripBracketsAndPipes(s) {
   return String(s ?? '')
     .replace(/\[[^\]]*\]/g, '')
-    .replace(/\|/g, ' ')
+    /** CC-CEDICT cross-refs / trad|simp tails that leak without a closing `]` */
+    .replace(/\[[^\]]*\|/g, '')
+    .replace(/\[[^\]]*$/g, '')
+    .replace(/\|+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
 }
@@ -202,10 +215,13 @@ export function resolveTypeHskDisplayPinyin(simplified, hskPinyin) {
  */
 export function resolveTypeHskMeaningPlain(simplified, hskEnglishLine) {
   const simp = String(simplified ?? '').trim()
+  let line = ''
   if (simp && MEANING_OVERRIDES[simp] != null && String(MEANING_OVERRIDES[simp]).trim() !== '') {
-    return String(MEANING_OVERRIDES[simp]).trim()
+    line = String(MEANING_OVERRIDES[simp]).trim()
+  } else {
+    line = String(hskEnglishLine ?? '').trim()
   }
-  return String(hskEnglishLine ?? '').trim()
+  return stripBracketsAndPipes(line)
 }
 
 /**

@@ -1,0 +1,51 @@
+---
+description: Rules for generating and editing draw.io .drawio architecture diagrams
+globs:
+  - "**/*.drawio"
+  - "**/*.xml"
+alwaysApply: false
+---
+
+When creating or editing draw.io files, follow these rules:
+
+## Structural validity
+
+- Preserve valid draw.io mxGraph XML.
+- The root must contain:
+  - `<mxCell id="0"/>`
+  - `<mxCell id="1" parent="0"/>`
+- Every cell must have a unique ID.
+- Every cell except root cells must have a valid parent.
+- Every vertex must include `vertex="1"`.
+- Every edge must include `edge="1"`.
+- Every edge source and target must reference existing vertex IDs.
+- Generate or verify all vertices before edges.
+- Every `<mxGeometry>` must include `as="geometry"`.
+- Do not use unescaped `&`, `<`, or `>` inside labels.
+- Use `&amp;` instead of `&`.
+- Use `html=1` if labels contain HTML such as `<br>`.
+
+## Layout rules
+
+- Prefer infinite canvas for documentation-style diagrams:
+  - `page="0"`
+  - `grid="1"`
+  - `gridSize="10"`
+- Use readable spacing, alignment, and grouping.
+- **Absolute routing rule:** connectors must never pass through the interior of any node/block (white content boxes). Route around blocks using orthogonal waypoints in lane gaps, below/above blocks, or just outside block edges.
+- Connectors **may** cross other connectors when unavoidable; crossing block interiors is never allowed.
+- Avoid arrows crossing through node text.
+- Avoid connector labels overlapping nodes.
+- If connector labels clutter the diagram, remove them and use a legend.
+- Keep architecture overview diagrams under 18–25 nodes.
+- Use larger node text: 14–16 px.
+- Use section titles: 18–20 px.
+- Use dark text on light boxes.
+
+## Editing existing diagrams
+
+When editing an existing `.drawio` file:
+- Preserve the existing pages unless explicitly asked to delete them.
+- Preserve existing architecture content unless asked to redesign it.
+- Prefer moving, resizing, restyling, and rerouting over regenerating from scratch.
+- Validate that the file still opens in draw.io after editing.

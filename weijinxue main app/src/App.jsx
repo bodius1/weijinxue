@@ -1,23 +1,35 @@
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { AuthProvider } from './context/AuthProvider.jsx'
 import { useAuth } from './context/useAuth.js'
 import AuthModal from './components/AuthModal.jsx'
 import LanternBackground from './components/LanternBackground.jsx'
-import LearnTab from './tabs/LearnTab.jsx'
-import FlashcardsTab from './tabs/FlashcardsTab.jsx'
-import QuizTab from './tabs/QuizTab.jsx'
-import TypeTab from './tabs/TypeTab.jsx'
-import YubanTab from './tabs/YubanTab.jsx'
 import { preloadFormatEnglishMeaningData } from './utils/formatEnglishMeaning.js'
-import { preloadPinyinImeData } from './utils/pinyinIme.js'
 import { preloadSentenceData } from './utils/sentenceData.js'
+import AboutModal from './components/chrome/AboutModal.jsx'
+import AppFooter from './components/chrome/AppFooter.jsx'
+import ContactModal from './components/chrome/ContactModal.jsx'
+import PrivacyModal from './components/chrome/PrivacyModal.jsx'
+import { APP_VERSION_LABEL } from './config/appMeta.js'
+import { trackEvent, trackTabView } from './utils/analytics.js'
+import { seedLeaderboard } from './utils/seedLeaderboard.js'
+
+const LearnTab = lazy(() => import('./tabs/LearnTab.jsx'))
+const FlashcardsTab = lazy(() => import('./tabs/FlashcardsTab.jsx'))
+const QuizTab = lazy(() => import('./tabs/QuizTab.jsx'))
+const TypeTab = lazy(() => import('./tabs/TypeTab.jsx'))
+const YubanTab = lazy(() => import('./yuban/YubanTabShell.jsx'))
+const ExamTab = lazy(() => import('./tabs/ExamTab.jsx'))
+const JourneysTab = lazy(() => import('./tabs/JourneysTab.jsx'))
+const ProfileTab = lazy(() => import('./tabs/ProfileTab.jsx'))
 
 const TABS = [
   { id: 'learn', label: 'Learn', Component: LearnTab },
   { id: 'flashcards', label: 'Flashcards', Component: FlashcardsTab },
   { id: 'quiz', label: 'Quiz', Component: QuizTab },
   { id: 'type', label: 'Type', Component: TypeTab },
+  { id: 'journeys', label: 'Journeys', Component: JourneysTab },
   { id: 'yuban', label: 'Yǔbàn AI', Component: YubanTab },
+  { id: 'exam', label: 'Exam', Component: ExamTab },
 ]
 
 /** @param {import('firebase/auth').User} user */
@@ -54,71 +66,21 @@ function IconUserMenu() {
   )
 }
 
-function UserAuthBar({ onOpenAuth }) {
-  const { user, loading, signOut } = useAuth()
-  const [menuOpen, setMenuOpen] = useState(false)
-  const wrapRef = useRef(/** @type {HTMLDivElement | null} */ (null))
-
-  useEffect(() => {
-    if (!user) queueMicrotask(() => setMenuOpen(false))
-  }, [user])
-
-  useEffect(() => {
-    if (!menuOpen) return
-    const onDoc = (e) => {
-      if (wrapRef.current && !wrapRef.current.contains(/** @type {Node} */ (e.target))) {
-        setMenuOpen(false)
-      }
-    }
-    const onKey = (e) => {
-      if (e.key === 'Escape') setMenuOpen(false)
-    }
-    document.addEventListener('mousedown', onDoc)
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('mousedown', onDoc)
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [menuOpen])
+function UserAuthBar({ onOpenAuth, onOpenProfile }) {
+  const { user, loading } = useAuth()
 
   if (loading) return null
 
   if (user) {
     return (
-      <div className="relative flex shrink-0 items-center" ref={wrapRef}>
-        <button
-          type="button"
-          onClick={() => setMenuOpen((o) => !o)}
-          className="flex shrink-0 items-center justify-center rounded-md py-3 px-2 text-[#D4A843] transition hover:bg-elevated/90 hover:text-[#e4bc5c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4A843]/80"
-          aria-expanded={menuOpen}
-          aria-haspopup="menu"
-          aria-label="Account menu"
-        >
-          <IconUserMenu />
-        </button>
-
-        {menuOpen ? (
-          <div
-            className="absolute right-0 top-full z-50 mt-1.5 min-w-[10.5rem] rounded-xl border border-taupe bg-parchment py-1 shadow-lg shadow-ink/20 ring-1 ring-[#D4A843]/15"
-            role="menu"
-          >
-            <button
-              type="button"
-              role="menuitem"
-              className="flex w-full items-center px-3 py-2.5 text-left text-sm text-ink hover:bg-elevated"
-              onClick={() => {
-                setMenuOpen(false)
-                void signOut()
-              }}
-            >
-              <span className="mr-2.5 text-base opacity-90" aria-hidden>
-                🚪
-              </span>
-              Sign Out
-            </button>
-          </div>
-        ) : null}
-      </div>
+      <button
+        type="button"
+        onClick={onOpenProfile}
+        className="flex shrink-0 items-center justify-center rounded-md py-2 px-2 text-[#D4A843] transition hover:bg-elevated/90 hover:text-[#e4bc5c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4A843]/80"
+        aria-label="Profile and stats"
+      >
+        <IconUserMenu />
+      </button>
     )
   }
 
@@ -126,10 +88,43 @@ function UserAuthBar({ onOpenAuth }) {
     <button
       type="button"
       onClick={onOpenAuth}
-      className="shrink-0 rounded-t-lg bg-[#D4A843] px-4 py-3 text-xs font-semibold text-ink shadow-sm transition hover:bg-[#c49a3d] sm:px-5 sm:text-sm"
+      className="shrink-0 rounded-md border border-taupe bg-elevated/50 px-3 py-2 text-[11px] font-medium text-espresso transition hover:border-[#D4A843]/50 hover:text-[#D4A843] sm:px-4 sm:text-xs"
     >
       Sign In
     </button>
+  )
+}
+
+function TabLoader() {
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '60vh',
+      gap: '1rem',
+    }}>
+      <div style={{ display: 'flex', gap: '8px' }}>
+        {[0, 1, 2].map(i => (
+          <div key={i} style={{
+            width: '7px',
+            height: '7px',
+            borderRadius: '50%',
+            background: '#D4A843',
+            animation: 'tab-pulse 1.2s ease-in-out infinite',
+            animationDelay: `${i * 0.2}s`,
+            opacity: 0,
+          }} />
+        ))}
+      </div>
+      <style>{`
+        @keyframes tab-pulse {
+          0%, 100% { opacity: 0.15; transform: translateY(0); }
+          50% { opacity: 1; transform: translateY(-6px); }
+        }
+      `}</style>
+    </div>
   )
 }
 
@@ -137,10 +132,8 @@ function AppContent() {
   const { user, loading } = useAuth()
   const [activeId, setActiveId] = useState('learn')
   const [authModalOpen, setAuthModalOpen] = useState(false)
+  const [chromeModal, setChromeModal] = useState(/** @type {null | 'contact' | 'about' | 'privacy'} */ (null))
   const [toast, setToast] = useState(/** @type {null | { id: number; text: string }} */ (null))
-  const active = TABS.find((t) => t.id === activeId) ?? TABS[0]
-  const ActivePanel = active.Component
-
   const authTransition = useRef({ ready: false, hadUser: false })
 
   useEffect(() => {
@@ -165,19 +158,50 @@ function AppContent() {
     authTransition.current.hadUser = hasUser
   }, [user, loading])
 
+  useEffect(() => {
+    trackEvent('app_open', { app_version: APP_VERSION_LABEL })
+  }, [])
+
+  useEffect(() => {
+    const label =
+      activeId === 'profile' ? 'Profile' : TABS.find((t) => t.id === activeId)?.label ?? activeId
+    trackTabView(label)
+  }, [activeId])
+
+  const learningTab = TABS.find((t) => t.id === activeId) ?? TABS[0]
+  const LearningPanel = learningTab.Component
+
   return (
     <div className="relative isolate min-h-screen bg-paper text-ink">
       <LanternBackground />
       <div className="relative z-10 flex min-h-screen flex-col">
-        <header className="border-b border-taupe bg-parchment">
-          <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 pb-0 pt-4">
+        <header className="border-b border-taupe/80 bg-[#1c1a16]">
+          <div className="mx-auto max-w-3xl px-3 pb-0 pt-2 sm:px-4 sm:pt-2">
+            <div className="flex items-center justify-between gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveId('learn')}
+                className="min-w-0 shrink-0 text-left transition hover:brightness-125"
+                aria-label="Weijinxue — go to Learn"
+              >
+                <span className="inline-block rounded border border-[#D4A843] px-1.5 py-px text-[11px] font-semibold uppercase tracking-widest text-[#D4A843] sm:px-2 sm:py-0.5 sm:text-xs">
+                  WEIJINXUE
+                </span>
+              </button>
+              <div className="flex shrink-0 items-center">
+                <UserAuthBar
+                  onOpenAuth={() => setAuthModalOpen(true)}
+                  onOpenProfile={() => setActiveId('profile')}
+                />
+              </div>
+            </div>
             <nav
-              className="flex min-w-0 flex-1 items-stretch gap-0"
+              className="mt-1.5 flex min-w-0 items-stretch gap-0 border-t border-taupe/50 pt-1 sm:mt-2 sm:pt-1.5"
               aria-label="Main"
               role="tablist"
             >
               {TABS.map((tab) => {
-                const isActive = tab.id === activeId
+                const isActive = tab.id === activeId && activeId !== 'profile'
                 return (
                   <button
                     key={tab.id}
@@ -185,7 +209,7 @@ function AppContent() {
                     type="button"
                     onClick={() => setActiveId(tab.id)}
                     className={[
-                      'relative min-w-0 flex-1 rounded-t-lg px-2 py-3 text-xs font-medium transition-colors sm:px-3 sm:text-sm',
+                      'relative min-w-0 flex-1 rounded-t-md px-2 py-2 text-sm font-medium transition-colors sm:px-2.5 sm:py-2.5 sm:text-base',
                       isActive
                         ? 'bg-paper text-ink after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-clay'
                         : 'text-espresso hover:bg-elevated/90 hover:text-ink',
@@ -198,29 +222,44 @@ function AppContent() {
                 )
               })}
             </nav>
-            <div className="flex shrink-0 items-center self-stretch">
-              <UserAuthBar onOpenAuth={() => setAuthModalOpen(true)} />
-            </div>
           </div>
         </header>
 
         <main
-          className="mx-auto flex w-full max-w-3xl flex-1 flex-col bg-transparent px-4 py-8"
+          className={[
+            'mx-auto flex min-h-0 w-full flex-1 flex-col bg-transparent px-4 text-ink',
+            activeId === 'yuban' ? 'max-w-6xl' : activeId === 'journeys' ? 'max-w-4xl' : 'max-w-3xl',
+            activeId === 'quiz' || activeId === 'type' || activeId === 'yuban'
+              ? 'py-4 pb-2 sm:py-5 sm:pb-3'
+              : 'py-6 pb-8 sm:py-8',
+          ].join(' ')}
           role="tabpanel"
-          aria-labelledby={`tab-${activeId}`}
+          aria-labelledby={activeId === 'profile' ? 'profile-heading' : `tab-${activeId}`}
         >
-          {activeId === 'quiz' ? (
-            <QuizTab onGoToLearn={() => setActiveId('learn')} />
-          ) : activeId === 'type' ? (
-            <TypeTab />
-          ) : (
-            <ActivePanel />
-          )}
+          <Suspense fallback={<TabLoader />}>
+            {activeId === 'profile' ? (
+              <ProfileTab onOpenAuth={() => setAuthModalOpen(true)} />
+            ) : activeId === 'quiz' ? (
+              <QuizTab onGoToLearn={() => setActiveId('learn')} />
+            ) : activeId === 'type' ? (
+              <TypeTab />
+            ) : activeId === 'yuban' ? (
+              <YubanTab onOpenAuth={() => setAuthModalOpen(true)} />
+            ) : (
+              <LearningPanel />
+            )}
+          </Suspense>
         </main>
+
+        <AppFooter
+          onContact={() => setChromeModal('contact')}
+          onAbout={() => setChromeModal('about')}
+          onPrivacy={() => setChromeModal('privacy')}
+        />
       </div>
 
       {toast ? (
-        <div className="pointer-events-none fixed left-1/2 top-[4.25rem] z-[200] flex w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 justify-center sm:top-[4.5rem]">
+        <div className="pointer-events-none fixed left-1/2 top-[4.75rem] z-[200] flex w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 justify-center sm:top-[5rem]">
           <div
             key={toast.id}
             role="status"
@@ -237,34 +276,36 @@ function AppContent() {
       ) : null}
 
       <AuthModal open={authModalOpen} onClose={() => setAuthModalOpen(false)} />
+
+      <ContactModal open={chromeModal === 'contact'} onClose={() => setChromeModal(null)} />
+      <AboutModal open={chromeModal === 'about'} onClose={() => setChromeModal(null)} />
+      <PrivacyModal open={chromeModal === 'privacy'} onClose={() => setChromeModal(null)} />
     </div>
   )
 }
 
 export default function App() {
-  const [imeReady, setImeReady] = useState(false)
   useEffect(() => {
-    let cancelled = false
-    Promise.all([preloadPinyinImeData(), preloadFormatEnglishMeaningData(), preloadSentenceData()])
-      .then(() => {
-        if (!cancelled) setImeReady(true)
-      })
-      .catch((err) => {
-        console.error('Failed to load dictionary data', err)
-        if (!cancelled) setImeReady(true)
-      })
-    return () => {
-      cancelled = true
-    }
+    const splash = document.getElementById('splash')
+    if (!splash) return
+    splash.classList.add('out')
+    const t = setTimeout(() => {
+      splash.remove()
+      document.getElementById('splash-style')?.remove()
+    }, 700)
+    return () => clearTimeout(t)
   }, [])
 
-  if (!imeReady) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-parchment text-espresso">
-        <p className="text-sm">Loading dictionary…</p>
-      </div>
-    )
-  }
+  useEffect(() => {
+    Promise.all([preloadFormatEnglishMeaningData(), preloadSentenceData()]).catch((err) => {
+      console.error('Failed to preload app data', err)
+    })
+  }, [])
+
+  // TEMP: remove this useEffect after console shows 10 checkmarks + "Seed complete"
+  useEffect(() => {
+    seedLeaderboard().catch((err) => console.error('seedLeaderboard failed', err))
+  }, [])
 
   return (
     <AuthProvider>

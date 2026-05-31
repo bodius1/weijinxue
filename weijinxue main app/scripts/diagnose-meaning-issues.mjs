@@ -11,9 +11,16 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import cedict from 'cc-cedict'
-
 import { formatEnglishMeaningForDisplay } from '../src/utils/formatEnglishMeaning.js'
+
+let _dict = null
+
+async function getDictionary() {
+  if (!_dict) _dict = (await import('cc-cedict')).default
+  return _dict
+}
+
+const cedict = await getDictionary()
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const mandarinRoot = join(__dirname, '..')

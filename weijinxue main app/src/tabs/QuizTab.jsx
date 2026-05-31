@@ -14,7 +14,9 @@ import {
   writeQuizPosition,
   writeQuizSrMap,
 } from '../utils/quizSpacedRepetition.js'
-import { HSK_DATA } from '../utils/pinyinIme.js'
+import { HSK_DATA, preloadHskData } from '../utils/pinyinIme.js'
+import { recordStudyActivity } from '../utils/studyStatsFirestore.js'
+import { trackEvent } from '../utils/analytics.js'
 
 const DIRECTIONS = [
   { id: 'hanzi', label: '汉字 → English' },
@@ -47,6 +49,7 @@ function pickRandomFromList(list, excludeSimp, salt) {
  */
 export default function QuizTab({ onGoToLearn }) {
   const [, setStoreTick] = useState(0)
+  const [hskReady, setHskReady] = useState(false)
   const [round, setRound] = useState(0)
   const [picked, setPicked] = useState(null)
   const [directionMode, setDirectionMode] = useState('mix')
@@ -62,6 +65,21 @@ export default function QuizTab({ onGoToLearn }) {
     return () => window.removeEventListener('huaxue-learned-changed', fn)
   }, [])
 
+  useEffect(() => {
+    let cancelled = false
+    preloadHskData()
+      .then(() => {
+        if (!cancelled) setHskReady(true)
+      })
+      .catch((err) => {
+        console.error('Failed to load HSK data', err)
+        if (!cancelled) setHskReady(true)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   const learned = readLearnedCharacters()
   const savedCount = learned.length
 
@@ -75,7 +93,7 @@ export default function QuizTab({ onGoToLearn }) {
         english: String(raw?.english ?? '').trim(),
       }))
       .filter((w) => w.simplified)
-  }, [randomHskLevel])
+  }, [randomHskLevel, hskReady])
 
   /** Random-mode SR bundle; `null` until layout sync runs. */
   const [randomQuiz, setRandomQuiz] = useState(
@@ -162,10 +180,35 @@ export default function QuizTab({ onGoToLearn }) {
     )
   }, [currentCard, questionRound, isReverse, buildQuestionOptions])
 
+  useEffect(() => {
+    trackEvent('quiz_mode_selected', {
+      source_mode: sourceMode,
+      direction_mode: directionMode,
+    })
+  }, [sourceMode, directionMode])
+
+  useEffect(() => {
+    if (sourceMode !== 'random') return
+    trackEvent('hsk_level_selected', { context: 'quiz_random', hsk_level: randomHskLevel })
+  }, [randomHskLevel, sourceMode])
+
   const handlePick = useCallback(
     (index) => {
       if (picked !== null || !currentCard) return
       setPicked(index)
+      void recordStudyActivity({
+        quizAnswered: 1,
+        quizCorrect: index === correctIndex ? 1 : 0,
+        activeTab: 'quiz',
+      })
+      trackEvent('quiz_answered', {
+        correct: index === correctIndex ? 1 : 0,
+        source_mode: sourceMode,
+        direction_mode: directionMode,
+        hsk_level: sourceMode === 'random' ? randomHskLevel : 0,
+      })
+      if (index === correctIndex) trackEvent('quiz_correct')
+      else trackEvent('quiz_wrong')
       if (sourceMode === 'saved' && index === correctIndex) {
         setCorrectCount((c) => c + 1)
       }
@@ -184,7 +227,7 @@ export default function QuizTab({ onGoToLearn }) {
         })
       }
     },
-    [picked, currentCard, correctIndex, sourceMode],
+    [picked, currentCard, correctIndex, sourceMode, randomHskLevel, directionMode],
   )
 
   useEffect(() => {
@@ -301,7 +344,7 @@ export default function QuizTab({ onGoToLearn }) {
 
   if (sourceMode === 'saved' && !learned.length) {
     return (
-      <div className="flex min-h-[calc(100dvh-9rem)] flex-col bg-paper px-3 text-ink sm:px-4">
+      <div className="flex min-h-0 w-full flex-1 flex-col bg-transparent px-3 text-ink sm:px-4">
         <div className="mx-auto w-full max-w-lg flex flex-col pt-3">
           <div className="mb-4 flex flex-wrap items-center gap-2">
             <button
@@ -349,13 +392,13 @@ export default function QuizTab({ onGoToLearn }) {
     const randomWaiting = sourceMode === 'random' && hskPoolRows.length > 0 && randomQuiz === null
     if (randomWaiting) {
       return (
-        <div className="flex min-h-[calc(100dvh-9rem)] flex-col items-center justify-center bg-paper px-4 text-center text-ink">
+        <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center bg-transparent px-4 text-center text-ink">
           <p className="text-sm text-espresso/80">Loading quiz…</p>
         </div>
       )
     }
     return (
-      <div className="flex min-h-[calc(100dvh-9rem)] flex-col items-center justify-center bg-paper px-4 text-center text-ink">
+      <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center bg-transparent px-4 text-center text-ink">
         <p className="text-espresso">No words loaded for this HSK level.</p>
       </div>
     )
@@ -379,7 +422,7 @@ export default function QuizTab({ onGoToLearn }) {
   const showScore = sourceMode === 'saved'
 
   return (
-    <div className="relative flex min-h-[calc(100dvh-9rem)] flex-col bg-paper px-3 text-ink sm:px-4">
+    <div className="relative flex min-h-0 w-full flex-1 flex-col bg-transparent px-3 text-ink sm:px-4">
       {celebrateAll ? (
         <div
           className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center pt-4"
@@ -509,7 +552,7 @@ export default function QuizTab({ onGoToLearn }) {
         </div>
 
         <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-[#3A3529] bg-[#1C1A16] shadow-sm">
-          <div className="flex flex-col items-center justify-center px-5 py-6 text-center sm:px-6">
+          <div className="flex flex-col items-center justify-center px-5 py-4 text-center sm:px-6">
             {isReverse ? (
               <>
                 <p
@@ -588,7 +631,7 @@ export default function QuizTab({ onGoToLearn }) {
             </div>
 
             {picked !== null && (
-              <div className="mt-4 flex flex-col items-center gap-2 border-t border-[#3A3529] pt-4">
+              <div className="mt-3 flex flex-col items-center gap-2 border-t border-[#3A3529] pt-3">
                 <div className="flex flex-col items-center gap-1">
                   <button
                     type="button"

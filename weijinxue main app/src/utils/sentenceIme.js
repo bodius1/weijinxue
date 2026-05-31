@@ -43,14 +43,13 @@ export function normalizeSentenceCandidatePinyin(pinyinField) {
 }
 
 /**
- * Loose compatibility for single-syllable / global rows: exact, or one toneless string extends the other.
- * Rejects unrelated strings (e.g. `wanan` vs `wanshang`, `buyaonage` vs `buyaozhege`).
+ * Single-syllable / global row pinyin match: exact toneless equality only (no prefix).
  */
 export function pinyinTripletCompatible(candidatePyNorm, queryNorm) {
   const c = String(candidatePyNorm ?? '').trim()
   const q = String(queryNorm ?? '').trim()
   if (!c || !q) return false
-  return c === q || c.startsWith(q) || q.startsWith(c)
+  return c === q
 }
 
 /**
@@ -76,7 +75,7 @@ export function isGlobalSentenceFallbackCompatible(entry, queryNorm, remainingHa
     return pinyinTripletCompatible(pyNorm, q)
   }
 
-  return pyNorm === q || q.startsWith(pyNorm)
+  return pyNorm === q
 }
 
 /**
@@ -84,16 +83,23 @@ export function isGlobalSentenceFallbackCompatible(entry, queryNorm, remainingHa
  * @param {string} pyNorm toneless span from sentence `py`
  * @param {string} queryNorm
  * @param {string} prevSpanPyNorm toneless pinyin of the immediately shorter span (empty for the first span)
+ * @param {string[]} [syllables] toneless syllables for this span (one per Han cell)
  * @returns {'exact' | 'typed-beyond' | 'partial-into' | 'none'}
  */
-export function classifySentenceSpanMatch(pyNorm, queryNorm, prevSpanPyNorm) {
+export function classifySentenceSpanMatch(pyNorm, queryNorm, prevSpanPyNorm, syllables) {
   const py = String(pyNorm ?? '')
   const q = String(queryNorm ?? '')
   if (!q || !py) return 'none'
   if (py === q) return 'exact'
   if (q.startsWith(py)) return 'typed-beyond'
   const prevLen = String(prevSpanPyNorm ?? '').length
-  if (prevLen > 0 && py.startsWith(q) && q.length > prevLen) return 'partial-into'
+  if (prevLen > 0 && Array.isArray(syllables) && syllables.length > 0) {
+    let built = ''
+    for (const syl of syllables) {
+      built += syl
+      if (q === built && q.length > prevLen) return 'partial-into'
+    }
+  }
   return 'none'
 }
 
@@ -120,7 +126,7 @@ function compareSpanMetaByRank(
 export function sentenceSyllableMatchesQuery(cellPy, queryNorm) {
   if (!queryNorm) return false
   const t = fullTonelessPinyin(String(cellPy ?? ''))
-  return pinyinTripletCompatible(t, queryNorm)
+  return t === queryNorm
 }
 
 /**
@@ -161,13 +167,17 @@ export function buildAnchoredSentenceSpanCandidates(sentenceLine, active, queryN
     han += ch
     if (!isAnchoredSentenceCandidate(han, remainingHan)) break
 
+    /** @type {string[]} */
+    const spanSyllables = []
     let pyNorm = ''
     for (let j = start; j <= i; j += 1) {
       const cc = cells[j]
       if (cc.kind !== 'han') break
-      pyNorm += fullTonelessPinyin(String(cc.py ?? ''))
+      const syl = fullTonelessPinyin(String(cc.py ?? ''))
+      spanSyllables.push(syl)
+      pyNorm += syl
     }
-    const matchType = classifySentenceSpanMatch(pyNorm, queryNorm, prevSpanPyNorm)
+    const matchType = classifySentenceSpanMatch(pyNorm, queryNorm, prevSpanPyNorm, spanSyllables)
     if (matchType !== 'none') {
       const pinyinMarked = cells
         .slice(start, i + 1)
@@ -289,7 +299,8 @@ export function mergeSentenceContextCandidates(sentenceLine, active, queryNorm, 
  * 7. 你叫什么名字？ At 你, `nijiaoshenmemingzi` → 你叫什么名字 #1; after 你, `jiaoshenmemingzi` → 叫什么名字 (not 你叫什么名字).
  * 8. 不要那个。 `buyaozhege` → not 不要那个; `buyaonage` → 不要那个 #1.
  * 9. 请再说一遍。 `qing` → 请 #1; long global 请再说一遍 must not pass on `py.startsWith(qing)` alone. `qingzai` → 请再 (spans). `qingzaishuoyibian` → full phrase.
- * 10. 晚安。 `wanan` → 晚安; `wanshang` → not 晚安 (triplet fails).
+ * 10. 晚安。 `wanan` → 晚安; `wanshang` → not 晚安 (exact pinyin only).
+ * 12. 桌 `zhuo1`: `z` → not 桌; `zhuo` → 桌 #1.
  * 11. Multiple lines: IME row follows `getSentenceLineForTypingIme` in TypeTab (today always line 0).
  */
 export const getSentenceContextCandidates = mergeSentenceContextCandidates

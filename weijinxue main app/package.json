@@ -1,7 +1,7 @@
 {
   "name": "mandarin-app",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,25 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "gen:hsk6": "node scripts/build-hsk6-json.mjs",
-    "diagnose:meanings": "node scripts/diagnose-meaning-issues.mjs"
+    "gen:sentences-hsk1": "node scripts/build-hsk1-sample-sentences.mjs",
+    "merge:pinhok-hsk1": "node scripts/merge-pinhok-hsk1-sentences.mjs",
+    "gen:sentences-hsk2": "node scripts/build-hsk2-sample-sentences.cjs",
+    "diagnose:meanings": "node scripts/diagnose-meaning-issues.mjs",
+    "test": "npm run test:context-progress && npm run test:context-drills && npm run test:pinyin-stream",
+    "test:context-progress": "node test/contextProgressStore.test.js",
+    "test:context-drills": "node test/contextDrillEngine.test.js",
+    "test:pinyin-stream": "node test/pinyinStream.test.js",
+    "test:yuban-grading": "node scripts/test-yuban-grading.mjs",
+    "test:yuban-ime": "node scripts/test-yuban-ime-ranking.mjs",
+    "test:yuban-story": "node scripts/test-story-beat-guards.mjs",
+    "test:yuban-advance": "node scripts/test-yuban-advance-timing.mjs",
+    "test:yuban-phrase": "node scripts/test-yuban-phrase-ime.mjs",
+    "test:yuban-alternatives": "node scripts/test-yuban-alternatives.mjs",
+    "test:yuban-local-grader": "node scripts/test-yuban-local-grader.mjs",
+    "test:yuban-grade-cache": "node scripts/test-yuban-grade-cache.mjs",
+    "test:yuban-hybrid-story": "node scripts/test-yuban-hybrid-story.mjs",
+    "test:yuban": "npm run test:yuban-grading && npm run test:yuban-ime && npm run test:yuban-story && npm run test:yuban-advance && npm run test:yuban-phrase && npm run test:yuban-alternatives && npm run test:yuban-local-grader && npm run test:yuban-grade-cache && npm run test:yuban-hybrid-story",
+    "seed:leaderboard": "node scripts/seed-leaderboard.mjs"
   },
   "dependencies": {
     "axios": "^1.16.0",
@@ -28,6 +46,7 @@
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
+    "firebase-admin": "^13.10.0",
     "globals": "^17.6.0",
     "tailwindcss": "^4.3.0",
     "vite": "^8.0.12"

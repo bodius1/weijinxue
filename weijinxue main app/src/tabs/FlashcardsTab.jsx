@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { HSK_DATA } from '../utils/pinyinIme.js'
+import { HSK_DATA, preloadHskData } from '../utils/pinyinIme.js'
 import { formatEnglishMeaningForDisplay } from '../utils/formatEnglishMeaning.js'
 import { pinyinForDisplay } from '../utils/pinyinToneMark.js'
 import { isLearnedSaved, removeLearnedCharacter, saveLearnedCharacter, toggleLearnedCharacter } from '../utils/learnedCharacters.js'
 import { pushHskProgressLevel } from '../utils/hskProgressCloud.js'
+import { recordStudyActivity } from '../utils/studyStatsFirestore.js'
+import { trackEvent } from '../utils/analytics.js'
 
 const STORAGE_KEY = 'huaxue-hsk-flashcards-v1'
 
@@ -132,6 +134,7 @@ function flashcardHanFontSize(charCount) {
 }
 
 export default function FlashcardsTab() {
+  const [hskReady, setHskReady] = useState(false)
   const levels = useMemo(
     () =>
       [1, 2, 3, 4, 5, 6].map((level) => ({
@@ -139,7 +142,7 @@ export default function FlashcardsTab() {
         label: `HSK ${level}`,
         words: HSK_DATA[level - 1] ?? [],
       })),
-    [],
+    [hskReady],
   )
 
   const [storeTick, setStoreTick] = useState(0)
@@ -169,6 +172,26 @@ export default function FlashcardsTab() {
   const handleQuizDeckToggleRef = useRef(/** @type {() => void} */ (() => {}))
 
   const bumpStore = useCallback(() => setStoreTick((t) => t + 1), [])
+
+  useEffect(() => {
+    let cancelled = false
+    preloadHskData()
+      .then(() => {
+        if (!cancelled) setHskReady(true)
+      })
+      .catch((err) => {
+        console.error('Failed to load HSK data', err)
+        if (!cancelled) setHskReady(true)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const revealCardMeaning = useCallback(() => {
+    setMeaningRevealed(true)
+    trackEvent('flashcard_revealed', { hsk_level: activeLevel })
+  }, [activeLevel])
 
   useEffect(() => {
     const fn = () => setSavedTick((t) => t + 1)
@@ -235,6 +258,7 @@ export default function FlashcardsTab() {
       setShowPinyin(true)
       setMeaningRevealed(false)
       setMode('study')
+      trackEvent('hsk_level_selected', { context: 'flashcards', hsk_level: level })
     },
     [levels]
   )
@@ -291,6 +315,8 @@ export default function FlashcardsTab() {
       const store = readStore()
       const prev = getProgress(store, activeLevel, cur.simplified)
       saveProgress(store, activeLevel, cur.simplified, cur.pinyin, cur.english, rating, prev)
+      void recordStudyActivity({ flashcardsRated: 1, activeTab: 'flashcards' })
+      trackEvent('flashcard_rated', { rating, hsk_level: activeLevel })
       const storeAfter = readStore()
 
       if (rating === 5) {
@@ -416,7 +442,7 @@ export default function FlashcardsTab() {
         e.preventDefault()
         e.stopPropagation()
         if (!meaningRevealedRef.current) {
-          setMeaningRevealed(true)
+          revealCardMeaning()
         }
         return
       }
@@ -432,33 +458,35 @@ export default function FlashcardsTab() {
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [isStudying, meaningRevealed, current, applyRating, handleQuizDeckToggle])
+  }, [isStudying, meaningRevealed, current, applyRating, handleQuizDeckToggle, revealCardMeaning])
 
   if (mode === 'picker') {
     return (
-      <div className="flex min-h-[calc(100dvh-9rem)] flex-col bg-paper text-ink">
-        <h2 className="sr-only">Choose HSK level</h2>
-        <p className="mb-4 text-center text-sm text-espresso/85">Pick a level to study flashcards.</p>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
-          {levelMeta.map(({ level, label, total, mastered }) => {
-            const pct = total ? Math.round((mastered / total) * 100) : 0
-            return (
-              <button
-                key={level}
-                type="button"
-                onClick={() => beginSession(level)}
-                className="flex flex-col rounded-2xl border border-clay bg-elevated p-4 text-left shadow-sm transition hover:border-clay hover:shadow-md sm:p-5"
-              >
-                <span className="text-xl font-semibold text-ink sm:text-2xl">{label}</span>
-                <span className="mt-1 text-sm text-espresso/90">{total} words</span>
-                <span className="text-sm text-clay">{mastered} mastered</span>
-                <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-taupe/50" aria-hidden>
-                  <div className="h-full rounded-full bg-clay transition-[width]" style={{ width: `${pct}%` }} />
-                </div>
-                <span className="mt-1 text-xs text-espresso/70">{pct}% mastery</span>
-              </button>
-            )
-          })}
+      <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-y-auto bg-transparent px-3 text-ink sm:px-4">
+        <div className="mx-auto w-full max-w-lg shrink-0 py-2 sm:py-3">
+          <h2 className="sr-only">Choose HSK level</h2>
+          <p className="mb-3 text-center text-sm text-espresso/85">Pick a level to study flashcards.</p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+            {levelMeta.map(({ level, label, total, mastered }) => {
+              const pct = total ? Math.round((mastered / total) * 100) : 0
+              return (
+                <button
+                  key={level}
+                  type="button"
+                  onClick={() => beginSession(level)}
+                  className="flex flex-col rounded-2xl border border-clay bg-elevated p-4 text-left shadow-sm transition hover:border-clay hover:shadow-md sm:p-5"
+                >
+                  <span className="text-xl font-semibold text-ink sm:text-2xl">{label}</span>
+                  <span className="mt-1 text-sm text-espresso/90">{total} words</span>
+                  <span className="text-sm text-clay">{mastered} mastered</span>
+                  <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-taupe/50" aria-hidden>
+                    <div className="h-full rounded-full bg-clay transition-[width]" style={{ width: `${pct}%` }} />
+                  </div>
+                  <span className="mt-1 text-xs text-espresso/70">{pct}% mastery</span>
+                </button>
+              )
+            })}
+          </div>
         </div>
       </div>
     )
@@ -467,7 +495,7 @@ export default function FlashcardsTab() {
   if (mode === 'empty') {
     const L = levels.find((l) => l.level === activeLevel)
     return (
-      <div className="flex min-h-[calc(100dvh-9rem)] flex-col items-center justify-center bg-paper px-4 text-center text-ink">
+      <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center bg-transparent px-3 text-center text-ink sm:px-4">
         <p className="text-lg text-espresso">You have mastered every word in {L?.label ?? 'this level'}.</p>
         <button
           type="button"
@@ -486,7 +514,7 @@ export default function FlashcardsTab() {
   if (mode === 'complete') {
     const L = levels.find((l) => l.level === activeLevel)
     return (
-      <div className="flex min-h-[calc(100dvh-9rem)] flex-col items-center justify-center bg-paper px-4 text-center text-ink">
+      <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center bg-transparent px-3 text-center text-ink sm:px-4">
         <h2 className="text-2xl font-semibold text-ink sm:text-3xl">Session Complete! 🎉</h2>
         <p className="mt-2 text-sm text-espresso/90">{L?.label}</p>
         <ul className="mt-6 w-full max-w-sm space-y-2 text-left text-sm text-espresso">
@@ -526,7 +554,7 @@ export default function FlashcardsTab() {
   const L = levels.find((l) => l.level === activeLevel)
 
   return (
-    <div ref={studyRootRef} className="flex min-h-[calc(100dvh-9rem)] flex-col bg-paper text-ink">
+    <div ref={studyRootRef} className="flex min-h-0 w-full flex-1 flex-col bg-transparent px-3 text-ink sm:px-4">
       <div className="mb-2 flex items-center justify-between gap-2 px-0.5 sm:px-1">
         <button
           type="button"
@@ -597,7 +625,7 @@ export default function FlashcardsTab() {
               <div className="flex flex-col items-center gap-1">
                 <button
                   type="button"
-                  onClick={() => setMeaningRevealed(true)}
+                  onClick={revealCardMeaning}
                   className="rounded-xl border border-taupe bg-elevated px-5 py-2.5 text-sm font-medium text-ink shadow-sm hover:border-clay"
                 >
                   Tap to reveal meaning

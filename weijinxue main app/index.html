@@ -4,10 +4,86 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mandarin-app</title>
+    <meta
+      name="description"
+      content="Free, open-source Mandarin learning app for reading, typing, flashcards, quizzes, and AI conversation."
+    />
+    <meta name="theme-color" content="#D4A843" />
+    <title>Weijinxue | 为进学</title>
   </head>
   <body>
     <div id="root"></div>
+    <style id="splash-style">
+      #splash {
+        position: fixed; inset: 0; background: #0F0E0C;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        z-index: 9999; transition: opacity 0.7s ease;
+        font-family: sans-serif; overflow: hidden;
+      }
+      #splash.out { opacity: 0; pointer-events: none; }
+
+      .sp-char {
+        color: #D4A843; font-size: 5rem; display: inline-block;
+        opacity: 0; transform: translateY(14px);
+        animation: sp-rise 0.5s ease forwards;
+      }
+      .sp-char:nth-child(1) { animation-delay: 0.1s; }
+      .sp-char:nth-child(2) { animation-delay: 0.3s; }
+      .sp-char:nth-child(3) { animation-delay: 0.5s; }
+
+      .sp-line {
+        height: 1px; width: 0; background: #D4A843; opacity: 0.35;
+        margin: 0.75rem auto;
+        animation: sp-expand 0.6s ease 0.65s forwards;
+      }
+      .sp-sub {
+        color: #D4A843; opacity: 0; font-size: 0.7rem;
+        letter-spacing: 0.35em;
+        animation: sp-rise 0.5s ease 0.85s forwards;
+      }
+
+      .sp-dot {
+        position: absolute; width: 5px; height: 5px;
+        border-radius: 50%; background: #D4A843; opacity: 0;
+        animation: sp-float 3.5s ease-in infinite;
+      }
+      .sp-dot:nth-child(1) { left: 25%; animation-delay: 0s; }
+      .sp-dot:nth-child(2) { left: 50%; animation-delay: 1s; }
+      .sp-dot:nth-child(3) { left: 75%; animation-delay: 2s; }
+      .sp-dot:nth-child(4) { left: 38%; animation-delay: 1.7s; }
+      .sp-dot:nth-child(5) { left: 63%; animation-delay: 0.5s; }
+
+      @keyframes sp-rise {
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes sp-expand {
+        to { width: 80px; }
+      }
+      @keyframes sp-float {
+        0%   { transform: translateY(110vh); opacity: 0; }
+        15%  { opacity: 0.55; }
+        85%  { opacity: 0.2; }
+        100% { transform: translateY(-20vh); opacity: 0; }
+      }
+    </style>
+
+    <div id="splash">
+      <div class="sp-dot"></div>
+      <div class="sp-dot"></div>
+      <div class="sp-dot"></div>
+      <div class="sp-dot"></div>
+      <div class="sp-dot"></div>
+      <div style="text-align:center">
+        <div>
+          <span class="sp-char">为</span>
+          <span class="sp-char">进</span>
+          <span class="sp-char">学</span>
+        </div>
+        <div class="sp-line"></div>
+        <div class="sp-sub">WEIJINXUE</div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

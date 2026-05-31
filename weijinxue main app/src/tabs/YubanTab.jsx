@@ -6,12 +6,17 @@ import {
   HSK_DATA,
   lookupFromIndex,
   normalizeQuery,
+  preloadPinyinImeData,
 } from '../utils/pinyinIme.js'
 import { saveLearnedCharacter } from '../utils/learnedCharacters.js'
 import { formatEnglishMeaningForDisplay } from '../utils/formatEnglishMeaning.js'
 import { pinyinForDisplay } from '../utils/pinyinToneMark.js'
+import { trackEvent } from '../utils/analytics.js'
+import YubanStoryConversation from '../yuban/YubanStoryConversation.jsx'
+import { DevModeBadge } from '../yuban/dev/DevModeBadge.jsx'
 
 const STORAGE_GROQ = 'yuban_groq_key'
+const STORAGE_CLASSIC_MODE = 'yuban_classic_mode'
 const STORAGE_ANTHROPIC = 'yuban_anthropic_key'
 /** @deprecated migrated once into STORAGE_ANTHROPIC */
 const LEGACY_ANTHROPIC_STORAGE = 'anthropic_api_key'
@@ -280,7 +285,7 @@ function TypingIndicator() {
   return (
     <div className="flex gap-3">
       <YubanAvatar />
-      <div className="max-w-[85%] rounded-2xl rounded-tl-sm border border-taupe bg-elevated px-4 py-3">
+      <div className="max-w-[85%] rounded-2xl rounded-tl-sm border border-taupe bg-elevated px-3 py-2 sm:px-4 sm:py-2.5">
         <p className="text-sm text-espresso">
           Yǔbàn is typing
           <span className="inline-flex pl-0.5">
@@ -354,6 +359,7 @@ function migrateLegacyAnthropicKey() {
     const next = localStorage.getItem(STORAGE_ANTHROPIC)?.trim() ?? ''
     if (legacy && !next) {
       localStorage.setItem(STORAGE_ANTHROPIC, legacy)
+      localStorage.removeItem(LEGACY_ANTHROPIC_STORAGE)
     }
   } catch {
     /* ignore */
@@ -391,7 +397,13 @@ async function callGroq({ apiKey, systemPrompt, messages }) {
   return typeof reply === 'string' ? reply : ''
 }
 
-export default function YubanTab() {
+/**
+ * @param {{
+ *   storyHeaderSlot?: import('react').ReactNode,
+ *   onTurnHistoryChange?: (history: Array<{ evaluation?: string }>) => void,
+ * }} props
+ */
+export default function YubanTab({ storyHeaderSlot = null, onTurnHistoryChange }) {
   const [hasGroqKey, setHasGroqKey] = useState(false)
   const [hasAnthropicKey, setHasAnthropicKey] = useState(false)
   const [groqKeyInput, setGroqKeyInput] = useState('')
@@ -413,17 +425,48 @@ export default function YubanTab() {
 
   const [vocabOpen, setVocabOpen] = useState(false)
 
+  const [classicMode, setClassicMode] = useState(() => {
+    if (typeof localStorage === 'undefined') return false
+    try {
+      return localStorage.getItem(STORAGE_CLASSIC_MODE) === '1'
+    } catch {
+      return false
+    }
+  })
+
   const [pinyinIndex, setPinyinIndex] = useState(/** @type {ReturnType<typeof buildPinyinPrefixIndex> | null} */ (null))
   const candidatesRef = useRef(/** @type {{ simplified: string, pinyin: string, english: string[] }[]} */ ([]))
   const candidatesExpandedRef = useRef(false)
   const messageListRef = useRef(/** @type {HTMLDivElement | null} */ (null))
   const scrollAnchorRef = useRef(/** @type {HTMLDivElement | null} */ (null))
+  const yubanStartedTrackedRef = useRef(false)
 
   const scenario = SCENARIOS.find((s) => s.id === scenarioId) ?? SCENARIOS[0]
 
   const hasSession = hasAnthropicKey || hasGroqKey
   const isPremiumActive = hasAnthropicKey
-  const hskList = useMemo(() => HSK_DATA[hskLevel - 1] ?? [], [hskLevel])
+
+  useEffect(() => {
+    if (!hasSession) {
+      yubanStartedTrackedRef.current = false
+      return
+    }
+    if (keyOverlay) return
+    if (yubanStartedTrackedRef.current) return
+    yubanStartedTrackedRef.current = true
+    const s = readYubanSession()
+    trackEvent('yuban_started', { provider: s?.provider === 'anthropic' ? 'claude' : 'groq' })
+  }, [hasSession, keyOverlay])
+
+  useEffect(() => {
+    trackEvent('yuban_scenario_selected', { scenario_id: String(scenarioId).slice(0, 40) })
+  }, [scenarioId])
+
+  useEffect(() => {
+    trackEvent('yuban_hsk_level_selected', { hsk_level: hskLevel })
+  }, [hskLevel])
+
+  const hskList = useMemo(() => HSK_DATA[hskLevel - 1] ?? [], [hskLevel, indexReady])
   const injectedHskWords = useMemo(
     () =>
       (hskList ?? [])
@@ -462,14 +505,32 @@ export default function YubanTab() {
   }, [])
 
   useEffect(() => {
+    let cancelled = false
     const id = window.setTimeout(() => {
-      const idx = buildPinyinPrefixIndex()
-      queueMicrotask(() => {
-        setPinyinIndex(idx)
-        setIndexReady(true)
-      })
+      preloadPinyinImeData()
+        .then(() => {
+          if (cancelled) return
+          const idx = buildPinyinPrefixIndex()
+          queueMicrotask(() => {
+            if (cancelled) return
+            setPinyinIndex(idx)
+            setIndexReady(true)
+          })
+        })
+        .catch((err) => {
+          console.error('Failed to load pinyin dictionary', err)
+          if (cancelled) return
+          queueMicrotask(() => {
+            if (cancelled) return
+            setPinyinIndex(new Map())
+            setIndexReady(true)
+          })
+        })
     }, 0)
-    return () => window.clearTimeout(id)
+    return () => {
+      cancelled = true
+      window.clearTimeout(id)
+    }
   }, [])
 
   const queryNorm = useMemo(() => normalizeQuery(imeInput), [imeInput])
@@ -586,14 +647,31 @@ export default function YubanTab() {
     beginScenarioRef.current = beginScenario
   }, [beginScenario])
 
-  // Sync keys on mount and optionally bootstrap chat. `syncKeyFlags` is useCallback([]) so this still runs once.
+  const toggleClassicMode = useCallback(() => {
+    setClassicMode((prev) => {
+      const next = !prev
+      try {
+        localStorage.setItem(STORAGE_CLASSIC_MODE, next ? '1' : '0')
+      } catch {
+        /* ignore */
+      }
+      return next
+    })
+  }, [])
+
+  // Sync keys on mount and optionally bootstrap classic chat only.
   useEffect(() => {
     migrateLegacyAnthropicKey()
     queueMicrotask(() => syncKeyFlags())
-    if (readYubanSession()) {
+    if (readYubanSession() && classicMode) {
       queueMicrotask(() => beginScenarioRef.current())
     }
-  }, [syncKeyFlags])
+  }, [syncKeyFlags, classicMode])
+
+  useEffect(() => {
+    if (!classicMode || !readYubanSession() || messages.length > 0) return
+    queueMicrotask(() => beginScenarioRef.current())
+  }, [classicMode, messages.length])
 
   const handleSaveGroq = () => {
     const trimmed = groqKeyInput.trim()
@@ -606,6 +684,7 @@ export default function YubanTab() {
     setGroqKeyInput('')
     setKeyOverlay(false)
     syncKeyFlags()
+    trackEvent('yuban_provider_selected', { provider: 'groq' })
     setMessages([])
     window.setTimeout(() => beginScenario(), 0)
   }
@@ -621,6 +700,7 @@ export default function YubanTab() {
     setAnthropicKeyInput('')
     setKeyOverlay(false)
     syncKeyFlags()
+    trackEvent('yuban_provider_selected', { provider: 'claude' })
     setMessages([])
     window.setTimeout(() => beginScenario(), 0)
   }
@@ -634,6 +714,7 @@ export default function YubanTab() {
     syncKeyFlags()
     setAnthropicKeyInput('')
     setMessages([])
+    trackEvent('yuban_provider_selected', { provider: 'groq' })
     if (readYubanSession()) {
       window.setTimeout(() => beginScenario(), 0)
     }
@@ -662,6 +743,11 @@ export default function YubanTab() {
     }
 
     const userMsg = { id: uid(), role: /** @type {const} */ ('user'), content: text }
+    trackEvent('yuban_message_sent', {
+      char_count: Math.min(500, text.length),
+      han_segment_count: [...text].filter((ch) => /[\u4e00-\u9fff]/u.test(ch)).length,
+      hsk_level: hskLevel,
+    })
     const next = [...messages, userMsg]
     setMessages(next)
     setComposedHanzi('')
@@ -811,27 +897,36 @@ export default function YubanTab() {
 
   if (setupScreen || keyOverlay) {
     return (
-      <div className="flex min-h-[calc(100dvh-9rem)] flex-col items-center justify-center px-4 py-10">
-        <div className="w-full max-w-md space-y-6 rounded-2xl border border-taupe bg-[#1C1A16] p-6 shadow-lg">
+      <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center overflow-y-auto py-2 sm:py-3">
+        <div className="w-full max-w-md shrink-0">
+          <div className="w-full space-y-2.5 rounded-2xl border border-taupe bg-[#1C1A16] px-3.5 pt-2.5 pb-2 shadow-lg sm:px-4 sm:pt-3 sm:pb-2">
           <div>
-            <h2 className="text-lg font-semibold text-ink">
-              {keyOverlay ? 'API keys — Yǔbàn AI' : 'Meet Yǔbàn AI'}
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-espresso">
-              {keyOverlay
-                ? 'Update your Groq or Anthropic key. If both are saved, Claude (premium) is used.'
-                : 'A chill AI friend to practice Mandarin with.'}
-            </p>
+            {keyOverlay ? (
+              <>
+                <h2 className="text-lg font-semibold text-ink sm:text-xl">API keys — Yǔbàn AI</h2>
+                <p className="mt-1.5 text-sm leading-snug text-espresso">
+                  Update your Groq or Anthropic key. If both are saved, Claude (premium) is used.
+                </p>
+              </>
+            ) : (
+              <p className="text-base font-semibold leading-snug text-ink sm:text-lg">
+                Meet Yǔbàn AI
+                <span className="text-sm font-normal text-espresso sm:text-base">
+                  {' '}
+                  — your new Mandarin study buddy.
+                </span>
+              </p>
+            )}
           </div>
 
-          <div className="space-y-3 rounded-xl border border-taupe bg-elevated/40 p-4">
+          <div className="space-y-2.5 rounded-xl border border-taupe bg-elevated/40 p-3 sm:p-3.5">
             <p className="text-sm font-medium text-ink">🆓 Free — Powered by Llama 3.3</p>
             <p className="text-xs text-espresso">Get a free key at console.groq.com</p>
             <input
               type="password"
               value={groqKeyInput}
               onChange={(e) => setGroqKeyInput(e.target.value)}
-              className="w-full rounded-xl border border-taupe bg-paper px-4 py-3 text-sm text-ink outline-none ring-[#D4A843]/25 focus:ring-2"
+              className="w-full rounded-xl border border-taupe bg-paper px-3 py-2.5 text-sm text-ink outline-none ring-[#D4A843]/25 focus:ring-2"
               placeholder="Groq API key"
               autoComplete="off"
               data-yuban-skip-ime
@@ -839,20 +934,20 @@ export default function YubanTab() {
             <button
               type="button"
               onClick={handleSaveGroq}
-              className="w-full rounded-xl bg-[#D4A843] px-4 py-3 text-sm font-semibold text-[#0f0e0c] transition hover:bg-[#b8872a]"
+              className="w-full rounded-xl bg-[#D4A843] px-4 py-2.5 text-sm font-semibold text-[#0f0e0c] transition hover:bg-[#b8872a]"
             >
               Free
             </button>
           </div>
 
-          <div className="space-y-3 rounded-xl border border-taupe border-t-2 border-t-[#3A3529] bg-elevated/40 p-4 pt-5">
+          <div className="space-y-2.5 rounded-xl border border-taupe border-t-2 border-t-[#3A3529] bg-elevated/40 p-3 pt-3.5 sm:p-3.5">
             <p className="text-sm font-medium text-ink">⭐ Premium — Powered by Claude</p>
             <p className="text-xs text-espresso">Better Chinese understanding</p>
             <input
               type="password"
               value={anthropicKeyInput}
               onChange={(e) => setAnthropicKeyInput(e.target.value)}
-              className="w-full rounded-xl border border-taupe bg-paper px-4 py-3 text-sm text-ink outline-none ring-[#D4A843]/25 focus:ring-2"
+              className="w-full rounded-xl border border-taupe bg-paper px-3 py-2.5 text-sm text-ink outline-none ring-[#D4A843]/25 focus:ring-2"
               placeholder="Anthropic API key"
               autoComplete="off"
               data-yuban-skip-ime
@@ -860,7 +955,7 @@ export default function YubanTab() {
             <button
               type="button"
               onClick={handleSaveAnthropic}
-              className="w-full rounded-xl border border-[#D4A843]/60 bg-elevated px-4 py-3 text-sm font-semibold text-ink transition hover:border-[#D4A843]"
+              className="w-full rounded-xl border border-[#D4A843]/60 bg-elevated px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-[#D4A843]"
             >
               Premium
             </button>
@@ -875,7 +970,7 @@ export default function YubanTab() {
             ) : null}
           </div>
 
-          <p className="text-xs leading-relaxed text-muted">
+          <p className="mb-0 text-xs leading-snug text-muted">
             Keys stay in your browser. Groq and Anthropic receive them only when you send a message to their APIs.
           </p>
 
@@ -892,28 +987,47 @@ export default function YubanTab() {
               Cancel
             </button>
           ) : null}
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="flex min-h-[calc(100dvh-9rem)] flex-1 flex-col gap-4">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+    <div className="flex min-h-[calc(100dvh-9rem)] flex-1 flex-col gap-1.5">
+      <header className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between">
         <div className="text-center sm:text-left">
-          <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">Yǔbàn AI</h2>
-          <p className="mt-1 text-sm text-espresso">Your Mandarin conversation companion</p>
+          <h2 className="text-lg font-semibold tracking-tight text-ink sm:text-xl">
+            <span className="text-ink">Yǔbàn AI</span>
+            <span className="font-normal text-espresso"> — Your Mandarin conversation companion</span>
+          </h2>
         </div>
-        <div
-          className="self-center rounded-full border border-taupe bg-elevated px-3 py-1.5 text-xs font-medium text-ink sm:self-start"
-          title={isPremiumActive ? 'Using Anthropic Claude' : 'Using Groq Llama 3.3'}
-        >
-          {isPremiumActive ? '⭐ Claude' : '🆓 Llama 3.3'}
+        <div className="flex flex-wrap items-center justify-center gap-2 self-center sm:justify-end sm:self-start">
+          {storyHeaderSlot}
+          <DevModeBadge />
+          <button
+            type="button"
+            onClick={toggleClassicMode}
+            className="rounded-full border border-taupe/80 px-2.5 py-1 text-[11px] text-espresso transition hover:border-[#D4A843]/50 hover:text-[#D4A843] sm:px-3 sm:text-xs"
+            title={classicMode ? 'Switch to story teaching mode' : 'Switch to free-form classic chat'}
+          >
+            {classicMode ? '📖 Story mode' : '💬 Classic mode'}
+          </button>
+          <div
+            className="rounded-full border border-taupe bg-elevated px-2.5 py-1 text-[11px] font-medium text-ink sm:px-3 sm:py-1.5 sm:text-xs"
+            title={isPremiumActive ? 'Using Anthropic Claude' : 'Using Groq Llama 3.3'}
+          >
+            {isPremiumActive ? '⭐ Claude' : '🆓 Llama 3.3'}
+          </div>
         </div>
       </header>
 
+      {!classicMode ? (
+        <YubanStoryConversation onTurnHistoryChange={onTurnHistoryChange} />
+      ) : (
+        <>
       {/* Top bar */}
-      <div className="grid gap-3 rounded-xl border border-taupe bg-[#1C1A16] p-3 sm:grid-cols-3">
+      <div className="grid gap-2 rounded-xl border border-taupe bg-[#1C1A16] p-2 sm:grid-cols-3 sm:p-3">
         <label className="flex flex-col gap-1">
           <span className="text-[10px] font-semibold uppercase tracking-wide text-muted">Scenario</span>
           <select
@@ -969,12 +1083,12 @@ export default function YubanTab() {
 
       {/* Messages */}
       <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-taupe bg-[#1C1A16] shadow-inner">
-        <div className="min-h-[220px] flex-1 overflow-y-auto px-3 py-4 sm:px-4">
-          <div ref={messageListRef} className="mx-auto flex max-w-xl flex-col gap-4">
+        <div className="min-h-[180px] flex-1 overflow-y-auto px-2 py-2 sm:px-3 sm:py-2.5">
+          <div ref={messageListRef} className="mx-auto flex max-w-xl flex-col gap-2">
             {displayMessages.map((m) =>
               m.role === 'user' ? (
                 <div key={m.id} className="flex justify-end gap-3">
-                  <div className="max-w-[85%] rounded-2xl rounded-tr-sm border-2 border-[#D4A843]/70 bg-elevated px-4 py-3">
+                  <div className="max-w-[85%] rounded-2xl rounded-tr-sm border-2 border-[#D4A843]/70 bg-elevated px-3 py-2 sm:px-4 sm:py-2.5">
                     <p className="text-xl leading-snug text-ink">
                       <HighlightedChinese text={m.content} wordSet={hskWordSet} maxLen={hskMaxLen} meta={hskMeta} />
                     </p>
@@ -990,7 +1104,7 @@ export default function YubanTab() {
                 <div key={m.id} className="flex gap-3">
                   <YubanAvatar />
                   <div className="max-w-[85%] space-y-2">
-                    <div className="rounded-2xl rounded-tl-sm border border-taupe bg-elevated px-4 py-3">
+                    <div className="rounded-2xl rounded-tl-sm border border-taupe bg-elevated px-3 py-2 sm:px-4 sm:py-2.5">
                       <p className="text-xl leading-relaxed text-ink">
                         <HighlightedChinese
                           text={m.parsed?.chinese ?? parseAssistantContent(m.content).chinese}
@@ -1052,13 +1166,13 @@ export default function YubanTab() {
         </div>
 
         {/* Composer */}
-        <div className="border-t border-[#3A3529] bg-[#252219] px-3 py-4 sm:px-4">
+        <div className="border-t border-[#3A3529] bg-[#252219] px-2 py-2 sm:px-3 sm:py-3">
           <div className="mx-auto max-w-xl">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
               <div className="min-w-0 flex-1">
                 <div
                   tabIndex={-1}
-                  className="rounded-xl border border-taupe bg-paper px-4 py-3 font-mono text-lg leading-relaxed text-ink outline-none ring-[#D4A843]/25 focus-visible:ring-2"
+                  className="rounded-xl border border-taupe bg-paper px-3 py-2 font-mono text-base leading-relaxed text-ink outline-none ring-[#D4A843]/25 focus-visible:ring-2 sm:px-4 sm:py-2.5 sm:text-lg"
                 >
                   <span>{composedHanzi}</span>
                   <span className="text-muted">[</span>
@@ -1066,11 +1180,11 @@ export default function YubanTab() {
                   <span className="animate-pulse text-[#D4A843]">|</span>
                   <span className="text-muted">]</span>
                 </div>
-                <p className="mt-2 text-[11px] text-muted">
+                <p className="mt-1.5 text-[11px] text-muted">
                   Type pinyin (IME), then 1–4 / Space — same as Type tab. Enter to send.
                 </p>
 
-                <div className="mt-3 overflow-hidden rounded-lg border border-taupe bg-[#1C1A16]">
+                <div className="mt-2 overflow-hidden rounded-lg border border-taupe bg-[#1C1A16]">
                   <div className="flex items-center justify-between gap-2 border-b border-taupe/40 px-2 py-2 sm:px-3">
                     <div className="flex w-9 shrink-0 justify-start sm:w-10">
                       {candidatesExpanded ? (
@@ -1199,7 +1313,10 @@ export default function YubanTab() {
         </button>
       </div>
 
-      {vocabOpen ? (
+        </>
+      )}
+
+      {classicMode && vocabOpen ? (
         <div
           className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-4 sm:items-center"
           role="dialog"

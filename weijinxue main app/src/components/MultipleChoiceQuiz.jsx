@@ -8,7 +8,7 @@ const DIRECTIONS = [
 ]
 
 export default function MultipleChoiceQuiz({ entry, isOpen }) {
-  const char = (entry?.char || '').trim() || '学'
+  const char = (entry?.char || '').trim() || '欢迎'
   const meaning = (entry?.meaning || '').trim() || ''
 
   const [round, setRound] = useState(0)

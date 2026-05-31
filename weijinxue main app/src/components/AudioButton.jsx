@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { audioMap as defaultAudioMap } from '../utils/ankiDeckData.js'
 import { ankiAudioSrcCandidates, buildPlaybackPlan } from '../utils/ankiAudioPlayback.js'
+import { trackEvent } from '../utils/analytics.js'
 
 /** Overlap between character clips after silence trim (seconds). */
 const FALLBACK_OVERLAP_SECONDS = 0.04
@@ -294,7 +295,7 @@ export default function AudioButton({ term, audioFile, audioMap = defaultAudioMa
 
     const failAll = (detail) => {
       const msg =
-        'Could not play audio. Copy the deck .mp3 files into mandarin-app/public/anki-audio/ using the exact filenames from audioMap (e.g. 學習_B_zh.mp3 for 学习).'
+        'Could not play audio. Copy the deck .mp3 files into public/anki-audio/ using the exact filenames from audioMap (e.g. 學習_B_zh.mp3 for 学习).'
       setPlayError(msg)
       console.warn('[Anki audio]', detail)
       setIsPlaying(false)
@@ -333,6 +334,11 @@ export default function AudioButton({ term, audioFile, audioMap = defaultAudioMa
           chars: plan.clips.map((c) => c.char ?? null),
         })
       }
+
+      trackEvent('audio_played', {
+        engine: plan.mode === 'exact' ? 'html5' : 'web_audio',
+        clip_count: plan.clips.length,
+      })
 
       console.log('[Anki audio] play done', {
         term,

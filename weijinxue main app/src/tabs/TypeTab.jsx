@@ -8,9 +8,11 @@ import {
   HSK_DATA,
   buildPinyinPrefixIndex,
   digitKeyToSlot,
+  fullTonelessPinyin,
   lookupFromIndex,
   normalizeQuery,
   pickCedictEntryForWord,
+  preloadPinyinImeData,
 } from '../utils/pinyinIme.js'
 import {
   formatEnglishMeaningForDisplay,
@@ -24,6 +26,22 @@ import { isExcludedFromHskTypingPool } from '../utils/hskWordFilters.js'
 import { SENT_ROWS_BY_LEVEL } from '../utils/sentenceData.js'
 import { mergeSentenceContextCandidates } from '../utils/sentenceIme.js'
 import { filterRowsByHskVocabulary } from '../utils/hskSentenceFilter.js'
+import { markSentenceSeen } from '../utils/sentenceSeenLog.js'
+import {
+  createSentenceSessionDeck,
+  takeFromSentenceSessionDeck,
+} from '../utils/sentenceDeckShuffle.js'
+import { recordStudyActivity } from '../utils/studyStatsFirestore.js'
+import { trackEvent } from '../utils/analytics.js'
+import { PinyinStreamInput } from '../type/components/PinyinStreamInput.jsx'
+import { useScoreSystem } from '../type/scoring/useScoreSystem.js'
+import { usePersonalBest } from '../type/scoring/usePersonalBest.js'
+import { useLeaderboard } from '../type/scoring/useLeaderboard.js'
+import { XPOrbSystem } from '../type/components/XPOrbSystem.jsx'
+import { MultiplierBadge } from '../type/components/MultiplierBadge.jsx'
+import { SessionResults } from '../type/components/SessionResults.jsx'
+import { SentenceCarousel } from '../type/components/SentenceCarousel.jsx'
+import { AmbientParticles } from '../type/effects/AmbientParticles.jsx'
 
 /**
  * One entry per HSK level (1–6). Levels 5–6 reuse the HSK4 extended pool until
@@ -43,11 +61,20 @@ function normalizeWord(raw) {
   return simplified && pinyin ? { simplified, pinyin, english } : null
 }
 
-function pickRandomWord(words, excludeSimp) {
-  const list = words.filter((w) => w.simplified !== excludeSimp)
-  const pool = list.length ? list : words
-  const idx = Math.floor(Math.random() * pool.length)
-  return pool[idx]
+function pickRandomWord(words, excludeSimp, avoidTonelessPinyins) {
+  const avoid =
+    avoidTonelessPinyins && avoidTonelessPinyins.length
+      ? new Set(avoidTonelessPinyins.filter(Boolean))
+      : null
+  let list = words.filter((w) => w.simplified !== excludeSimp)
+  if (avoid && avoid.size > 0) {
+    const filtered = list.filter((w) => !avoid.has(fullTonelessPinyin(w.pinyin)))
+    if (filtered.length > 0) list = filtered
+  }
+  const pool = list.length ? list : words.filter((w) => w.simplified !== excludeSimp)
+  const pool2 = pool.length ? pool : words
+  const idx = Math.floor(Math.random() * pool2.length)
+  return pool2[idx]
 }
 
 const TIMER_OPTIONS = [
@@ -59,14 +86,6 @@ const TIMER_OPTIONS = [
 /** Pause timer while skip-reveal is shown; easy to tune. */
 const SKIP_REVEAL_DURATION = 2000
 const SKIP_REVEAL_EXIT_MS = 300
-
-function Kbd({ children }) {
-  return (
-    <kbd className="rounded border border-ink/45 bg-elevated px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-espresso shadow-[inset_0_-1px_0_rgba(0,0,0,0.12)]">
-      {children}
-    </kbd>
-  )
-}
 
 /** @param {number} level 1–6 */
 function getHskWordMeta(level, simplified) {
@@ -134,15 +153,6 @@ function IconArrowRight() {
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 8l6 4-6 4" />
     </svg>
   )
-}
-
-function shuffleArray(arr) {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
 }
 
 /** @typedef {{ kind: 'han'; expect: string; py: string; state: 'untyped' | 'correct' | 'wrong'; wrongGlyph?: string }} SentHanCell */
@@ -357,10 +367,16 @@ export default function TypeTab() {
 
   const [typeMode, setTypeMode] = useState(/** @type {'characters' | 'sentences'} */ ('characters'))
   const sentLineIdRef = useRef(0)
-  const sentDeckRef = useRef(/** @type {any[]} */ ([]))
-  const sentNextDeckIdxRef = useRef(0)
+  const typeRoundStartTrackedRef = useRef(false)
+  const typeResultsTrackedRef = useRef(false)
+  /** @type {import('react').MutableRefObject<{ pool: unknown[], order: number[], pointer: number, usedIndices: Set<number> }>} */
+  const sentSessionDeckRef = useRef({
+    pool: [],
+    order: [],
+    pointer: 0,
+    usedIndices: new Set(),
+  })
   const [sentLines, setSentLines] = useState(/** @type {SentLine[]} */ ([]))
-  const [sentLineAnim, setSentLineAnim] = useState(false)
   const [sentCharsCorrect, setSentCharsCorrect] = useState(0)
   const [sentCharsWrong, setSentCharsWrong] = useState(0)
   const [sentPickTotal, setSentPickTotal] = useState(0)
@@ -368,6 +384,25 @@ export default function TypeTab() {
   const [sentStreakVal, setSentStreakVal] = useState(0)
   const [sentLinesCompleted, setSentLinesCompleted] = useState(0)
   const [sentCursorLeft, setSentCursorLeft] = useState(/** @type {number | null} */ (null))
+  const [showSessionResults, setShowSessionResults] = useState(false)
+  const [isNewBest, setIsNewBest] = useState(false)
+  const scoreBadgeRef = useRef(/** @type {HTMLDivElement | null} */ (null))
+  const sentenceContainerRef = useRef(/** @type {HTMLDivElement | null} */ (null))
+  const handleSentenceSessionEndRef = useRef(/** @type {() => Promise<void>} */ (async () => {}))
+
+  const { personalBest, submitScore } = usePersonalBest(hskLevel)
+  const { userRank, refresh: refreshLeaderboard } = useLeaderboard(hskLevel)
+  const {
+    score: typeScore,
+    multiplier: typeMultiplier,
+    sessionBestStreak,
+    orbEvents,
+    orbArrivalCount,
+    emitXPOrb,
+    dissolveOrbs,
+    updateSessionBest,
+    reset: resetScoreSystem,
+  } = useScoreSystem(sentStreakVal)
   /**
    * Sentences mode: last `line0.cells` index that is a locked (gold) Han — same as end of the correct prefix.
    * `-1` means nothing confirmed yet. Backspace never removes Hans at or before this index.
@@ -398,6 +433,8 @@ export default function TypeTab() {
   const skipRevealExitTimerRef = useRef(0)
   /** True while skip-reveal timers are active (before skipReveal state commits). */
   const skipRevealInFlightRef = useRef(false)
+  /** Last one or two prompt words (HSK toneless pinyin) to reduce back-to-back repeats (e.g. many 红 in a row). */
+  const recentPromptTonelessRef = useRef(/** @type {string[]} */ ([]))
 
   useEffect(() => {
     currentWordRef.current = currentWord
@@ -454,16 +491,34 @@ export default function TypeTab() {
   )
 
   useEffect(() => {
+    let cancelled = false
     const id = window.setTimeout(() => {
-      console.time('buildPinyinIndex')
-      const idx = buildPinyinPrefixIndex()
-      console.timeEnd('buildPinyinIndex')
-      queueMicrotask(() => {
-        setPinyinIndex(idx)
-        setIndexReady(true)
-      })
+      preloadPinyinImeData()
+        .then(() => {
+          if (cancelled) return
+          console.time('buildPinyinIndex')
+          const idx = buildPinyinPrefixIndex()
+          console.timeEnd('buildPinyinIndex')
+          queueMicrotask(() => {
+            if (cancelled) return
+            setPinyinIndex(idx)
+            setIndexReady(true)
+          })
+        })
+        .catch((err) => {
+          console.error('Failed to load pinyin dictionary', err)
+          if (cancelled) return
+          queueMicrotask(() => {
+            if (cancelled) return
+            setPinyinIndex(new Map())
+            setIndexReady(true)
+          })
+        })
     }, 0)
-    return () => window.clearTimeout(id)
+    return () => {
+      cancelled = true
+      window.clearTimeout(id)
+    }
   }, [])
 
   const words = useMemo(() => {
@@ -472,7 +527,7 @@ export default function TypeTab() {
       .filter((raw) => !isExcludedFromHskTypingPool(raw?.simplified))
       .map(normalizeWord)
       .filter(Boolean)
-  }, [hskLevel])
+  }, [hskLevel, indexReady])
 
   const queryNorm = useMemo(() => normalizeQuery(imeInput), [imeInput])
 
@@ -510,7 +565,7 @@ export default function TypeTab() {
     const rowRect = row.getBoundingClientRect()
     const aRect = anchor.getBoundingClientRect()
     queueMicrotask(() => setSentCursorLeft(aRect.left - rowRect.left - 3))
-  }, [typeMode, sentLines, sentActive, sentLineAnim, imeInput, roundStarted, showRestartPrompt])
+  }, [typeMode, sentLines, sentActive, imeInput, roundStarted, showRestartPrompt])
 
   const candidates = useMemo(() => {
     if (!indexReady || !pinyinIndex) return []
@@ -542,9 +597,11 @@ export default function TypeTab() {
 
   const loadWord = useCallback(
     (excludeSimp) => {
+      const avoid = [...recentPromptTonelessRef.current]
       for (let attempt = 0; attempt < 80; attempt += 1) {
-        const raw = pickRandomWord(words, excludeSimp)
+        const raw = pickRandomWord(words, excludeSimp, avoid)
         if (!raw) return
+        const rawToneless = fullTonelessPinyin(raw.pinyin)
         if (hskLevel === 1) {
           setCurrentWord({
             simplified: raw.simplified,
@@ -556,6 +613,7 @@ export default function TypeTab() {
           setWrongThisWord(0)
           wrongThisWordRef.current = 0
           setFlash('none')
+          recentPromptTonelessRef.current = [rawToneless, avoid[0]].filter(Boolean).slice(0, 2)
           return
         }
         const hskHint = getHskWordMeta(hskLevel, raw.simplified)
@@ -573,28 +631,43 @@ export default function TypeTab() {
         setWrongThisWord(0)
         wrongThisWordRef.current = 0
         setFlash('none')
+        recentPromptTonelessRef.current = [rawToneless, avoid[0]].filter(Boolean).slice(0, 2)
         return
       }
     },
     [words, hskLevel],
   )
 
+  const takeNextSentenceRow = useCallback(() => {
+    const row = takeFromSentenceSessionDeck(sentSessionDeckRef.current)
+    if (!row) return null
+    markSentenceSeen(row)
+    return row
+  }, [])
+
   const refillSentenceLines = useCallback(() => {
     const raw = SENT_ROWS_BY_LEVEL[hskLevel - 1] ?? []
     const filtered = filterRowsByHskVocabulary(raw, hskLevel, HSK_DATA)
     const pool =
       filtered.length > 0 ? filtered : raw.filter((x) => x && String(x?.chinese ?? '').trim())
-    const deck = shuffleArray(pool)
-    sentDeckRef.current = deck
-    sentNextDeckIdxRef.current = 0
+    if (typeof import.meta !== 'undefined' && import.meta.env?.DEV) {
+      const pct = raw.length ? Math.round((pool.length / raw.length) * 100) : 0
+      console.log('%c[Sentences] Session pool', 'color: #D4A843; font-weight: bold', {
+        hskLevel,
+        rawInFile: raw.length,
+        afterHskFilter: filtered.length,
+        playing: pool.length,
+        filterCoverage: `${pct}%`,
+        fallbackToUnfiltered: filtered.length === 0 && raw.length > 0,
+      })
+    }
+    sentSessionDeckRef.current = createSentenceSessionDeck(pool, Date.now())
     const nextLine = () => {
-      const d = sentDeckRef.current
-      if (!d.length) return null
-      const row = d[sentNextDeckIdxRef.current % d.length]
-      sentNextDeckIdxRef.current += 1
+      const row = takeNextSentenceRow()
+      if (!row) return null
       return buildSentLine(row, () => `sl-${(sentLineIdRef.current += 1)}`)
     }
-    const lines = [nextLine(), nextLine(), nextLine()].filter(Boolean)
+    const lines = [nextLine(), nextLine(), nextLine(), nextLine()].filter(Boolean)
     setSentLines(lines)
     setImeInput('')
     setCandidatesExpanded(false)
@@ -606,11 +679,14 @@ export default function TypeTab() {
     setSentPickGood(0)
     setSentStreakVal(0)
     setSentLinesCompleted(0)
-    setSentLineAnim(false)
-  }, [hskLevel])
+    resetScoreSystem()
+    setShowSessionResults(false)
+    setIsNewBest(false)
+  }, [hskLevel, takeNextSentenceRow, resetScoreSystem])
 
   useEffect(() => {
     queueMicrotask(() => {
+      recentPromptTonelessRef.current = []
       setWrongEntries([])
       setWordsCompleted(0)
       setStreak(0)
@@ -672,13 +748,21 @@ export default function TypeTab() {
 
   useEffect(() => {
     if (screen !== 'play' || timerSeconds === 0) return
-    if (secondsLeft === 0) queueMicrotask(() => setScreen('results'))
+    if (secondsLeft === 0) {
+      if (typeModeRef.current === 'sentences') {
+        queueMicrotask(() => void handleSentenceSessionEndRef.current())
+      } else {
+        queueMicrotask(() => setScreen('results'))
+      }
+    }
   }, [secondsLeft, screen, timerSeconds])
 
   const completeWord = useCallback(() => {
     pausedRef.current = true
+    const n = currentWordRef.current?.simplified.length ?? 0
+    if (n > 0) void recordStudyActivity({ typedCharacters: n, activeTab: 'type' })
     setWordsCompleted((c) => c + 1)
-    setCharsCompleted((c) => c + (currentWordRef.current?.simplified.length ?? 0))
+    setCharsCompleted((c) => c + n)
     setStreak((s) => {
       const n = s + 1
       setBestStreak((b) => Math.max(b, n))
@@ -728,10 +812,13 @@ export default function TypeTab() {
     } else {
       loadWord(null)
     }
+    resetScoreSystem()
+    setShowSessionResults(false)
+    setIsNewBest(false)
     requestAnimationFrame(() => {
       playSurfaceRef.current?.focus()
     })
-  }, [loadWord, timerSeconds, refillSentenceLines])
+  }, [loadWord, timerSeconds, refillSentenceLines, resetScoreSystem])
 
   /** From restart overlay: next word only — timer & session stats unchanged; streak cleared. */
   const skipWordFromPrompt = useCallback(() => {
@@ -791,14 +878,12 @@ export default function TypeTab() {
 
     const runAdvance = () => {
       if (typeModeRef.current === 'sentences') {
-        const deck = sentDeckRef.current
-        if (deck.length) {
-          const row = deck[sentNextDeckIdxRef.current % deck.length]
-          sentNextDeckIdxRef.current += 1
+        const row = takeNextSentenceRow()
+        if (row) {
           const newFirst = buildSentLine(row, () => `sl-${(sentLineIdRef.current += 1)}`)
           committedPosRef.current = -1
           setCommittedPos(-1)
-          setSentLines((prev) => [newFirst, prev[1], prev[2]].filter(Boolean))
+          setSentLines((prev) => [newFirst, prev[1], prev[2], prev[3]].filter(Boolean))
         }
       } else {
         loadWord(excludedForLoad)
@@ -850,7 +935,26 @@ export default function TypeTab() {
       }, SKIP_REVEAL_EXIT_MS)
       skipRevealTimerRef.current = 0
     }, SKIP_REVEAL_DURATION)
-  }, [loadWord, hskLevel])
+  }, [loadWord, hskLevel, takeNextSentenceRow])
+
+  const advanceSentenceQueue = useCallback(() => {
+    committedPosRef.current = -1
+    setCommittedPos(-1)
+    setSentLines((p2) => {
+      if (!sentSessionDeckRef.current.pool.length || p2.length < 2) return p2.slice(1)
+      const row = takeNextSentenceRow()
+      if (!row) return p2.slice(1)
+      const cL = buildSentLine(row, () => `sl-${(sentLineIdRef.current += 1)}`)
+      const next = [...p2.slice(1), cL].filter(Boolean)
+      while (next.length < 4) {
+        const extra = takeNextSentenceRow()
+        if (!extra) break
+        next.push(buildSentLine(extra, () => `sl-${(sentLineIdRef.current += 1)}`))
+      }
+      return next
+    })
+    setSentLinesCompleted((n) => n + 1)
+  }, [takeNextSentenceRow])
 
   const handleSentencePick = useCallback((/** @type {CedictEntry} */ entry) => {
     const active = findActiveSentenceCell(sentLinesRef.current)
@@ -865,6 +969,7 @@ export default function TypeTab() {
     setSentPickTotal((t) => t + 1)
     if (ok) {
       const len = endExclusive - cellIndex
+      if (len > 0) void recordStudyActivity({ typedCharacters: len, activeTab: 'type' })
       setSentPickGood((g) => g + 1)
       setSentStreakVal((s) => s + len)
       setSentCharsCorrect((c) => c + len)
@@ -884,12 +989,12 @@ export default function TypeTab() {
           return c
         })
         const next0 = { ...l0, cells }
-        return [next0, prev[1], prev[2]].filter(Boolean)
+        return [next0, prev[1], prev[2], prev[3]].filter(Boolean)
       })
       window.setTimeout(() => {
         const l0 = sentLinesRef.current[0]
         if (!l0 || !lineAllHanCorrect(l0)) return
-        setSentLineAnim(true)
+        advanceSentenceQueue()
       }, 280)
       return
     }
@@ -910,33 +1015,40 @@ export default function TypeTab() {
           wrongGlyph: entry.simplified,
         }
       })
-      return [{ ...l0, cells }, prev[1], prev[2]].filter(Boolean)
+      return [{ ...l0, cells }, prev[1], prev[2], prev[3]].filter(Boolean)
     })
     setFlash('wrong')
     window.setTimeout(() => setFlash('none'), 220)
-  }, [])
+  }, [advanceSentenceQueue])
 
-  useEffect(() => {
-    if (!sentLineAnim) return undefined
-    const id = window.setTimeout(() => {
-      queueMicrotask(() => {
-        committedPosRef.current = -1
-        setCommittedPos(-1)
-        setSentLines((p2) => {
-          const deck = sentDeckRef.current
-          if (!deck.length || p2.length < 2) return p2
-          const [, a, b] = p2
-          const row = deck[sentNextDeckIdxRef.current % deck.length]
-          sentNextDeckIdxRef.current += 1
-          const cL = buildSentLine(row, () => `sl-${(sentLineIdRef.current += 1)}`)
-          return [a, b, cL].filter(Boolean)
-        })
-        setSentLinesCompleted((n) => n + 1)
-        setSentLineAnim(false)
+  const handleSentenceStreamCharConfirmed = useCallback(
+    (fromX, fromY) => {
+      setSentCharsCorrect((c) => c + 1)
+      setSentPickGood((g) => g + 1)
+      setSentPickTotal((t) => t + 1)
+      setSentStreakVal((s) => {
+        const next = s + 1
+        updateSessionBest(next)
+        emitXPOrb(fromX, fromY, next)
+        return next
       })
-    }, 320)
-    return () => window.clearTimeout(id)
-  }, [sentLineAnim])
+    },
+    [emitXPOrb, updateSessionBest],
+  )
+
+  const handleSentenceStreamCharError = useCallback(() => {
+    dissolveOrbs()
+    setSentCharsWrong((w) => w + 1)
+    setSentPickTotal((t) => t + 1)
+    setSentStreakVal(0)
+  }, [dissolveOrbs])
+
+  const handleSentenceStreamComplete = useCallback(() => {
+    const l0 = sentLinesRef.current[0]
+    const hanCount = l0?.cells.filter((c) => c.kind === 'han').length ?? 0
+    if (hanCount > 0) void recordStudyActivity({ typedCharacters: hanCount, activeTab: 'type' })
+    advanceSentenceQueue()
+  }, [advanceSentenceQueue])
 
   const revertLastSentenceHan = useCallback(() => {
     const line0 = sentLinesRef.current[0]
@@ -954,7 +1066,7 @@ export default function TypeTab() {
             ? { kind: 'han', expect: x.expect, py: x.py, state: 'untyped' }
             : x,
         )
-        return [{ ...l0, cells }, prev[1], prev[2]].filter(Boolean)
+        return [{ ...l0, cells }, prev[1], prev[2], prev[3]].filter(Boolean)
       })
       setSentPickTotal((n) => Math.max(0, n - 1))
       setSentCharsWrong((n) => Math.max(0, n - 1))
@@ -1071,12 +1183,19 @@ export default function TypeTab() {
         return
       }
 
-      if (key === 'Backspace') {
-        e.preventDefault()
-        if (typeModeRef.current === 'sentences' && imeInputRef.current === '') {
-          revertLastSentenceHan()
+      if (typeModeRef.current === 'sentences' && roundStartedRef.current) {
+        if (
+          key === 'Backspace' ||
+          (key.length === 1 && /^[a-z]$/i.test(key)) ||
+          key === ' ' ||
+          code === 'Space'
+        ) {
           return
         }
+      }
+
+      if (key === 'Backspace') {
+        e.preventDefault()
         setImeInput((s) => s.slice(0, -1))
         return
       }
@@ -1089,7 +1208,7 @@ export default function TypeTab() {
       }
 
       if (key === ' ') {
-        if (candidatesRef.current.length > 0) {
+        if (typeModeRef.current !== 'sentences' && candidatesRef.current.length > 0) {
           e.preventDefault()
           trySelectSlot(0)
         }
@@ -1098,6 +1217,7 @@ export default function TypeTab() {
 
       const slot = digitKeyToSlot(key, code)
       if (slot >= 0 && slot <= 8) {
+        if (typeModeRef.current === 'sentences') return
         if (slot >= 4 && !candidatesExpandedRef.current) {
           e.preventDefault()
           return
@@ -1108,6 +1228,7 @@ export default function TypeTab() {
       }
 
       if (key.length === 1 && /^[a-z]$/i.test(key)) {
+        if (typeModeRef.current === 'sentences') return
         e.preventDefault()
         setImeInput((s) => s + key.toLowerCase())
         return
@@ -1116,7 +1237,7 @@ export default function TypeTab() {
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [screen, trySelectSlot, restartTest, skipWordFromPrompt, revertLastSentenceHan])
+  }, [screen, trySelectSlot, restartTest, skipWordFromPrompt])
 
   const playedSecondsForCpm =
     screen !== 'play'
@@ -1138,6 +1259,94 @@ export default function TypeTab() {
       : totalSelectionAttempts > 0
         ? Math.round((correctFirstPicks / totalSelectionAttempts) * 100)
         : 100
+
+  const handleSentenceSessionEnd = useCallback(async () => {
+    if (showSessionResults) return
+    pausedRef.current = true
+    const accuracy = sentPickTotal > 0 ? sentPickGood / sentPickTotal : 1
+    const newBest = await submitScore({
+      score: typeScore,
+      streak: sessionBestStreak,
+      cpm,
+      accuracy,
+      hskLevel,
+    })
+    setIsNewBest(newBest)
+    setShowSessionResults(true)
+    void refreshLeaderboard()
+  }, [
+    showSessionResults,
+    submitScore,
+    typeScore,
+    sessionBestStreak,
+    cpm,
+    sentPickGood,
+    sentPickTotal,
+    hskLevel,
+    refreshLeaderboard,
+  ])
+
+  useEffect(() => {
+    handleSentenceSessionEndRef.current = handleSentenceSessionEnd
+  }, [handleSentenceSessionEnd])
+
+  useEffect(() => {
+    trackEvent('hsk_level_selected', { context: 'type', hsk_level: hskLevel })
+  }, [hskLevel])
+
+  useEffect(() => {
+    trackEvent('type_mode_selected', { mode: typeMode === 'sentences' ? 'sentences' : 'characters' })
+  }, [typeMode])
+
+  useEffect(() => {
+    if (!roundStarted) {
+      typeRoundStartTrackedRef.current = false
+    }
+  }, [roundStarted])
+
+  useEffect(() => {
+    if (!roundStarted || screen !== 'play') return
+    if (typeRoundStartTrackedRef.current) return
+    typeRoundStartTrackedRef.current = true
+    trackEvent('type_session_started', {
+      timer_mode: timerSeconds === 0 ? 'unlimited' : 'timed',
+      type_mode: typeMode === 'sentences' ? 'sentences' : 'characters',
+      hsk_level: hskLevel,
+    })
+  }, [roundStarted, screen, timerSeconds, typeMode, hskLevel])
+
+  useEffect(() => {
+    if (screen !== 'results') {
+      typeResultsTrackedRef.current = false
+      return
+    }
+    if (typeResultsTrackedRef.current) return
+    typeResultsTrackedRef.current = true
+    const elapsed = timerSeconds > 0 ? timerSeconds : Math.max(0, practiceSeconds)
+    const charCount = typeMode === 'sentences' ? sentCharsCorrect : charsCompleted
+    void recordStudyActivity({
+      typeSessions: 1,
+      studySeconds: elapsed,
+      activeTab: 'type',
+    })
+    trackEvent('type_session_completed', {
+      timer_mode: timerSeconds === 0 ? 'unlimited' : 'timed',
+      hsk_level: hskLevel,
+    })
+    trackEvent('typed_characters_count', { count: charCount })
+    trackEvent('typing_accuracy', { percent: accuracyPct })
+    trackEvent('typing_cpm', { value: cpm })
+  }, [
+    screen,
+    timerSeconds,
+    practiceSeconds,
+    typeMode,
+    sentCharsCorrect,
+    charsCompleted,
+    accuracyPct,
+    cpm,
+    hskLevel,
+  ])
 
   const handleTryAgain = () => {
     if (skipRevealTimerRef.current) window.clearTimeout(skipRevealTimerRef.current)
@@ -1161,6 +1370,9 @@ export default function TypeTab() {
     setPracticeSeconds(0)
     setSecondsLeft(timerSeconds === 0 ? 0 : timerSeconds)
     setScreen('play')
+    setShowSessionResults(false)
+    setIsNewBest(false)
+    resetScoreSystem()
     if (typeMode === 'sentences') refillSentenceLines()
     else loadWord(null)
   }
@@ -1189,7 +1401,7 @@ export default function TypeTab() {
 
     if (typeMode === 'sentences') {
       return (
-        <div className="flex min-h-[calc(100dvh-9rem)] flex-col bg-paper px-3 py-6 text-ink sm:px-4">
+        <div className="flex min-h-[calc(100dvh-9rem)] flex-col bg-transparent px-3 py-6 text-ink sm:px-4">
           <h2 className="text-center text-xl font-semibold text-ink">Time&apos;s up</h2>
           <dl className="mx-auto mt-6 grid max-w-sm gap-3 text-sm">
             <div className="flex justify-between gap-8 border-b border-taupe pb-2">
@@ -1242,7 +1454,7 @@ export default function TypeTab() {
     }
 
     return (
-      <div className="flex min-h-[calc(100dvh-9rem)] flex-col bg-paper px-3 py-6 text-ink sm:px-4">
+      <div className="flex min-h-[calc(100dvh-9rem)] flex-col bg-transparent px-3 py-6 text-ink sm:px-4">
         <h2 className="text-center text-xl font-semibold text-ink">Time&apos;s up</h2>
         <dl className="mx-auto mt-6 grid max-w-sm gap-3 text-sm">
           <div className="flex justify-between gap-8 border-b border-taupe pb-2">
@@ -1339,8 +1551,8 @@ export default function TypeTab() {
   const canShowPlay = typeMode === 'sentences' ? sentLines.length > 0 : Boolean(currentWord)
 
   return (
-    <div className="flex min-h-[calc(100dvh-9rem)] flex-1 flex-col bg-paper text-ink">
-      <div className="mb-3 flex flex-col gap-3 rounded-xl border border-taupe bg-parchment px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-2">
+    <div className="flex min-h-0 w-full flex-1 flex-col bg-transparent text-ink">
+      <div className="mb-2 shrink-0 flex flex-col gap-3 rounded-xl border border-taupe bg-parchment px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-2">
         <div className="flex flex-wrap items-center gap-2 gap-y-2">
           <div className="flex flex-wrap gap-1">
             <button
@@ -1414,14 +1626,36 @@ export default function TypeTab() {
         ) : null}
       </div>
 
-      <div className="mx-1.5 flex min-h-0 flex-1 flex-col rounded-2xl border border-taupe bg-parchment px-3 py-6 shadow-sm sm:mx-0 sm:px-6">
+      <div
+        className={[
+          'flex min-h-0 w-full flex-1 flex-col overflow-y-auto',
+          typeMode === 'sentences' ? 'justify-start' : '',
+        ].join(' ')}
+      >
+        <div className={typeMode === 'sentences' ? 'w-full py-6 sm:py-8' : 'my-auto w-full'}>
+          <div
+            className={[
+              'mx-1.5 flex w-full flex-col rounded-2xl border border-taupe bg-parchment px-3 shadow-sm sm:mx-0 sm:px-6',
+              typeMode === 'sentences' ? 'pb-6 pt-5 sm:pb-8 sm:pt-6' : 'pb-2 pt-3 sm:pb-2 sm:pt-4',
+            ].join(' ')}
+          >
         {canShowPlay ? (
           <>
-            <div className="flex min-h-0 flex-1 flex-col items-center text-center">
+            {typeMode === 'sentences' && screen === 'play' ? (
+              <XPOrbSystem
+                orbEvents={orbEvents}
+                badgeRef={scoreBadgeRef}
+                multiplier={typeMultiplier}
+              />
+            ) : null}
+            <div className="flex flex-col items-center text-center">
               <div
                 ref={playSurfaceRef}
                 tabIndex={-1}
-                className="relative mt-2 w-full max-w-3xl flex-1 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-clay/30 focus-visible:ring-offset-2 focus-visible:ring-offset-parchment"
+                className={[
+                  'relative w-full max-w-3xl rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-clay/30 focus-visible:ring-offset-2 focus-visible:ring-offset-parchment',
+                  typeMode === 'sentences' ? 'mt-0' : 'mt-1',
+                ].join(' ')}
               >
                 <div
                   className={
@@ -1433,89 +1667,57 @@ export default function TypeTab() {
                   <div className="flex w-full max-w-3xl flex-col items-center">
                     {typeMode === 'sentences' ? (
                       <div
+                        ref={sentenceContainerRef}
                         className={[
-                          'flex w-full max-w-3xl flex-col items-stretch transition-opacity duration-300 ease-out',
+                          'relative flex w-full max-w-3xl flex-col items-center transition-opacity duration-300 ease-out',
                           wordEntryOpacity ? 'opacity-100' : 'opacity-0',
+                          typeMultiplier >= 5 ? 'fire-container' : '',
                         ].join(' ')}
                       >
-                        <div className="w-full self-stretch px-1 text-left sm:px-0">
-                          <div className="overflow-hidden">
-                            <div
-                              className={[
-                                'flex flex-col gap-4',
-                                sentLineAnim
-                                  ? 'translate-y-[-2.85rem] transition-transform duration-300 ease-out motion-reduce:transition-none'
-                                  : 'translate-y-0',
-                              ].join(' ')}
-                            >
-                              {sentLines.map((line, lineIdx) => (
-                                <div
-                                  key={line.id}
-                                  ref={lineIdx === 0 ? sentLine0RowRef : undefined}
-                                  className={[
-                                    'font-mono text-[clamp(1.45rem,5vw,2.65rem)] leading-snug tracking-wide',
-                                    lineIdx === 0 ? 'relative' : '',
-                                  ].join(' ')}
-                                >
-                                  {line.cells.map((cell, ci) => {
-                                    if (cell.kind === 'punct') {
-                                      return (
-                                        <span key={`${line.id}-p-${ci}`} className="text-[#6B6050]">
-                                          {cell.ch}
-                                        </span>
-                                      )
-                                    }
-                                    const isActiveSlot =
-                                      lineIdx === 0 && sentActive && sentActive.cellIndex === ci
-                                    const isCurrent =
-                                      isActiveSlot && (cell.state === 'untyped' || cell.state === 'wrong')
-                                    const displayChar =
-                                      cell.state === 'wrong'
-                                        ? (cell.wrongGlyph ?? cell.expect)
-                                        : cell.expect
-
-                                    const toneClass =
-                                      lineIdx === 0
-                                        ? cell.state === 'correct'
-                                          ? 'text-[#D4A843]'
-                                          : cell.state === 'wrong'
-                                            ? 'text-[#C0392B] bg-[#C0392B]/15 rounded-sm px-px'
-                                            : isCurrent
-                                              ? 'text-white'
-                                              : 'text-[#6B6050]'
-                                        : 'text-[#6B6050]/85'
-
-                                    return (
-                                      <span
-                                        key={`${line.id}-h-${ci}`}
-                                        className="inline-flex items-baseline"
-                                        data-sent-cursor-active={lineIdx === 0 && isCurrent ? '1' : undefined}
-                                      >
-                                        <span className={['inline-block', toneClass].join(' ')}>{displayChar}</span>
-                                      </span>
-                                    )
-                                  })}
-                                  {lineIdx === 0 && sentCursorLeft !== null ? (
-                                    <span
-                                      className="type-tab-sent-cursor pointer-events-none absolute z-10 top-[50%] h-[0.82em] -translate-y-1/2"
-                                      style={{ left: sentCursorLeft }}
-                                      aria-hidden
-                                    />
-                                  ) : null}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
+                        <AmbientParticles
+                          multiplier={typeMultiplier}
+                          containerRef={sentenceContainerRef}
+                        />
+                        <div className="pointer-events-none absolute top-0 right-1 z-20">
+                          <MultiplierBadge
+                            ref={scoreBadgeRef}
+                            score={typeScore}
+                            streak={sentStreakVal}
+                            cpm={cpm}
+                            orbArrived={orbArrivalCount}
+                          />
                         </div>
 
-                        <p className="mt-12 max-w-2xl self-stretch px-1 text-left text-base text-[#D4A843] sm:mt-14 sm:text-lg">
-                          {formatEnglishMeaningForDisplay('', sentLines[0]?.english ?? '')}
-                        </p>
+                        {sentLines.length === 0 ? (
+                          <div className="py-8 text-center text-sm text-[#8C7A52]">
+                            Loading sentences...
+                          </div>
+                        ) : (
+                          <SentenceCarousel
+                            sentenceQueue={sentLines.map((l) => l.chinese)}
+                            completedCount={sentLinesCompleted}
+                            activeInput={
+                              <PinyinStreamInput
+                                key={sentLines[0].id}
+                                sentence={sentLines[0].chinese}
+                                sentLine={sentLines[0]}
+                                english={formatEnglishMeaningForDisplay('', sentLines[0].english ?? '')}
+                                onComplete={handleSentenceStreamComplete}
+                                onCharConfirmed={handleSentenceStreamCharConfirmed}
+                                onCharError={handleSentenceStreamCharError}
+                                active={roundStarted && !showRestartPrompt && !skipReveal}
+                                disabled={!roundStarted || showRestartPrompt || Boolean(skipReveal)}
+                                sentencesCompleted={sentLinesCompleted}
+                                multiplier={typeMultiplier}
+                              />
+                            }
+                          />
+                        )}
                       </div>
                     ) : (
                       <div
                         className={[
-                          'flex flex-col items-center gap-3 transition-opacity duration-300 ease-out',
+                          'flex flex-col items-center gap-1.5 transition-opacity duration-300 ease-out',
                           wordEntryOpacity ? 'opacity-100' : 'opacity-0',
                         ].join(' ')}
                       >
@@ -1526,7 +1728,7 @@ export default function TypeTab() {
                             flash === 'wrong' ? 'text-wrong' : '',
                             flash === 'none' ? 'text-ink' : '',
                           ].join(' ')}
-                          style={{ fontSize: 'clamp(72px, 22vw, 200px)' }}
+                          style={{ fontSize: 'clamp(66px,20.5vw,184px)' }}
                         >
                           {currentWord.simplified}
                         </div>
@@ -1542,7 +1744,8 @@ export default function TypeTab() {
                       </div>
                     )}
 
-                    <div className="mx-auto mt-8 w-full max-w-2xl transition-opacity duration-300">
+                    {typeMode !== 'sentences' ? (
+                    <div className="mx-auto mt-4 w-full max-w-2xl transition-opacity duration-300">
                       <div
                         className={[
                           'rounded-lg border border-taupe bg-elevated px-4 py-3 font-mono text-xl tracking-wide text-ink sm:text-2xl',
@@ -1550,13 +1753,14 @@ export default function TypeTab() {
                         ].join(' ')}
                         aria-label="Pinyin composition"
                       >
-                        <span className="text-muted">[</span>
-                        <span className="px-1">{imeInput || '\u00a0'}</span>
-                        <span className="animate-pulse text-clay">|</span>
-                        <span className="text-muted">]</span>
+                        <span className="px-1 text-ink">{imeInput || '\u00a0'}</span>
+                        <span
+                          className="ml-0.5 inline-block h-[0.92em] w-px shrink-0 animate-pulse bg-clay"
+                          aria-hidden
+                        />
                       </div>
 
-                      <div className="mt-2 overflow-hidden rounded-lg border border-taupe bg-paper">
+                      <div className="mt-2 overflow-hidden rounded-lg border border-taupe bg-parchment/90">
                         <div className="flex items-center justify-between gap-2 border-b border-taupe/40 px-2 py-2 sm:px-3">
                           <div className="flex w-9 shrink-0 justify-start sm:w-10">
                             {candidatesExpanded ? (
@@ -1598,7 +1802,7 @@ export default function TypeTab() {
                             )}
                           </div>
                         </div>
-                        <div className="overflow-hidden px-2 py-3 sm:px-3">
+                        <div className="overflow-hidden px-2 py-2 sm:px-3 sm:pb-2">
                           {!indexReady ? (
                             <p className="py-3 text-center text-sm text-muted">Preparing fast lookup…</p>
                           ) : visibleCandidates.length === 0 ? (
@@ -1642,6 +1846,7 @@ export default function TypeTab() {
                         </div>
                       </div>
                     </div>
+                    ) : null}
                   </div>
                 </div>
 
@@ -1649,12 +1854,9 @@ export default function TypeTab() {
                   <p className="pointer-events-none absolute left-1/2 top-[clamp(5.25rem,19vw,12.75rem)] z-[25] w-full max-w-lg -translate-x-1/2 rounded-md border border-taupe/50 bg-parchment/95 px-3 py-2 text-center text-sm leading-snug text-espresso/80 shadow-sm sm:top-[clamp(5.75rem,20vw,13.5rem)]">
                     {typeMode === 'sentences' ? (
                       <>
-                        Type pinyin for the highlighted character, then <span className="font-medium text-ink">1–4</span>{' '}
-                        or <span className="font-medium text-ink">Space</span> for the first choice.{' '}
-                        <span className="font-medium text-ink">Backspace</span> clears pinyin or clears a wrong
-                        pick; confirmed characters stay locked. Press <span className="font-medium text-ink">»</span>{' '}
-                        below for up to nine
-                        candidates.
+                        Type pinyin continuously for each character — no spaces, no tones.{' '}
+                        <span className="font-medium text-ink">Backspace</span> fixes a mistake. Characters turn gold as
+                        you match each syllable.
                       </>
                     ) : (
                       <>
@@ -1675,15 +1877,17 @@ export default function TypeTab() {
                   >
                     <span className="text-sm font-semibold text-ink sm:text-base">Press Space to start</span>
                     <span className="text-xs text-espresso">The timer counts down only after you start.</span>
+                    <div className="mt-1 flex flex-col gap-1 text-[11px] text-muted">
+                      <p>tab + enter — restart</p>
+                      <p>tab + space — skip</p>
+                      <p>esc — cancel</p>
+                    </div>
                   </button>
                 ) : null}
 
                 {roundStarted && showRestartPrompt ? (
                   <div
-                    className={[
-                      'pointer-events-none absolute inset-0 z-[45] flex flex-col items-center px-4',
-                      skipReveal ? 'justify-center' : 'justify-end pb-8 sm:pb-14',
-                    ].join(' ')}
+                    className="pointer-events-none absolute inset-0 z-[45] flex flex-col items-center justify-center px-4 py-6"
                   >
                     {skipReveal ? (
                       <div
@@ -1700,7 +1904,7 @@ export default function TypeTab() {
                           <>
                             <p
                               className="font-mono font-normal leading-snug text-white"
-                              style={{ fontSize: 'clamp(1.25rem,4.5vw,2.25rem)' }}
+                              style={{ fontSize: 'clamp(1.15rem,4.1vw,2.05rem)' }}
                             >
                               {skipReveal.simplified}
                             </p>
@@ -1713,7 +1917,7 @@ export default function TypeTab() {
                           <>
                             <p
                               className="leading-none font-normal text-white"
-                              style={{ fontSize: 'clamp(56px,16vw,140px)' }}
+                              style={{ fontSize: 'clamp(52px,15vw,128px)' }}
                             >
                               {skipReveal.simplified}
                             </p>
@@ -1761,43 +1965,32 @@ export default function TypeTab() {
             {typeMode === 'sentences' ? 'No sentences loaded for this level.' : 'No words in this list.'}
           </p>
         )}
+          </div>
+        </div>
       </div>
 
-      <div className="mt-auto border-t border-taupe/80 bg-paper px-2 py-3 sm:px-4">
-        <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-espresso">
-          <span>
-            <span aria-hidden>🔥</span> Streak{' '}
-            <span className="font-semibold tabular-nums text-ink">
-              {typeMode === 'sentences' ? sentStreakVal : streak}
-            </span>
-          </span>
-          <span>
-            CPM <span className="font-semibold tabular-nums text-ink">{cpm}</span>
-          </span>
-          <span>
-            {typeMode === 'sentences' ? 'Accuracy' : 'First-pick'}{' '}
-            <span className="font-semibold tabular-nums text-ink">{accuracyPct}%</span>
-          </span>
-        </div>
-        <div className="mt-3 flex flex-col items-center gap-1.5 text-[11px] text-muted">
-          <p className="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1">
-            <Kbd>tab</Kbd>
-            <span className="font-medium text-espresso/60">+</span>
-            <Kbd>enter</Kbd>
-            <span>— restart</span>
-          </p>
-          <p className="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1">
-            <Kbd>tab</Kbd>
-            <span className="font-medium text-espresso/60">+</span>
-            <Kbd>space</Kbd>
-            <span>— skip</span>
-          </p>
-          <p className="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1">
-            <Kbd>esc</Kbd>
-            <span>— cancel</span>
-          </p>
-        </div>
-      </div>
+      {showSessionResults && typeMode === 'sentences' ? (
+        <SessionResults
+          score={typeScore}
+          streak={sessionBestStreak}
+          cpm={cpm}
+          accuracy={sentPickTotal > 0 ? sentPickGood / sentPickTotal : 1}
+          hskLevel={hskLevel}
+          personalBest={personalBest}
+          isNewBest={isNewBest}
+          leaderboardRank={userRank}
+          onPlayAgain={() => {
+            setShowSessionResults(false)
+            setIsNewBest(false)
+            handleTryAgain()
+          }}
+          onClose={() => {
+            setShowSessionResults(false)
+            pausedRef.current = false
+            setScreen('results')
+          }}
+        />
+      ) : null}
     </div>
   )
 }

@@ -1,7 +1,7 @@
-import { getCedictOrNull } from '../utils/pinyinIme.js'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { trackEvent } from '../utils/analytics.js'
 import { HSK13_SET, SYLLABLE_PRIORITY } from '../data/searchRankData.js'
-import { fullTonelessPinyin } from '../utils/pinyinIme.js'
+import { fullTonelessPinyin, getDictionary } from '../utils/pinyinIme.js'
 import { cedictPinyinToMarked } from '../utils/pinyinToneMark.js'
 
 function normalizeQuery(q) {
@@ -81,9 +81,9 @@ function sortMatches(entries, queryNorm) {
 /** Cap sorted results so very broad prefixes (e.g. "a") stay responsive. */
 const MAX_RESULTS = 800
 
-function searchPinyin(queryNorm) {
-  const dict = getCedictOrNull()
-  if (!dict || !queryNorm) return []
+async function searchPinyin(queryNorm) {
+  if (!queryNorm) return []
+  const dict = await getDictionary()
   const all = dict.data.all
   const seen = new Set()
   const out = []
@@ -123,6 +123,8 @@ export default function PinyinSearch({
   const [query, setQuery] = useState('')
   const [debounced, setDebounced] = useState('')
   const [page, setPage] = useState(0)
+  const [allMatches, setAllMatches] = useState([])
+  const [dictionaryLoading, setDictionaryLoading] = useState(false)
   const inputRef = useRef(null)
 
   useEffect(() => {
@@ -132,7 +134,29 @@ export default function PinyinSearch({
 
   const norm = useMemo(() => normalizeQuery(debounced), [debounced])
 
-  const allMatches = useMemo(() => searchPinyin(norm), [norm])
+  useEffect(() => {
+    if (!norm) {
+      setAllMatches([])
+      setDictionaryLoading(false)
+      return
+    }
+    let cancelled = false
+    setDictionaryLoading(true)
+    searchPinyin(norm)
+      .then((matches) => {
+        if (!cancelled) setAllMatches(matches)
+      })
+      .catch((err) => {
+        console.error('Failed to load pinyin dictionary', err)
+        if (!cancelled) setAllMatches([])
+      })
+      .finally(() => {
+        if (!cancelled) setDictionaryLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [norm])
 
   useEffect(() => {
     queueMicrotask(() => setPage(0))
@@ -145,6 +169,12 @@ export default function PinyinSearch({
 
   const commit = useCallback(
     (entry) => {
+      if (variant === 'hero') {
+        trackEvent('search_performed', {
+          query_length: Math.min(32, norm.length),
+          results_bucket: allMatches.length > 20 ? 'many' : allMatches.length > 0 ? 'few' : 'none',
+        })
+      }
       onSelect?.({
         simplified: entry.simplified,
         traditional: entry.traditional,
@@ -157,7 +187,7 @@ export default function PinyinSearch({
       setPage(0)
       inputRef.current?.focus()
     },
-    [onSelect],
+    [onSelect, variant, norm.length, allMatches.length],
   )
 
   const handleKeyDown = (e) => {
@@ -191,11 +221,15 @@ export default function PinyinSearch({
           className={[
             'w-full outline-none transition',
             variant === 'hero'
-              ? 'min-h-[3.25rem] rounded-xl border border-taupe bg-parchment px-6 py-3 text-lg font-normal text-ink shadow-sm placeholder:text-espresso/55 focus:border-clay focus:ring-2 focus:ring-clay/25 sm:min-h-[3.5rem] sm:text-xl'
+              ? 'min-h-[3.25rem] rounded-xl border border-taupe bg-parchment px-4 py-3 text-lg font-normal text-ink shadow-sm placeholder:text-espresso/55 focus:border-clay focus:ring-2 focus:ring-clay/25 sm:min-h-[3.5rem] sm:text-xl'
               : 'border-0 border-b border-taupe bg-transparent py-2.5 text-[15px] text-ink placeholder:text-muted focus:border-clay',
           ].join(' ')}
         />
       </label>
+
+      {dictionaryLoading && norm ? (
+        <p className="mt-2 border-b border-taupe pb-2.5 text-xs text-muted">Loading dictionary…</p>
+      ) : null}
 
       {showRow && (
         <div

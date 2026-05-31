@@ -134,7 +134,7 @@ function emptySet() {
 
 export default function QuickQuiz({ entry, isOpen }) {
   const placementWord = useMemo(
-    () => (entry?.char || '').trim() || '学',
+    () => (entry?.char || '').trim() || '欢迎',
     [entry?.char],
   )
   const displayPinyin = useMemo(() => pinyinForDisplay(entry?.pinyin), [entry?.pinyin])

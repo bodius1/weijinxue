@@ -1,52 +1,842 @@
 [
-  {"chinese":"我每天早上喝咖啡。","english":"I drink coffee every morning.","pinyin":"Wǒ měitiān zǎoshang hē kāfēi.","parts":"我|每|天|早|上|喝|咖|啡","py":"wo3|mei3|tian1|zao3|shang5|he1|ka1|fei1"},
-  {"chinese":"他喜欢看书。","english":"He likes reading books.","pinyin":"Tā xǐhuān kànshū.","parts":"他|喜|欢|看|书","py":"ta1|xi3|huan1|kan4|shu1"},
-  {"chinese":"我们明天去北京。","english":"We are going to Beijing tomorrow.","pinyin":"Wǒmen míngtiān qù Běijīng.","parts":"我|们|明|天|去|北|京","py":"wo3|men5|ming2|tian1|qu4|bei3|jing1"},
-  {"chinese":"她昨天买了一件新衣服。","english":"She bought a new piece of clothing yesterday.","pinyin":"Tā zuótiān mǎi le yī jiàn xīn yīfu.","parts":"她|昨|天|买|了|一|件|新|衣|服","py":"ta1|zuo2|tian1|mai3|le5|yi2|jian4|xin1|yi1|fu5"},
-  {"chinese":"饭店的菜很好吃。","english":"The food at the restaurant is delicious.","pinyin":"Fàndiàn de cài hěn hǎochī.","parts":"饭|店|的|菜|很|好|吃","py":"fan4|dian4|de5|cai4|hen3|hao3|chi1"},
-  {"chinese":"我学习汉语已经两年了。","english":"I have been studying Chinese for two years.","pinyin":"Wǒ xuéxí Hànyǔ yǐjīng liǎng nián le.","parts":"我|学|习|汉|语|已|经|两|年|了","py":"wo3|xue2|xi2|han4|yu3|yi3|jing1|liang3|nian2|le5"},
-  {"chinese":"火车站离我家不远。","english":"The train station is not far from my home.","pinyin":"Huǒchēzhàn lí wǒ jiā bù yuǎn.","parts":"火|车|站|离|我|家|不|远","py":"huo3|che1|zhan4|li2|wo3|jia1|bu4|yuan3"},
-  {"chinese":"天气太热了，我想喝水。","english":"It's too hot; I want to drink water.","pinyin":"Tiānqì tài rè le, wǒ xiǎng hē shuǐ.","parts":"天|气|太|热|了|我|想|喝|水","py":"tian1|qi4|tai4|re4|le5|wo3|xiang3|he1|shui3"},
-  {"chinese":"他一边走路一边打电话。","english":"He walks while talking on the phone.","pinyin":"Tā yībiān zǒulù yībiān dǎ diànhuà.","parts":"他|一|边|走|路|一|边|打|电|话","py":"ta1|yi1|bian1|zou3|lu4|yi1|bian1|da3|dian4|hua4"},
-  {"chinese":"超市八点开门。","english":"The supermarket opens at eight.","pinyin":"Chāoshì bā diǎn kāimén.","parts":"超|市|八|点|开|门","py":"chao1|shi4|ba1|dian3|kai1|men2"},
-  {"chinese":"弟弟比妹妹高一点儿。","english":"My younger brother is a bit taller than my sister.","pinyin":"Dìdi bǐ mèimei gāo yīdiǎnr.","parts":"弟|弟|比|妹|妹|高|一|点|儿","py":"di4|di5|bi3|mei4|mei5|gao1|yi1|dian3|er5"},
-  {"chinese":"外面下雨了。","english":"It is raining outside.","pinyin":"Wàimiàn xiàyǔ le.","parts":"外|面|下|雨|了","py":"wai4|mian4|xia4|yu3|le5"},
-  {"chinese":"我打算明年换工作。","english":"I plan to change jobs next year.","pinyin":"Wǒ dǎsuàn míngnián huàn gōngzuò.","parts":"我|打|算|明|年|换|工|作","py":"wo3|da3|suan4|ming2|nian2|huan4|gong1|zuo4"},
-  {"chinese":"飞机来了。","english":"The plane has arrived.","pinyin":"Fēijī lái le.","parts":"飞|机|来|了","py":"fei1|ji1|lai2|le5"},
-  {"chinese":"他一边吃饭一边看电视。","english":"He eats while watching TV.","pinyin":"Tā yībiān chīfàn yībiān kàn diànshì.","parts":"他|一|边|吃|饭|一|边|看|电|视","py":"ta1|yi1|bian1|chi1|fan4|yi1|bian1|kan4|dian4|shi4"},
-  {"chinese":"我明天要早起。","english":"I have to get up early tomorrow.","pinyin":"Wǒ míngtiān yào zǎoqǐ.","parts":"我|明|天|要|早|起","py":"wo3|ming2|tian1|yao4|zao3|qi3"},
-  {"chinese":"我们坐公共汽车去学校。","english":"We take the bus to school.","pinyin":"Wǒmen zuò gōnggòng qìchē qù xuéxiào.","parts":"我|们|坐|公|共|汽|车|去|学|校","py":"wo3|men5|zuo4|gong1|gong4|qi4|che1|qu4|xue2|xiao4"},
-  {"chinese":"她今天身体不太好。","english":"She doesn't feel well today.","pinyin":"Tā jīntiān shēntǐ bútài hǎo.","parts":"她|今|天|身|体|不|太|好","py":"ta1|jin1|tian1|shen1|ti3|bu2|tai4|hao3"},
-  {"chinese":"我打算周末看电影。","english":"I'm planning to see a movie this weekend.","pinyin":"Wǒ dǎsuàn zhōumò kàn diànyǐng.","parts":"我|打|算|周|末|看|电|影","py":"wo3|da3|suan4|zhou1|mo4|kan4|dian4|ying3"},
-  {"chinese":"天气冷了，多穿一件衣服。","english":"It's cold; put on another layer.","pinyin":"Tiānqì lěng le, duō chuān yī jiàn yīfu.","parts":"天|气|冷|了|多|穿|一|件|衣|服","py":"tian1|qi4|leng3|le5|duo1|chuan1|yi2|jian4|yi1|fu5"},
-  {"chinese":"他昨天把作业写完了。","english":"He finished his homework yesterday.","pinyin":"Tā zuótiān bǎ zuòyè xiě wán le.","parts":"他|昨|天|把|作|业|写|完|了","py":"ta1|zuo2|tian1|ba3|zuo4|ye4|xie3|wan2|le5"},
-  {"chinese":"我们一起去超市买东西吧。","english":"Let's go to the supermarket together.","pinyin":"Wǒmen yīqǐ qù chāoshì mǎi dōngxi ba.","parts":"我|们|一|起|去|超|市|买|东|西|吧","py":"wo3|men5|yi1|qi3|qu4|chao1|shi4|mai3|dong1|xi5|ba5"},
-  {"chinese":"她每天早上跑步半小时。","english":"She runs for half an hour every morning.","pinyin":"Tā měitiān zǎoshang pǎobù bàn xiǎoshí.","parts":"她|每|天|早|上|跑|步|半|小|时","py":"ta1|mei3|tian1|zao3|shang5|pao3|bu4|ban4|xiao3|shi2"},
-  {"chinese":"我弟弟今年上小学。","english":"My younger brother starts primary school this year.","pinyin":"Wǒ dìdi jīnnián shàng xiǎoxué.","parts":"我|弟|弟|今|年|上|小|学","py":"wo3|di4|di5|jin1|nian2|shang4|xiao3|xue2"},
-  {"chinese":"我周末一般在家休息。","english":"I usually rest at home on weekends.","pinyin":"Wǒ zhōumò yībān zài jiā xiūxi.","parts":"我|周|末|一|般|在|家|休|息","py":"wo3|zhou1|mo4|yi1|ban1|zai4|jia1|xiu1|xi5"},
-  {"chinese":"我们明天要去机场。","english":"We are going to the airport tomorrow.","pinyin":"Wǒmen míngtiān yào qù jīchǎng.","parts":"我|们|明|天|要|去|机|场","py":"wo3|men5|ming2|tian1|yao4|qu4|ji1|chang3"},
-  {"chinese":"他一边听音乐一边做饭。","english":"He cooks while listening to music.","pinyin":"Tā yībiān tīng yīnyuè yībiān zuòfàn.","parts":"他|一|边|听|音|乐|一|边|做|饭","py":"ta1|yi1|bian1|ting1|yin1|yue4|yi1|bian1|zuo4|fan4"},
-  {"chinese":"我们晚上一起散步吧。","english":"Let's take a walk together tonight.","pinyin":"Wǒmen wǎnshang yīqǐ sànbù ba.","parts":"我|们|晚|上|一|起|散|步|吧","py":"wo3|men5|wan3|shang5|yi1|qi3|san4|bu4|ba5"},
-  {"chinese":"她每天游泳半小时。","english":"She swims for half an hour every day.","pinyin":"Tā měitiān yóuyǒng bàn xiǎoshí.","parts":"她|每|天|游|泳|半|小|时","py":"ta1|mei3|tian1|you2|yong3|ban4|xiao3|shi2"},
-  {"chinese":"我想买一件红色衣服。","english":"I want to buy a red piece of clothing.","pinyin":"Wǒ xiǎng mǎi yī jiàn hóngsè yīfu.","parts":"我|想|买|一|件|红|色|衣|服","py":"wo3|xiang3|mai3|yi2|jian4|hong2|se4|yi1|fu5"},
-  {"chinese":"这件衣服有点儿贵。","english":"This piece of clothing is a little expensive.","pinyin":"Zhè jiàn yīfu yǒudiǎnr guì.","parts":"这|件|衣|服|有|点|儿|贵","py":"zhe4|jian4|yi1|fu5|you3|dian3|er5|gui4"},
-  {"chinese":"他今天上班迟到了。","english":"He was late for work today.","pinyin":"Tā jīntiān shàngbān chídào le.","parts":"他|今|天|上|班|迟|到|了","py":"ta1|jin1|tian1|shang4|ban1|chi2|dao4|le5"},
-  {"chinese":"我妹妹生病了。","english":"My younger sister is sick.","pinyin":"Wǒ mèimei shēngbìng le.","parts":"我|妹|妹|生|病|了","py":"wo3|mei4|mei5|sheng1|bing4|le5"},
-  {"chinese":"我们约好明天见面。","english":"We agreed to meet tomorrow.","pinyin":"Wǒmen yuēhǎo míngtiān jiànmiàn.","parts":"我|们|约|好|明|天|见|面","py":"wo3|men5|yue1|hao3|ming2|tian1|jian4|mian4"},
-  {"chinese":"他生病的时候还在工作。","english":"He kept working even while he was sick.","pinyin":"Tā shēngbìng de shíhou hái zài gōngzuò.","parts":"他|生|病|的|时|候|还|在|工|作","py":"ta1|sheng1|bing4|de5|shi2|hou5|hai2|zai4|gong1|zuo4"},
-  {"chinese":"我每天早上跑步。","english":"I run every morning.","pinyin":"Wǒ měitiān zǎoshang pǎobù.","parts":"我|每|天|早|上|跑|步","py":"wo3|mei3|tian1|zao3|shang5|pao3|bu4"},
-  {"chinese":"她把礼物给了朋友。","english":"She gave the gift to her friend.","pinyin":"Tā bǎ lǐwù gěi le péngyou.","parts":"她|把|礼|物|给|了|朋|友","py":"ta1|ba3|li3|wu4|gei3|le5|peng2|you5"},
-  {"chinese":"我想找一个新工作。","english":"I want to find a new job.","pinyin":"Wǒ xiǎng zhǎo yī gè xīn gōngzuò.","parts":"我|想|找|一|个|新|工|作","py":"wo3|xiang3|zhao3|yi2|ge4|xin1|gong1|zuo4"},
-  {"chinese":"他们正在说话。","english":"They are talking.","pinyin":"Tāmen zhèngzài shuōhuà.","parts":"他|们|正|在|说|话","py":"ta1|men5|zheng4|zai4|shuo1|hua4"},
-  {"chinese":"我们一起去饭店吃饭吧。","english":"Let's go eat at a restaurant together.","pinyin":"Wǒmen yīqǐ qù fàndiàn chīfàn ba.","parts":"我|们|一|起|去|饭|店|吃|饭|吧","py":"wo3|men5|yi1|qi3|qu4|fan4|dian4|chi1|fan4|ba5"},
-  {"chinese":"她买了很多东西。","english":"She bought a lot of things.","pinyin":"Tā mǎi le hěn duō dōngxi.","parts":"她|买|了|很|多|东|西","py":"ta1|mai3|le5|hen3|duo1|dong1|xi5"},
-  {"chinese":"我哥哥比我高。","english":"My older brother is taller than me.","pinyin":"Wǒ gēge bǐ wǒ gāo.","parts":"我|哥|哥|比|我|高","py":"wo3|ge1|ge5|bi3|wo3|gao1"},
-  {"chinese":"你会游泳吗？","english":"Can you swim?","pinyin":"Nǐ huì yóuyǒng ma?","parts":"你|会|游|泳|吗","py":"ni3|hui4|you2|yong3|ma5"},
-  {"chinese":"我不会跳舞。","english":"I can't dance.","pinyin":"Wǒ bú huì tiàowǔ.","parts":"我|不|会|跳|舞","py":"wo3|bu2|hui4|tiao4|wu3"},
-  {"chinese":"他唱歌唱得很好。","english":"He sings very well.","pinyin":"Tā chànggē chàng de hěn hǎo.","parts":"他|唱|歌|唱|得|很|好","py":"ta1|chang4|ge1|chang4|de5|hen3|hao3"},
-  {"chinese":"我们去机场送朋友。","english":"We are going to the airport to see our friend off.","pinyin":"Wǒmen qù jīchǎng sòng péngyou.","parts":"我|们|去|机|场|送|朋|友","py":"wo3|men5|qu4|ji1|chang3|song4|peng2|you5"},
-  {"chinese":"她每天骑车上班。","english":"She cycles to work every day.","pinyin":"Tā měitiān qíchē shàngbān.","parts":"她|每|天|骑|车|上|班","py":"ta1|mei3|tian1|qi2|che1|shang4|ban1"},
-  {"chinese":"我打算周末去旅游。","english":"I plan to travel this weekend.","pinyin":"Wǒ dǎsuàn zhōumò qù lǚyóu.","parts":"我|打|算|周|末|去|旅|游","py":"wo3|da3|suan4|zhou1|mo4|qu4|lv3|you2"},
-  {"chinese":"天气怎么样？","english":"What is the weather like?","pinyin":"Tiānqì zěnmeyàng?","parts":"天|气|怎|么|样","py":"tian1|qi4|zen3|me5|yang4"},
-  {"chinese":"今天天气很好，我们出去走走吧。","english":"The weather is great today; let's go for a walk.","pinyin":"Jīntiān tiānqì hěn hǎo, wǒmen chūqù zǒuzou ba.","parts":"今|天|天|气|很|好|我|们|出|去|走|走|吧","py":"jin1|tian1|tian1|qi4|hen3|hao3|wo3|men5|chu1|qu4|zou3|zou3|ba5"}
+  {
+    "chinese": "每个星期六，我都去打篮球。",
+    "english": "Every Saturday I go play basketball.",
+    "pinyin": "Měi ge xīng qī liù, wǒ dōu qù dǎ lán qiú.",
+    "parts": "每|个|星|期|六|我|都|去|打|篮|球",
+    "py": "mei3|ge5|xing1|qi1|liu4|wo3|dou1|qu4|da3|lan2|qiu2"
+  },
+  {
+    "chinese": "雨停了，天晴了。",
+    "english": "The rain stopped and the sky cleared up.",
+    "pinyin": "Yǔ tíng le, tiān qíng le.",
+    "parts": "雨|停|了|天|晴|了",
+    "py": "yu3|ting2|le5|tian1|qing2|le5"
+  },
+  {
+    "chinese": "他给女朋友买了一部新手机。",
+    "english": "He bought his girlfriend a new cellphone.",
+    "pinyin": "Tā gěi nǚ péngyou mǎi le yí bù xīn shǒujī.",
+    "parts": "他|给|女|朋|友|买|了|一|部|新|手|机",
+    "py": "ta1|gei3|nv3|peng2|you5|mai3|le5|yi2|bu4|xin1|shou3|ji1"
+  },
+  {
+    "chinese": "准备好了吗？笑一笑。",
+    "english": "Are you ready? Smile.",
+    "pinyin": "Zhǔnbèi hǎo le ma? Xiào yí xiào.",
+    "parts": "准|备|好|了|吗|笑|一|笑",
+    "py": "zhun3|bei4|hao3|le5|ma5|xiao4|yi2|xiao5"
+  },
+  {
+    "chinese": "欢迎你来我们公司工作。",
+    "english": "Welcome to work at our company.",
+    "pinyin": "Huānyíng nǐ lái wǒmen gōngsī gōngzuò.",
+    "parts": "欢|迎|你|来|我|们|公|司|工|作",
+    "py": "huan1|ying2|ni3|lai2|wo3|men5|gong1|si1|gong1|zuo4"
+  },
+  {
+    "chinese": "她每天早上都跑步一小时。",
+    "english": "She runs for an hour every morning.",
+    "pinyin": "Tā měi tiān zǎoshang dōu pǎobù yì xiǎoshí.",
+    "parts": "她|每|天|早|上|都|跑|步|一|小|时",
+    "py": "ta1|mei3|tian1|zao3|shang5|dou1|pao3|bu4|yi2|xiao3|shi2"
+  },
+  {
+    "chinese": "天阴了，可能要下雪。",
+    "english": "It turned cloudy; it might snow.",
+    "pinyin": "Tiān yīn le, kěnéng yào xià xuě.",
+    "parts": "天|阴|了|可|能|要|下|雪",
+    "py": "tian1|yin1|le5|ke3|neng2|yao4|xia4|xue3"
+  },
+  {
+    "chinese": "这些题明天再做吧。",
+    "english": "Let's do these problems tomorrow.",
+    "pinyin": "Zhè xiē tí míng tiān zài zuò ba.",
+    "parts": "这|些|题|明|天|再|做|吧",
+    "py": "zhe4|xie1|ti2|ming2|tian1|zai4|zuo4|ba5"
+  },
+  {
+    "chinese": "我希望能和你一起去。",
+    "english": "I hope I can go with you.",
+    "pinyin": "Wǒ xīwàng néng hé nǐ yìqǐ qù.",
+    "parts": "我|希|望|能|和|你|一|起|去",
+    "py": "wo3|xi1|wang4|neng2|he2|ni3|yi4|qi3|qu4"
+  },
+  {
+    "chinese": "我的生日是六月七号。",
+    "english": "My birthday is June 7th.",
+    "pinyin": "Wǒ de shēngrì shì liù yuè qī hào.",
+    "parts": "我|的|生|日|是|六|月|七|号",
+    "py": "wo3|de5|sheng1|ri4|shi4|liu4|yue4|qi1|hao4"
+  },
+  {
+    "chinese": "现在西瓜多少钱一斤？",
+    "english": "How much is watermelon per jin now?",
+    "pinyin": "Xiànzài xīguā duōshao qián yì jīn?",
+    "parts": "现|在|西|瓜|多|少|钱|一|斤",
+    "py": "xian4|zai4|xi1|gua1|duo1|shao5|qian2|yi2|jin1"
+  },
+  {
+    "chinese": "这个房间比那个房间大。",
+    "english": "This room is bigger than that room.",
+    "pinyin": "Zhè ge fáng jiān bǐ nà ge fáng jiān dà.",
+    "parts": "这|个|房|间|比|那|个|房|间|大",
+    "py": "zhe4|ge5|fang2|jian1|bi3|na4|ge5|fang2|jian1|da4"
+  },
+  {
+    "chinese": "孩子的房间在旁边。",
+    "english": "The child's room is next door.",
+    "pinyin": "Hái zi de fáng jiān zài páng biān.",
+    "parts": "孩|子|的|房|间|在|旁|边",
+    "py": "hai2|zi5|de5|fang2|jian1|zai4|pang2|bian1"
+  },
+  {
+    "chinese": "我爸爸不爱喝咖啡。",
+    "english": "My dad does not like drinking coffee.",
+    "pinyin": "Wǒ bàba bú ài hē kāfēi.",
+    "parts": "我|爸|爸|不|爱|喝|咖|啡",
+    "py": "wo3|ba4|ba5|bu2|ai4|he1|ka1|fei1"
+  },
+  {
+    "chinese": "他每天上午喝几杯热茶。",
+    "english": "He drinks several cups of hot tea every morning.",
+    "pinyin": "Tā měi tiān shàngwǔ hē jǐ bēi rè chá.",
+    "parts": "他|每|天|上|午|喝|几|杯|热|茶",
+    "py": "ta1|mei3|tian1|shang4|wu3|he1|ji3|bei1|re4|cha2"
+  },
+  {
+    "chinese": "他在火车站工作。",
+    "english": "He works at the train station.",
+    "pinyin": "Tā zài huǒ chē zhàn gōng zuò.",
+    "parts": "他|在|火|车|站|工|作",
+    "py": "ta1|zai4|huo3|che1|zhan4|gong1|zuo4"
+  },
+  {
+    "chinese": "他每天都很忙，但是很快乐。",
+    "english": "He is busy every day, but very happy.",
+    "pinyin": "Tā měi tiān dōu hěn máng, dàn shì hěn kuài lè.",
+    "parts": "他|每|天|都|很|忙|但|是|很|快|乐",
+    "py": "ta1|mei3|tian1|dou1|hen3|mang2|dan4|shi4|hen3|kuai4|le4"
+  },
+  {
+    "chinese": "这些桌子是一百多年前做的。",
+    "english": "These tables were made over a hundred years ago.",
+    "pinyin": "Zhè xiē zhuō zi shì yì bǎi duō nián qián zuò de.",
+    "parts": "这|些|桌|子|是|一|百|多|年|前|做|的",
+    "py": "zhe4|xie1|zhuo1|zi5|shi4|yi4|bai3|duo1|nian2|qian2|zuo4|de5"
+  },
+  {
+    "chinese": "这把椅子比那把椅子贵。",
+    "english": "This chair is more expensive than that chair.",
+    "pinyin": "Zhè bǎ yǐzi bǐ nà bǎ yǐzi guì.",
+    "parts": "这|把|椅|子|比|那|把|椅|子|贵",
+    "py": "zhe4|ba3|yi3|zi5|bi3|na4|ba3|yi3|zi5|gui4"
+  },
+  {
+    "chinese": "他做的菜比我做的好吃。",
+    "english": "The food he cooks tastes better than mine.",
+    "pinyin": "Tā zuò de cài bǐ wǒ zuò de hǎo chī.",
+    "parts": "他|做|的|菜|比|我|做|的|好|吃",
+    "py": "ta1|zuo4|de5|cai4|bi3|wo3|zuo4|de5|hao3|chi1"
+  },
+  {
+    "chinese": "因为工作忙，他很少做饭。",
+    "english": "Because work is busy, he rarely cooks.",
+    "pinyin": "Yīnwèi gōngzuò máng, tā hěn shǎo zuò fàn.",
+    "parts": "因|为|工|作|忙|他|很|少|做|饭",
+    "py": "yin1|wei4|gong1|zuo4|mang2|ta1|hen3|shao3|zuo4|fan4"
+  },
+  {
+    "chinese": "请再给我一天时间。",
+    "english": "Please give me one more day.",
+    "pinyin": "Qǐng zài gěi wǒ yì tiān shíjiān.",
+    "parts": "请|再|给|我|一|天|时|间",
+    "py": "qing3|zai4|gei3|wo3|yi2|tian1|shi2|jian1"
+  },
+  {
+    "chinese": "王老师，您的电话。",
+    "english": "Teacher Wang, your phone call.",
+    "pinyin": "Wáng lǎoshī, nín de diànhuà.",
+    "parts": "王|老|师|您|的|电|话",
+    "py": "wang2|lao3|shi1|nin2|de5|dian4|hua4"
+  },
+  {
+    "chinese": "早上我吃了一个鸡蛋。",
+    "english": "This morning I ate an egg.",
+    "pinyin": "Zǎoshang wǒ chīle yí ge jīdàn.",
+    "parts": "早|上|我|吃|了|一|个|鸡|蛋",
+    "py": "zao3|shang5|wo3|chi1|le5|yi2|ge5|ji1|dan4"
+  },
+  {
+    "chinese": "出去的时候多穿点儿衣服。",
+    "english": "Wear more clothes when you go out.",
+    "pinyin": "Chū qù de shí hou duō chuān diǎn er yī fu.",
+    "parts": "出|去|的|时|候|多|穿|点|儿|衣|服",
+    "py": "chu1|qu4|de5|shi2|hou5|duo1|chuan1|dian3|er5|yi1|fu5"
+  },
+  {
+    "chinese": "他在哪儿呢？你看见他了吗？",
+    "english": "Where is he? Did you see him?",
+    "pinyin": "Tā zài nǎr ne? Nǐ kànjiàn tā le ma?",
+    "parts": "他|在|哪|儿|呢|你|看|见|他|了|吗",
+    "py": "ta1|zai4|na3|er5|ne5|ni3|kan4|jian4|ta1|le5|ma5"
+  },
+  {
+    "chinese": "这条船是从上海来的。",
+    "english": "This boat came from Shanghai.",
+    "pinyin": "Zhè tiáo chuán shì cóng Shànghǎi lái de.",
+    "parts": "这|条|船|是|从|上|海|来|的",
+    "py": "zhe4|tiao2|chuan2|shi4|cong2|shang4|hai3|lai2|de5"
+  },
+  {
+    "chinese": "今天真冷，可能有零下十度。",
+    "english": "It is really cold today; it may be ten below zero.",
+    "pinyin": "Jīn tiān zhēn lěng, kě néng yǒu líng xià shí dù.",
+    "parts": "今|天|真|冷|可|能|有|零|下|十|度",
+    "py": "jin1|tian1|zhen1|leng3|ke3|neng2|you3|ling2|xia4|shi2|du4"
+  },
+  {
+    "chinese": "你第一次来这儿吗？",
+    "english": "Is this your first time here?",
+    "pinyin": "Nǐ dì yī cì lái zhèr ma?",
+    "parts": "你|第|一|次|来|这|儿|吗",
+    "py": "ni3|di4|yi1|ci4|lai2|zhe4|er5|ma5"
+  },
+  {
+    "chinese": "那本书你读完了吗？",
+    "english": "Have you finished reading that book?",
+    "pinyin": "Nà běn shū nǐ dú wán le ma?",
+    "parts": "那|本|书|你|读|完|了|吗",
+    "py": "na4|ben3|shu1|ni3|du2|wan2|le5|ma5"
+  },
+  {
+    "chinese": "这个名字很有意思。",
+    "english": "This name is very interesting.",
+    "pinyin": "Zhè ge míng zi hěn yǒu yì si.",
+    "parts": "这|个|名|字|很|有|意|思",
+    "py": "zhe4|ge5|ming2|zi5|hen3|you3|yi4|si5"
+  },
+  {
+    "chinese": "这药一天吃四次。",
+    "english": "Take this medicine four times a day.",
+    "pinyin": "Zhè yào yì tiān chī sì cì.",
+    "parts": "这|药|一|天|吃|四|次",
+    "py": "zhe4|yao4|yi4|tian1|chi1|si4|ci4"
+  },
+  {
+    "chinese": "你姐姐真高，也很漂亮。",
+    "english": "Your older sister is tall and very pretty.",
+    "pinyin": "Nǐ jiě jie zhēn gāo, yě hěn piào liang.",
+    "parts": "你|姐|姐|真|高|也|很|漂|亮",
+    "py": "ni3|jie3|jie5|zhen1|gao1|ye3|hen3|piao4|liang5"
+  },
+  {
+    "chinese": "我的小猫在门后面玩儿。",
+    "english": "My kitten is playing behind the door.",
+    "pinyin": "Wǒ de xiǎo māo zài mén hòu miàn wán er.",
+    "parts": "我|的|小|猫|在|门|后|面|玩|儿",
+    "py": "wo3|de5|xiao3|mao1|zai4|men2|hou4|mian4|wan2|er5"
+  },
+  {
+    "chinese": "这个字你写错了。",
+    "english": "You wrote this character wrong.",
+    "pinyin": "Zhège zì nǐ xiě cuò le.",
+    "parts": "这|个|字|你|写|错|了",
+    "py": "zhe4|ge5|zi4|ni3|xie3|cuo4|le5"
+  },
+  {
+    "chinese": "这个是“白”，不是“百”。",
+    "english": "This is bái (white), not bǎi (hundred).",
+    "pinyin": "Zhège shì “bái”, bú shì “bǎi”.",
+    "parts": "这|个|是|白|不|是|百",
+    "py": "zhe4|ge5|shi4|bai2|bu2|shi4|bai3"
+  },
+  {
+    "chinese": "我爸爸姓刘，我妈妈姓杨。",
+    "english": "My father's surname is Liu; my mother's is Yang.",
+    "pinyin": "Wǒ bàba xìng Liú, wǒ māma xìng Yáng.",
+    "parts": "我|爸|爸|姓|刘|我|妈|妈|姓|杨",
+    "py": "wo3|ba4|ba5|xing4|liu2|wo3|ma1|ma5|xing4|yang2"
+  },
+  {
+    "chinese": "所以我叫刘杨。",
+    "english": "So my name is Liu Yang.",
+    "pinyin": "Suǒyǐ wǒ jiào Liú Yáng.",
+    "parts": "所|以|我|叫|刘|杨",
+    "py": "suo3|yi3|wo3|jiao4|liu2|yang2"
+  },
+  {
+    "chinese": "同学们，你们听懂了吗？",
+    "english": "Classmates, did you understand?",
+    "pinyin": "Tóngxuémen, nǐmen tīng dǒng le ma?",
+    "parts": "同|学|们|你|们|听|懂|了|吗",
+    "py": "tong2|xue2|men5|ni3|men5|ting1|dong3|le5|ma5"
+  },
+  {
+    "chinese": "里面有你最爱吃的水果。",
+    "english": "Inside is your favorite fruit.",
+    "pinyin": "Lǐ miàn yǒu nǐ zuì ài chī de shuǐ guǒ.",
+    "parts": "里|面|有|你|最|爱|吃|的|水|果",
+    "py": "li3|mian4|you3|ni3|zui4|ai4|chi1|de5|shui3|guo3"
+  },
+  {
+    "chinese": "儿子生病了，你什么时候回来？",
+    "english": "Our son is sick; when will you come back?",
+    "pinyin": "Érzi shēngbìng le, nǐ shénme shíhou huí lai?",
+    "parts": "儿|子|生|病|了|你|什|么|时|候|回|来",
+    "py": "er2|zi5|sheng1|bing4|le5|ni3|shen2|me5|shi2|hou5|hui2|lai5"
+  },
+  {
+    "chinese": "我来介绍一下，这是我丈夫。",
+    "english": "Let me introduce you; this is my husband.",
+    "pinyin": "Wǒ lái jiè shào yí xià, zhè shì wǒ zhàng fu.",
+    "parts": "我|来|介|绍|一|下|这|是|我|丈|夫",
+    "py": "wo3|lai2|jie4|shao4|yi2|xia4|zhe4|shi4|wo3|zhang4|fu5"
+  },
+  {
+    "chinese": "现在快六点了。",
+    "english": "It's almost six o'clock now.",
+    "pinyin": "Xiànzài kuài liù diǎn le.",
+    "parts": "现|在|快|六|点|了",
+    "py": "xian4|zai4|kuai4|liu4|dian3|le5"
+  },
+  {
+    "chinese": "我二十分钟后去公司找你。",
+    "english": "I will go to the company to find you in twenty minutes.",
+    "pinyin": "Wǒ èr shí fēn zhōng hòu qù gōng sī zhǎo nǐ.",
+    "parts": "我|二|十|分|钟|后|去|公|司|找|你",
+    "py": "wo3|er4|shi2|fen1|zhong1|hou4|qu4|gong1|si1|zhao3|ni3"
+  },
+  {
+    "chinese": "这些题你什么时候能做完？",
+    "english": "When can you finish these problems?",
+    "pinyin": "Zhè xiē tí nǐ shén me shí hou néng zuò wán?",
+    "parts": "这|些|题|你|什|么|时|候|能|做|完",
+    "py": "zhe4|xie1|ti2|ni3|shen2|me5|shi2|hou5|neng2|zuo4|wan2"
+  },
+  {
+    "chinese": "快点儿，大家都在等你。",
+    "english": "Hurry up, everyone is waiting for you.",
+    "pinyin": "Kuài diǎn er, dà jiā dōu zài děng nǐ.",
+    "parts": "快|点|儿|大|家|都|在|等|你",
+    "py": "kuai4|dian3|er5|da4|jia1|dou1|zai4|deng3|ni3"
+  },
+  {
+    "chinese": "手机在桌子上，电脑在旁边。",
+    "english": "The phone is on the desk; the computer is beside it.",
+    "pinyin": "Shǒu jī zài zhuō zi shang, diàn nǎo zài páng biān.",
+    "parts": "手|机|在|桌|子|上|电|脑|在|旁|边",
+    "py": "shou3|ji1|zai4|zhuo1|zi5|shang5|dian4|nao3|zai4|pang2|bian1"
+  },
+  {
+    "chinese": "我来北京的第一天就认识他了。",
+    "english": "I met him on my first day in Beijing.",
+    "pinyin": "Wǒ lái Běi jīng de dì yī tiān jiù rèn shi tā le.",
+    "parts": "我|来|北|京|的|第|一|天|就|认|识|他|了",
+    "py": "wo3|lai2|bei3|jing1|de5|di4|yi1|tian1|jiu4|ren4|shi5|ta1|le5"
+  },
+  {
+    "chinese": "房间里有人吗？",
+    "english": "Is anyone in the room?",
+    "pinyin": "Fáng jiān lǐ yǒu rén ma?",
+    "parts": "房|间|里|有|人|吗",
+    "py": "fang2|jian1|li3|you3|ren2|ma5"
+  },
+  {
+    "chinese": "我知道她的名字。",
+    "english": "I know her name.",
+    "pinyin": "Wǒ zhī dào tā de míng zi.",
+    "parts": "我|知|道|她|的|名|字",
+    "py": "wo3|zhi1|dao4|ta1|de5|ming2|zi5"
+  },
+  {
+    "chinese": "她姓杨，叫杨笑笑。",
+    "english": "Her surname is Yang; her name is Yang Xiaoxiao.",
+    "pinyin": "Tā xìng Yáng, jiào Yáng Xiào xiao.",
+    "parts": "她|姓|杨|叫|杨|笑|笑",
+    "py": "ta1|xing4|yang2|jiao4|yang2|xiao4|xiao5"
+  },
+  {
+    "chinese": "她姐姐是我的同学。",
+    "english": "Her older sister is my classmate.",
+    "pinyin": "Tā jiě jie shì wǒ de tóng xué.",
+    "parts": "她|姐|姐|是|我|的|同|学",
+    "py": "ta1|jie3|jie5|shi4|wo3|de5|tong2|xue2"
+  },
+  {
+    "chinese": "我的朋友正在找房子。",
+    "english": "My friend is looking for an apartment.",
+    "pinyin": "Wǒ de péng you zhèng zài zhǎo fáng zi.",
+    "parts": "我|的|朋|友|正|在|找|房|子",
+    "py": "wo3|de5|peng2|you5|zheng4|zai4|zhao3|fang2|zi5"
+  },
+  {
+    "chinese": "他希望住得离公司近一点儿。",
+    "english": "He hopes to live a little closer to the company.",
+    "pinyin": "Tā xī wàng zhù de lí gōng sī jìn yì diǎn er.",
+    "parts": "他|希|望|住|得|离|公|司|近|一|点|儿",
+    "py": "ta1|xi1|wang4|zhu4|de5|li2|gong1|si1|jin4|yi4|dian3|er5"
+  },
+  {
+    "chinese": "这样他早上可以多睡一会儿。",
+    "english": "That way he can sleep a bit longer in the morning.",
+    "pinyin": "Zhè yàng tā zǎo shang kě yǐ duō shuì yí huì er.",
+    "parts": "这|样|他|早|上|可|以|多|睡|一|会|儿",
+    "py": "zhe4|yang4|ta1|zao3|shang5|ke3|yi3|duo1|shui4|yi2|hui4|er5"
+  },
+  {
+    "chinese": "我喜欢猫，但是我丈夫不喜欢。",
+    "english": "I like cats, but my husband does not.",
+    "pinyin": "Wǒ xǐ huan māo, dàn shì wǒ zhàng fu bù xǐ huan.",
+    "parts": "我|喜|欢|猫|但|是|我|丈|夫|不|喜|欢",
+    "py": "wo3|xi3|huan5|mao1|dan4|shi4|wo3|zhang4|fu5|bu4|xi3|huan5"
+  },
+  {
+    "chinese": "我希望有一天能有一只小猫。",
+    "english": "I hope one day I can have a kitten.",
+    "pinyin": "Wǒ xī wàng yǒu yì tiān néng yǒu yì zhī xiǎo māo.",
+    "parts": "我|希|望|有|一|天|能|有|一|只|小|猫",
+    "py": "wo3|xi1|wang4|you3|yi4|tian1|neng2|you3|yi4|zhi1|xiao3|mao1"
+  },
+  {
+    "chinese": "从我家到北京，坐火车要五个小时。",
+    "english": "From my home to Beijing by train takes five hours.",
+    "pinyin": "Cóng wǒ jiā dào Běi jīng, zuò huǒ chē yào wǔ ge xiǎo shí.",
+    "parts": "从|我|家|到|北|京|坐|火|车|要|五|个|小|时",
+    "py": "cong2|wo3|jia1|dao4|bei3|jing1|zuo4|huo3|che1|yao4|wu3|ge5|xiao3|shi2"
+  },
+  {
+    "chinese": "坐火车比坐飞机便宜很多。",
+    "english": "Taking the train is much cheaper than flying.",
+    "pinyin": "Zuò huǒ chē bǐ zuò fēi jī pián yi hěn duō.",
+    "parts": "坐|火|车|比|坐|飞|机|便|宜|很|多",
+    "py": "zuo4|huo3|che1|bi3|zuo4|fei1|ji1|pian2|yi5|hen3|duo1"
+  },
+  {
+    "chinese": "明天我准备坐火车去北京。",
+    "english": "Tomorrow I plan to take the train to Beijing.",
+    "pinyin": "Míng tiān wǒ zhǔn bèi zuò huǒ chē qù Běi jīng.",
+    "parts": "明|天|我|准|备|坐|火|车|去|北|京",
+    "py": "ming2|tian1|wo3|zhun3|bei4|zuo4|huo3|che1|qu4|bei3|jing1"
+  },
+  {
+    "chinese": "你的电影票已经买到了。",
+    "english": "Your movie ticket has already been bought.",
+    "pinyin": "Nǐ de diàn yǐng piào yǐjīng mǎi dào le.",
+    "parts": "你|的|电|影|票|已|经|买|到|了",
+    "py": "ni3|de5|dian4|ying3|piao4|yi3|jing1|mai3|dao4|le5"
+  },
+  {
+    "chinese": "现在已经九点二十五了。",
+    "english": "It's already 9:25 now.",
+    "pinyin": "Xiànzài yǐjīng jiǔ diǎn èr shí wǔ le.",
+    "parts": "现|在|已|经|九|点|二|十|五|了",
+    "py": "xian4|zai4|yi3|jing1|jiu3|dian3|er4|shi2|wu3|le5"
+  },
+  {
+    "chinese": "我的手表慢了。",
+    "english": "My watch is slow.",
+    "pinyin": "Wǒ de shǒu biǎo màn le.",
+    "parts": "我|的|手|表|慢|了",
+    "py": "wo3|de5|shou3|biao3|man4|le5"
+  },
+  {
+    "chinese": "我家的狗喜欢吃苹果。",
+    "english": "Our dog likes to eat apples.",
+    "pinyin": "Wǒ jiā de gǒu xǐ huan chī píng guǒ.",
+    "parts": "我|家|的|狗|喜|欢|吃|苹|果",
+    "py": "wo3|jia1|de5|gou3|xi3|huan5|chi1|ping2|guo3"
+  },
+  {
+    "chinese": "别笑了，我说的是真的。",
+    "english": "Stop laughing; I am telling the truth.",
+    "pinyin": "Bié xiào le, wǒ shuō de shì zhēn de.",
+    "parts": "别|笑|了|我|说|的|是|真|的",
+    "py": "bie2|xiao4|le5|wo3|shuo1|de5|shi4|zhen1|de5"
+  },
+  {
+    "chinese": "你的自行车是白色的，真漂亮。",
+    "english": "Your bicycle is white; it is really pretty.",
+    "pinyin": "Nǐ de zì xíng chē shì bái sè de, zhēn piàoliang.",
+    "parts": "你|的|自|行|车|是|白|色|的|真|漂|亮",
+    "py": "ni3|de5|zi4|xing2|che1|shi4|bai2|se4|de5|zhen1|piao4|liang5"
+  },
+  {
+    "chinese": "这辆自行车不到三百元。",
+    "english": "This bicycle costs less than three hundred yuan.",
+    "pinyin": "Zhè liàng zì xíng chē bú dào sān bǎi yuán.",
+    "parts": "这|辆|自|行|车|不|到|三|百|元",
+    "py": "zhe4|liang4|zi4|xing2|che1|bu2|dao4|san1|bai3|yuan2"
+  },
+  {
+    "chinese": "鸡蛋吃完了，我下午再买一些。",
+    "english": "The eggs are finished; I will buy more this afternoon.",
+    "pinyin": "Jīdàn chī wán le, wǒ xiàwǔ zài mǎi yì xiē.",
+    "parts": "鸡|蛋|吃|完|了|我|下|午|再|买|一|些",
+    "py": "ji1|dan4|chi1|wan2|le5|wo3|xia4|wu3|zai4|mai3|yi4|xie1"
+  },
+  {
+    "chinese": "这儿有商店吗？",
+    "english": "Is there a store here?",
+    "pinyin": "Zhèr yǒu shāngdiàn ma?",
+    "parts": "这|儿|有|商|店|吗",
+    "py": "zhe4|er5|you3|shang1|dian4|ma5"
+  },
+  {
+    "chinese": "我想去买点儿东西。",
+    "english": "I want to go buy some things.",
+    "pinyin": "Wǒ xiǎng qù mǎi diǎnr dōngxi.",
+    "parts": "我|想|去|买|点|儿|东|西",
+    "py": "wo3|xiang3|qu4|mai3|dian3|er5|dong1|xi5"
+  },
+  {
+    "chinese": "向前走，学校就在那儿。",
+    "english": "Walk forward; the school is right there.",
+    "pinyin": "Xiàng qián zǒu, xué xiào jiù zài nà er.",
+    "parts": "向|前|走|学|校|就|在|那|儿",
+    "py": "xiang4|qian2|zou3|xue2|xiao4|jiu4|zai4|na4|er5"
+  },
+  {
+    "chinese": "今天是一月一日。",
+    "english": "Today is January 1st.",
+    "pinyin": "Jīntiān shì yī yuè yī rì.",
+    "parts": "今|天|是|一|月|一|日",
+    "py": "jin1|tian1|shi4|yi1|yue4|yi1|ri4"
+  },
+  {
+    "chinese": "新年快乐！",
+    "english": "Happy New Year!",
+    "pinyin": "Xīn nián kuài lè!",
+    "parts": "新|年|快|乐",
+    "py": "xin1|nian2|kuai4|le4"
+  },
+  {
+    "chinese": "等一下，我打电话问问。",
+    "english": "Wait a moment; I will call and ask.",
+    "pinyin": "Děng yí xià, wǒ dǎ diàn huà wèn wen.",
+    "parts": "等|一|下|我|打|电|话|问|问",
+    "py": "deng3|yi2|xia4|wo3|da3|dian4|hua4|wen4|wen5"
+  },
+  {
+    "chinese": "听说他病了，我们去看看他吧。",
+    "english": "I heard he's sick; let's go visit him.",
+    "pinyin": "Tīng shuō tā bìng le, wǒ men qù kàn kan tā ba.",
+    "parts": "听|说|他|病|了|我|们|去|看|看|他|吧",
+    "py": "ting1|shuo1|ta1|bing4|le5|wo3|men5|qu4|kan4|kan5|ta1|ba5"
+  },
+  {
+    "chinese": "他会说汉语吗？",
+    "english": "Can he speak Chinese?",
+    "pinyin": "Tā huì shuō Hànyǔ ma?",
+    "parts": "他|会|说|汉|语|吗",
+    "py": "ta1|hui4|shuo1|han4|yu3|ma5"
+  },
+  {
+    "chinese": "我从您这儿学了很多。",
+    "english": "I learned a lot from you here.",
+    "pinyin": "Wǒ cóng nín zhèr xué le hěn duō.",
+    "parts": "我|从|您|这|儿|学|了|很|多",
+    "py": "wo3|cong2|nin2|zhe4|er5|xue2|le5|hen3|duo1"
+  },
+  {
+    "chinese": "希望我的回答对你有帮助。",
+    "english": "I hope my answer is helpful to you.",
+    "pinyin": "Xī wàng wǒ de huí dá duì nǐ yǒu bāng zhù.",
+    "parts": "希|望|我|的|回|答|对|你|有|帮|助",
+    "py": "xi1|wang4|wo3|de5|hui2|da2|dui4|ni3|you3|bang1|zhu4"
+  },
+  {
+    "chinese": "给您介绍一下，这是我们公司的李先生。",
+    "english": "Let me introduce Mr. Li from our company.",
+    "pinyin": "Gěi nín jiè shào yí xià, zhè shì wǒ men gōng sī de Lǐ xiān sheng.",
+    "parts": "给|您|介|绍|一|下|这|是|我|们|公|司|的|李|先|生",
+    "py": "gei3|nin2|jie4|shao4|yi2|xia4|zhe4|shi4|wo3|men5|gong1|si1|de5|li3|xian1|sheng5"
+  },
+  {
+    "chinese": "看书时间长了，眼睛要休息一下。",
+    "english": "After reading a long time, your eyes need a rest.",
+    "pinyin": "Kàn shū shí jiān cháng le, yǎn jing yào xiū xi yí xià.",
+    "parts": "看|书|时|间|长|了|眼|睛|要|休|息|一|下",
+    "py": "kan4|shu1|shi2|jian1|chang2|le5|yan3|jing5|yao4|xiu1|xi2|yi2|xia4"
+  },
+  {
+    "chinese": "那是我的孩子，她爱跳舞。",
+    "english": "That is my child; she loves to dance.",
+    "pinyin": "Nà shì wǒ de háizi, tā ài tiàowǔ.",
+    "parts": "那|是|我|的|孩|子|她|爱|跳|舞",
+    "py": "na4|shi4|wo3|de5|hai2|zi5|ta1|ai4|tiao4|wu3"
+  },
+  {
+    "chinese": "今天下雪了，天气很冷。",
+    "english": "It snowed today; the weather is very cold.",
+    "pinyin": "Jīn tiān xià xuě le, tiān qì hěn lěng.",
+    "parts": "今|天|下|雪|了|天|气|很|冷",
+    "py": "jin1|tian1|xia4|xue3|le5|tian1|qi4|hen3|leng3"
+  },
+  {
+    "chinese": "因为我不会游泳，所以我不想下水。",
+    "english": "Because I can't swim, I don't want to get in the water.",
+    "pinyin": "Yīn wèi wǒ bú huì yóu yǒng, suǒ yǐ wǒ bù xiǎng xià shuǐ.",
+    "parts": "因|为|我|不|会|游|泳|所|以|我|不|想|下|水",
+    "py": "yin1|wei4|wo3|bu2|hui4|you2|yong3|suo3|yi3|wo3|bu4|xiang3|xia4|shui3"
+  },
+  {
+    "chinese": "这个船很大，可以坐几千人。",
+    "english": "This ship is huge; it can hold thousands of people.",
+    "pinyin": "Zhège chuán hěn dà, kěyǐ zuò jǐ qiān rén.",
+    "parts": "这|个|船|很|大|可|以|坐|几|千|人",
+    "py": "zhe4|ge5|chuan2|hen3|da4|ke3|yi3|zuo4|ji3|qian1|ren2"
+  },
+  {
+    "chinese": "请进，这就是我的房间。",
+    "english": "Please come in; this is my room.",
+    "pinyin": "Qǐng jìn, zhè jiù shì wǒ de fáng jiān.",
+    "parts": "请|进|这|就|是|我|的|房|间",
+    "py": "qing3|jin4|zhe4|jiu4|shi4|wo3|de5|fang2|jian1"
+  },
+  {
+    "chinese": "昨天的考试题太多了。",
+    "english": "Yesterday's exam had too many questions.",
+    "pinyin": "Zuó tiān de kǎo shì tí tài duō le.",
+    "parts": "昨|天|的|考|试|题|太|多|了",
+    "py": "zuo2|tian1|de5|kao3|shi4|ti2|tai4|duo1|le5"
+  },
+  {
+    "chinese": "我没有做完。",
+    "english": "I didn't finish.",
+    "pinyin": "Wǒ méi yǒu zuò wán.",
+    "parts": "我|没|有|做|完",
+    "py": "wo3|mei2|you3|zuo4|wan2"
+  },
+  {
+    "chinese": "我没去过中国。",
+    "english": "I have never been to China.",
+    "pinyin": "Wǒ méi qù guo Zhōng guó.",
+    "parts": "我|没|去|过|中|国",
+    "py": "wo3|mei2|qu4|guo5|zhong1|guo2"
+  },
+  {
+    "chinese": "我希望今年能去中国。",
+    "english": "I hope I can go to China this year.",
+    "pinyin": "Wǒ xī wàng jīn nián néng qù Zhōng guó.",
+    "parts": "我|希|望|今|年|能|去|中|国",
+    "py": "wo3|xi1|wang4|jin1|nian2|neng2|qu4|zhong1|guo2"
+  },
+  {
+    "chinese": "对不起，我不能和你一起去买自行车了。",
+    "english": "Sorry, I can't go buy a bicycle with you.",
+    "pinyin": "Duì bu qǐ, wǒ bù néng hé nǐ yì qǐ qù mǎi zì xíng chē le.",
+    "parts": "对|不|起|我|不|能|和|你|一|起|去|买|自|行|车|了",
+    "py": "dui4|bu4|qi3|wo3|bu4|neng2|he2|ni3|yi4|qi3|qu4|mai3|zi4|xing2|che1|le5"
+  },
+  {
+    "chinese": "上午我买了一个新手机。",
+    "english": "This morning I bought a new cellphone.",
+    "pinyin": "Shàngwǔ wǒ mǎi le yí ge xīn shǒujī.",
+    "parts": "上|午|我|买|了|一|个|新|手|机",
+    "py": "shang4|wu3|wo3|mai3|le5|yi2|ge5|xin1|shou3|ji1"
+  },
+  {
+    "chinese": "这个手机九百多块钱，很便宜。",
+    "english": "This phone is over nine hundred yuan; very cheap.",
+    "pinyin": "Zhège shǒujī jiǔ bǎi duō kuài qián, hěn piányi.",
+    "parts": "这|个|手|机|九|百|多|块|钱|很|便|宜",
+    "py": "zhe4|ge5|shou3|ji1|jiu3|bai3|duo1|kuai4|qian2|hen3|pian2|yi5"
+  },
+  {
+    "chinese": "时间过得真快。",
+    "english": "Time passes so quickly.",
+    "pinyin": "Shí jiān guò de zhēn kuài.",
+    "parts": "时|间|过|得|真|快",
+    "py": "shi2|jian1|guo4|de5|zhen1|kuai4"
+  },
+  {
+    "chinese": "我来北京十年了。",
+    "english": "I have been in Beijing for ten years.",
+    "pinyin": "Wǒ lái Běi jīng shí nián le.",
+    "parts": "我|来|北|京|十|年|了",
+    "py": "wo3|lai2|bei3|jing1|shi2|nian2|le5"
+  },
+  {
+    "chinese": "我女儿已经五岁多了。",
+    "english": "My daughter is already over five years old.",
+    "pinyin": "Wǒ nǚ'ér yǐjīng wǔ suì duō le.",
+    "parts": "我|女|儿|已|经|五|岁|多|了",
+    "py": "wo3|nv3|er2|yi3|jing1|wu3|sui4|duo1|le5"
+  },
+  {
+    "chinese": "她开始学习写汉字了。",
+    "english": "She has started learning to write Chinese characters.",
+    "pinyin": "Tā kāi shǐ xué xí xiě Hàn zì le.",
+    "parts": "她|开|始|学|习|写|汉|字|了",
+    "py": "ta1|kai1|shi3|xue2|xi2|xie3|han4|zi4|le5"
+  },
+  {
+    "chinese": "今天是七月十二日。",
+    "english": "Today is July 12th.",
+    "pinyin": "Jīn tiān shì qī yuè shí èr rì.",
+    "parts": "今|天|是|七|月|十|二|日",
+    "py": "jin1|tian1|shi4|qi1|yue4|shi2|er4|ri4"
+  },
+  {
+    "chinese": "再过三天就是我爸爸的生日。",
+    "english": "In three more days it's my dad's birthday.",
+    "pinyin": "Zài guò sān tiān jiù shì wǒ bàba de shēngrì.",
+    "parts": "再|过|三|天|就|是|我|爸|爸|的|生|日",
+    "py": "zai4|guo4|san1|tian1|jiu4|shi4|wo3|ba4|ba5|de5|sheng1|ri4"
+  },
+  {
+    "chinese": "我想送他一台电脑。",
+    "english": "I want to give him a computer.",
+    "pinyin": "Wǒ xiǎng sòng tā yì tái diànnǎo.",
+    "parts": "我|想|送|他|一|台|电|脑",
+    "py": "wo3|xiang3|song4|ta1|yi4|tai2|dian4|nao3"
+  },
+  {
+    "chinese": "我的飞机是十点零七分的。",
+    "english": "My flight is at ten oh seven.",
+    "pinyin": "Wǒ de fēi jī shì shí diǎn líng qī fēn de.",
+    "parts": "我|的|飞|机|是|十|点|零|七|分|的",
+    "py": "wo3|de5|fei1|ji1|shi4|shi2|dian3|ling2|qi1|fen1|de5"
+  },
+  {
+    "chinese": "我在去机场的路上。",
+    "english": "I am on the way to the airport.",
+    "pinyin": "Wǒ zài qù jī chǎng de lù shang.",
+    "parts": "我|在|去|机|场|的|路|上",
+    "py": "wo3|zai4|qu4|ji1|chang3|de5|lu4|shang5"
+  },
+  {
+    "chinese": "昨天我和朋友们在外面玩儿了一晚上。",
+    "english": "Yesterday my friends and I hung out outside all evening.",
+    "pinyin": "Zuó tiān wǒ hé péng you men zài wài miàn wán er le yí wǎn shang.",
+    "parts": "昨|天|我|和|朋|友|们|在|外|面|玩|儿|了|一|晚|上",
+    "py": "zuo2|tian1|wo3|he2|peng2|you5|men5|zai4|wai4|mian4|wan2|er5|le5|yi2|wan3|shang5"
+  },
+  {
+    "chinese": "我很累，但是很高兴。",
+    "english": "I am tired, but very happy.",
+    "pinyin": "Wǒ hěn lèi, dàn shì hěn gāo xìng.",
+    "parts": "我|很|累|但|是|很|高|兴",
+    "py": "wo3|hen3|lei4|dan4|shi4|hen3|gao1|xing4"
+  },
+  {
+    "chinese": "火车站离这儿远吗？",
+    "english": "Is the train station far from here?",
+    "pinyin": "Huǒ chē zhàn lí zhè er yuǎn ma?",
+    "parts": "火|车|站|离|这|儿|远|吗",
+    "py": "huo3|che1|zhan4|li2|zhe4|er5|yuan3|ma5"
+  },
+  {
+    "chinese": "不远，坐出租车六七分钟就到了。",
+    "english": "Not far; a taxi takes six or seven minutes.",
+    "pinyin": "Bù yuǎn, zuò chū zū chē liù qī fēn zhōng jiù dào le.",
+    "parts": "不|远|坐|出|租|车|六|七|分|钟|就|到|了",
+    "py": "bu4|yuan3|zuo4|chu1|zu1|che1|liu4|qi1|fen1|zhong1|jiu4|dao4|le5"
+  },
+  {
+    "chinese": "已经快八点了，你还出去做什么？",
+    "english": "It's almost eight; why are you still going out?",
+    "pinyin": "Yǐ jīng kuài bā diǎn le, nǐ hái chū qù zuò shén me?",
+    "parts": "已|经|快|八|点|了|你|还|出|去|做|什|么",
+    "py": "yi3|jing1|kuai4|ba1|dian3|le5|ni3|hai2|chu1|qu4|zuo4|shen2|me5"
+  },
+  {
+    "chinese": "小狗怎么了？为什么不吃东西？",
+    "english": "What is wrong with the puppy? Why is it not eating?",
+    "pinyin": "Xiǎo gǒu zěn me le? Wèi shén me bù chī dōng xi?",
+    "parts": "小|狗|怎|么|了|为|什|么|不|吃|东|西",
+    "py": "xiao3|gou3|zen3|me5|le5|wei4|shen2|me5|bu4|chi1|dong1|xi5"
+  },
+  {
+    "chinese": "它不认识你。",
+    "english": "It doesn't know you.",
+    "pinyin": "Tā bú rèn shi nǐ.",
+    "parts": "它|不|认|识|你",
+    "py": "ta1|bu2|ren4|shi5|ni3"
+  },
+  {
+    "chinese": "你没有他高。",
+    "english": "You are not as tall as him.",
+    "pinyin": "Nǐ méi yǒu tā gāo.",
+    "parts": "你|没|有|他|高",
+    "py": "ni3|mei2|you3|ta1|gao1"
+  },
+  {
+    "chinese": "你比他大一岁。",
+    "english": "You are one year older than him.",
+    "pinyin": "Nǐ bǐ tā dà yí suì.",
+    "parts": "你|比|他|大|一|岁",
+    "py": "ni3|bi3|ta1|da4|yi2|sui4"
+  },
+  {
+    "chinese": "大家好，我姓王，是新来的汉语老师。",
+    "english": "Hello everyone; my surname is Wang. I am the new Chinese teacher.",
+    "pinyin": "Dà jiā hǎo, wǒ xìng Wáng, shì xīn lái de Hàn yǔ lǎo shī.",
+    "parts": "大|家|好|我|姓|王|是|新|来|的|汉|语|老|师",
+    "py": "da4|jia1|hao3|wo3|xing4|wang2|shi4|xin1|lai2|de5|han4|yu3|lao3|shi1"
+  },
+  {
+    "chinese": "这个月真的非常忙。",
+    "english": "This month is really extremely busy.",
+    "pinyin": "Zhè ge yuè zhēn de fēi cháng máng.",
+    "parts": "这|个|月|真|的|非|常|忙",
+    "py": "zhe4|ge5|yue4|zhen1|de5|fei1|chang2|mang2"
+  },
+  {
+    "chinese": "他每天工作十个小时。",
+    "english": "He works ten hours every day.",
+    "pinyin": "Tā měi tiān gōng zuò shí ge xiǎo shí.",
+    "parts": "他|每|天|工|作|十|个|小|时",
+    "py": "ta1|mei3|tian1|gong1|zuo4|shi2|ge5|xiao3|shi2"
+  },
+  {
+    "chinese": "星期六他也不休息。",
+    "english": "He does not rest on Saturdays either.",
+    "pinyin": "Xīng qī liù tā yě bù xiū xi.",
+    "parts": "星|期|六|他|也|不|休|息",
+    "py": "xing1|qi1|liu4|ta1|ye3|bu4|xiu1|xi2"
+  },
+  {
+    "chinese": "快开门！",
+    "english": "Open the door quickly!",
+    "pinyin": "Kuài kāi mén!",
+    "parts": "快|开|门",
+    "py": "kuai4|kai1|men2"
+  },
+  {
+    "chinese": "你怎么回来这么晚？",
+    "english": "Why did you come back so late?",
+    "pinyin": "Nǐ zěnme huí lai zhème wǎn?",
+    "parts": "你|怎|么|回|来|这|么|晚",
+    "py": "ni3|zen3|me5|hui2|lai5|zhe4|me5|wan3"
+  },
+  {
+    "chinese": "她笑着对我说：“不客气。”",
+    "english": "She said to me with a smile, \"You are welcome.\"",
+    "pinyin": "Tā xiào zhe duì wǒ shuō: “Bú kèqi.”",
+    "parts": "她|笑|着|对|我|说|不|客|气",
+    "py": "ta1|xiao4|zhe5|dui4|wo3|shuo1|bu2|ke4|qi5"
+  },
+  {
+    "chinese": "你们认识？这怎么可能？",
+    "english": "You know each other? How is that possible?",
+    "pinyin": "Nǐ men rèn shi? Zhè zěn me kě néng?",
+    "parts": "你|们|认|识|这|怎|么|可|能",
+    "py": "ni3|men5|ren4|shi5|zhe4|zen3|me5|ke3|neng2"
+  },
+  {
+    "chinese": "你们听懂我说的话了吗？",
+    "english": "Did you understand what I said?",
+    "pinyin": "Nǐ men tīng dǒng wǒ shuō de huà le ma?",
+    "parts": "你|们|听|懂|我|说|的|话|了|吗",
+    "py": "ni3|men5|ting1|dong3|wo3|shuo1|de5|hua4|le5|ma5"
+  },
+  {
+    "chinese": "谢谢您给我们的帮助。",
+    "english": "Thank you for your help to us.",
+    "pinyin": "Xiè xie nín gěi wǒ men de bāng zhù.",
+    "parts": "谢|谢|您|给|我|们|的|帮|助",
+    "py": "xie4|xie5|nin2|gei3|wo3|men5|de5|bang1|zhu4"
+  }
 ]

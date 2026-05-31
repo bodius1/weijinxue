@@ -1,4 +1,4 @@
-# Mandarin App Anki Assets
+# Weijinxue Anki Assets
 
 Generated from `HSK_levels_1_to_6_with_audio_read_speak_and_write.apkg`.
 
